@@ -4,39 +4,20 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Channel9Downloader.Test.Integration
 {
     /// <summary>
-    /// Summary description for AvailableCategoriesTest
+    /// This class contains tests that are related to retrieving available categories.
     /// </summary>
     [TestClass]
     public class AvailableCategoriesTest
     {
         /// <summary>
-        ///Gets or sets the test context which provides
-        ///information about and functionality for the current test run.
-        ///</summary>
+        /// Gets or sets the test context which provides
+        /// information about and functionality for the current test run.
+        /// </summary>
         public TestContext TestContext { get; set; }
 
-        #region Additional test attributes
-        //
-        // You can use the following additional attributes as you write your tests:
-        //
-        // Use ClassInitialize to run code before running the first test in the class
-        // [ClassInitialize()]
-        // public static void MyClassInitialize(TestContext testContext) { }
-        //
-        // Use ClassCleanup to run code after all tests in a class have run
-        // [ClassCleanup()]
-        // public static void MyClassCleanup() { }
-        //
-        // Use TestInitialize to run code before running each test 
-        // [TestInitialize()]
-        // public void MyTestInitialize() { }
-        //
-        // Use TestCleanup to run code after each test has run
-        // [TestCleanup()]
-        // public void MyTestCleanup() { }
-        //
-        #endregion
-
+        /// <summary>
+        /// Tests whether the tags can be retrieved.
+        /// </summary>
         [TestMethod]
         public void GetAllTags()
         {
@@ -47,6 +28,9 @@ namespace Channel9Downloader.Test.Integration
             Assert.IsTrue(tags.Count > 0);
         }
 
+        /// <summary>
+        /// Tests whether the shows can be retrieved.
+        /// </summary>
         [TestMethod]
         public void GetAllShows()
         {
@@ -57,6 +41,9 @@ namespace Channel9Downloader.Test.Integration
             Assert.IsTrue(shows.Count > 0);
         }
 
+        /// <summary>
+        /// Tests whether the series can be retrieved.
+        /// </summary>
         [TestMethod]
         public void GetAllSeries()
         {
@@ -67,9 +54,14 @@ namespace Channel9Downloader.Test.Integration
             Assert.IsTrue(series.Count > 0);
         }
 
+        /// <summary>
+        /// Creates a category browser.
+        /// </summary>
+        /// <returns>Returns a category browser.</returns>
         private Channel9CategoryBrowser CreateChannel9CategoryBrowser()
         {
-            return new Channel9CategoryBrowser();
+            var webDownloader = new WebDownloader();
+            return new Channel9CategoryBrowser(webDownloader);
         }
     }
 }

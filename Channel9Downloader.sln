@@ -16,6 +16,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Channel9Downloader.Entities
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Channel9Downloader.Test.Unit", "Channel9Downloader.Test.Unit\Channel9Downloader.Test.Unit.csproj", "{673949F7-1FC7-42A5-BC07-0EE4C8CFBD5F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Channel9Downloader", "Channel9Downloader\Channel9Downloader.csproj", "{53B6D567-17D8-411A-A01A-8AF98FA5F23D}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Channel9Downloader.vsmdi
@@ -69,6 +71,16 @@ Global
 		{673949F7-1FC7-42A5-BC07-0EE4C8CFBD5F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{673949F7-1FC7-42A5-BC07-0EE4C8CFBD5F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{673949F7-1FC7-42A5-BC07-0EE4C8CFBD5F}.Release|x86.ActiveCfg = Release|Any CPU
+		{53B6D567-17D8-411A-A01A-8AF98FA5F23D}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{53B6D567-17D8-411A-A01A-8AF98FA5F23D}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{53B6D567-17D8-411A-A01A-8AF98FA5F23D}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{53B6D567-17D8-411A-A01A-8AF98FA5F23D}.Debug|x86.ActiveCfg = Debug|x86
+		{53B6D567-17D8-411A-A01A-8AF98FA5F23D}.Debug|x86.Build.0 = Debug|x86
+		{53B6D567-17D8-411A-A01A-8AF98FA5F23D}.Release|Any CPU.ActiveCfg = Release|x86
+		{53B6D567-17D8-411A-A01A-8AF98FA5F23D}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{53B6D567-17D8-411A-A01A-8AF98FA5F23D}.Release|Mixed Platforms.Build.0 = Release|x86
+		{53B6D567-17D8-411A-A01A-8AF98FA5F23D}.Release|x86.ActiveCfg = Release|x86
+		{53B6D567-17D8-411A-A01A-8AF98FA5F23D}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
