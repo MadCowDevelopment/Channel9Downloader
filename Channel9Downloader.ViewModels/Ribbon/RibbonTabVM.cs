@@ -9,6 +9,8 @@ namespace Channel9Downloader.ViewModels.Ribbon
     /// </summary>
     public class RibbonTabVM : ObservableObject, IRibbonTabVM
     {
+        #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="RibbonTabVM"/> class.
         /// </summary>
@@ -17,14 +19,26 @@ namespace Channel9Downloader.ViewModels.Ribbon
             Groups = new ObservableCollection<IRibbonGroupVM>();
         }
 
-        /// <summary>
-        /// Gets or sets header.
-        /// </summary>
-        public string Header { get; set; }
+        #endregion Constructors
+
+        #region Public Properties
 
         /// <summary>
         /// Gets all groups of this tab.
         /// </summary>
-        public ObservableCollection<IRibbonGroupVM> Groups { get; private set; }
+        public ObservableCollection<IRibbonGroupVM> Groups
+        {
+            get; private set;
+        }
+
+        /// <summary>
+        /// Gets or sets header.
+        /// </summary>
+        public string Header
+        {
+            get; set;
+        }
+
+        #endregion Public Properties
     }
 }

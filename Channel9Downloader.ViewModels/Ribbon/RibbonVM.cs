@@ -13,6 +13,17 @@ namespace Channel9Downloader.ViewModels.Ribbon
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class RibbonVM : ObservableObject, IRibbonVM
     {
+        #region Fields
+
+        /// <summary>
+        /// Backing field for <see cref="SelectedTab"/> property.
+        /// </summary>
+        private IRibbonTabVM _selectedTab;
+
+        #endregion Fields
+
+        #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="RibbonVM"/> class.
         /// </summary>
@@ -38,9 +49,35 @@ namespace Channel9Downloader.ViewModels.Ribbon
             Tabs.Add(home);
         }
 
+        #endregion Constructors
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the selected tab.
+        /// </summary>
+        public IRibbonTabVM SelectedTab
+        {
+            get
+            {
+                return _selectedTab;
+            }
+
+            set
+            {
+                _selectedTab = value;
+                RaisePropertyChanged();
+            }
+        }
+
         /// <summary>
         /// Gets the ribbon's tabs.
         /// </summary>
-        public ObservableCollection<IRibbonTabVM> Tabs { get; private set; }
+        public ObservableCollection<IRibbonTabVM> Tabs
+        {
+            get; private set;
+        }
+
+        #endregion Public Properties
     }
 }

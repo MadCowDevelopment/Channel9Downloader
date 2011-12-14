@@ -5,6 +5,8 @@
     /// </summary>
     public class Show : RecurringCategory
     {
+        #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Show"/> class.
         /// Copy constructor for <see cref="RecurringCategory"/>.
@@ -16,5 +18,7 @@
             RelativePath = recurringCategory.RelativePath;
             Title = recurringCategory.Title;
         }
+
+        #endregion Constructors
     }
 }

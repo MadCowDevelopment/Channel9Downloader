@@ -12,6 +12,17 @@ namespace Channel9Downloader.ViewModels
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class MainWindowVM : SimpleViewModel, IMainWindowVM
     {
+        #region Public Properties
+
+        /// <summary>
+        /// Gets the viewmodel for the main content.
+        /// </summary>
+        [Import]
+        public IContentAreaVM ContentArea
+        {
+            get; private set;
+        }
+
         /// <summary>
         /// Gets the viewmodel for the ribbon bar.
         /// </summary>
@@ -21,11 +32,7 @@ namespace Channel9Downloader.ViewModels
             get;
             private set;
         }
-        
-        /// <summary>
-        /// Gets the viewmodel for the main content.
-        /// </summary>
-        [Import]
-        public IContentAreaVM ContentArea { get; private set; }
+
+        #endregion Public Properties
     }
 }

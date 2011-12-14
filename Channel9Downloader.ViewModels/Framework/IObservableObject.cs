@@ -7,6 +7,8 @@ namespace Channel9Downloader.ViewModels.Framework
     /// </summary>
     public interface IObservableObject : INotifyPropertyChanged
     {
+        #region Methods
+
         /// <summary>
         /// Verifies that a property name exists in this ViewModel. This method
         /// can be called before the property is used, for instance before
@@ -16,5 +18,7 @@ namespace Channel9Downloader.ViewModels.Framework
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
         void VerifyPropertyName(string propertyName);
+
+        #endregion Methods
     }
 }

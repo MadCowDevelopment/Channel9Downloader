@@ -7,6 +7,8 @@ namespace Channel9Downloader.ViewModels.Framework
     /// </summary>
     public interface ISimpleViewModel : IViewModelBase
     {
+        #region Events
+
         /// <summary>
         /// This event should be raised to activate the UI.  Any view tied to this
         /// ViewModel should register a handler on this event and close itself when
@@ -23,30 +25,53 @@ namespace Channel9Downloader.ViewModels.Framework
         /// </summary>
         event EventHandler<CloseRequestEventArgs> CloseRequest;
 
+        #endregion Events
+
+        #region Properties
+
         /// <summary>
         /// Gets the ActivatedCommand : Window Lifetime command
         /// </summary>
-        RelayCommand ActivatedCommand { get; }
+        RelayCommand ActivatedCommand
+        {
+            get;
+        }
 
         /// <summary>
         /// Gets the CloseCommand : Window Lifetime command
         /// </summary>
-        RelayCommand CloseCommand { get; }
+        RelayCommand CloseCommand
+        {
+            get;
+        }
 
         /// <summary>
         /// Gets the DeactivatedCommand : Window Lifetime command
         /// </summary>
-        RelayCommand DeactivatedCommand { get; }
+        RelayCommand DeactivatedCommand
+        {
+            get;
+        }
 
         /// <summary>
         /// Gets the LoadedCommand : Window/UserControl Lifetime command
         /// </summary>
-        RelayCommand LoadedCommand { get; }
+        RelayCommand LoadedCommand
+        {
+            get;
+        }
 
         /// <summary>
         /// Gets the UnloadedCommand : Window/UserControl Lifetime command
         /// </summary>
-        RelayCommand UnloadedCommand { get; }
+        RelayCommand UnloadedCommand
+        {
+            get;
+        }
+
+        #endregion Properties
+
+        #region Methods
 
         /// <summary>
         /// This raises the <see cref="SimpleViewModel.ActivateRequest"/> event to activate the UI.
@@ -63,5 +88,7 @@ namespace Channel9Downloader.ViewModels.Framework
         /// </summary>
         /// <param name="dialogResult">The dialog result.</param>
         void RaiseCloseRequest(bool? dialogResult);
+
+        #endregion Methods
     }
 }

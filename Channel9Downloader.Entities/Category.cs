@@ -5,14 +5,24 @@
     /// </summary>
     public class Category
     {
-        /// <summary>
-        /// Gets or sets the title of the category.
-        /// </summary>
-        public string Title { get; set; }
+        #region Public Properties
 
         /// <summary>
         /// Gets or sets the relative path for the category.
         /// </summary>
-        public string RelativePath { get; set; }
+        public string RelativePath
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Gets or sets the title of the category.
+        /// </summary>
+        public string Title
+        {
+            get; set;
+        }
+
+        #endregion Public Properties
     }
 }

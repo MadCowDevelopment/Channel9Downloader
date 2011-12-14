@@ -1,4 +1,5 @@
 ﻿using Channel9Downloader.DataAccess;
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Channel9Downloader.Test.Integration
@@ -9,23 +10,32 @@ namespace Channel9Downloader.Test.Integration
     [TestClass]
     public class AvailableCategoriesTest
     {
+        #region Public Properties
+
         /// <summary>
         /// Gets or sets the test context which provides
         /// information about and functionality for the current test run.
         /// </summary>
-        public TestContext TestContext { get; set; }
+        public TestContext TestContext
+        {
+            get; set;
+        }
+
+        #endregion Public Properties
+
+        #region Public Methods
 
         /// <summary>
-        /// Tests whether the tags can be retrieved.
+        /// Tests whether the series can be retrieved.
         /// </summary>
         [TestMethod]
-        public void GetAllTags()
+        public void GetAllSeries()
         {
             var browser = CreateChannel9CategoryBrowser();
 
-            var tags = browser.GetAllTags();
+            var series = browser.GetAllSeries();
 
-            Assert.IsTrue(tags.Count > 0);
+            Assert.IsTrue(series.Count > 0);
         }
 
         /// <summary>
@@ -42,17 +52,21 @@ namespace Channel9Downloader.Test.Integration
         }
 
         /// <summary>
-        /// Tests whether the series can be retrieved.
+        /// Tests whether the tags can be retrieved.
         /// </summary>
         [TestMethod]
-        public void GetAllSeries()
+        public void GetAllTags()
         {
             var browser = CreateChannel9CategoryBrowser();
 
-            var series = browser.GetAllSeries();
+            var tags = browser.GetAllTags();
 
-            Assert.IsTrue(series.Count > 0);
+            Assert.IsTrue(tags.Count > 0);
         }
+
+        #endregion Public Methods
+
+        #region Private Methods
 
         /// <summary>
         /// Creates a category browser.
@@ -63,5 +77,7 @@ namespace Channel9Downloader.Test.Integration
             var webDownloader = new WebDownloader();
             return new Channel9CategoryBrowser(webDownloader);
         }
+
+        #endregion Private Methods
     }
 }

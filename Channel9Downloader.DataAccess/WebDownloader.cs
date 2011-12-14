@@ -9,6 +9,8 @@ namespace Channel9Downloader.DataAccess
     [Export(typeof(IWebDownloader))]
     public class WebDownloader : IWebDownloader
     {
+        #region Public Methods
+
         /// <summary>
         /// Downloads the requested resource as a String. 
         /// The resource to download is specified as a String containing the URI.
@@ -21,5 +23,7 @@ namespace Channel9Downloader.DataAccess
             var result = webClient.DownloadString(address);
             return result;
         }
+
+        #endregion Public Methods
     }
 }

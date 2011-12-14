@@ -7,9 +7,16 @@ namespace Channel9Downloader.ViewModels.Framework
     /// </summary>
     public interface IValidatingObject : IObservableObject, IDataErrorInfo
     {
+        #region Properties
+
         /// <summary>
         /// Gets a value indicating whether the object is valid.
         /// </summary>
-        bool HasErrors { get; }
+        bool HasErrors
+        {
+            get;
+        }
+
+        #endregion Properties
     }
 }

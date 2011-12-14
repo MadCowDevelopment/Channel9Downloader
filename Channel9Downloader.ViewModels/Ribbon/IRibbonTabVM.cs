@@ -9,14 +9,24 @@ namespace Channel9Downloader.ViewModels.Ribbon
     /// </summary>
     public interface IRibbonTabVM : IObservableObject
     {
-        /// <summary>
-        /// Gets or sets the header.
-        /// </summary>
-        string Header { get; set; }
+        #region Properties
 
         /// <summary>
         /// Gets the groups of this tab.
         /// </summary>
-        ObservableCollection<IRibbonGroupVM> Groups { get; }
+        ObservableCollection<IRibbonGroupVM> Groups
+        {
+            get;
+        }
+
+        /// <summary>
+        /// Gets or sets the header.
+        /// </summary>
+        string Header
+        {
+            get; set;
+        }
+
+        #endregion Properties
     }
 }

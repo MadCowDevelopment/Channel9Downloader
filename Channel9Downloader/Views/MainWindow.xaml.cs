@@ -10,6 +10,8 @@ namespace Channel9Downloader.Views
     /// </summary>
     public partial class MainWindow
     {
+        #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindow"/> class.
         /// </summary>
@@ -30,5 +32,7 @@ namespace Channel9Downloader.Views
                 throw;
             }
         }
+
+        #endregion Constructors
     }
 }

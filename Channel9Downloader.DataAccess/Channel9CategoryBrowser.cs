@@ -2,6 +2,7 @@
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Xml.Linq;
+
 using Channel9Downloader.Entities;
 
 namespace Channel9Downloader.DataAccess
@@ -12,10 +13,16 @@ namespace Channel9Downloader.DataAccess
     [Export(typeof(IChannel9CategoryBrowser))]
     public class Channel9CategoryBrowser : IChannel9CategoryBrowser
     {
+        #region Fields
+
         /// <summary>
         /// The web downloader used for retrieving web resources.
         /// </summary>
         private readonly IWebDownloader _webDownloader;
+
+        #endregion Fields
+
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Channel9CategoryBrowser"/> class.
@@ -27,13 +34,18 @@ namespace Channel9Downloader.DataAccess
             _webDownloader = webDownloader;
         }
 
+        #endregion Constructors
+
+        #region Public Methods
+
         /// <summary>
-        /// Gets a list of all available tags.
+        /// Gets a list of all available series.
         /// </summary>
-        /// <returns>Returns a list of all available tags.</returns>
-        public List<Tag> GetAllTags()
+        /// <returns>Returns a list of all available series.</returns>
+        public List<Series> GetAllSeries()
         {
-            return RetrieveTags();
+            var recurringCategories = RetrieveShowsOrSeries("http://channel9.msdn.com/Browse/Series?sort=atoz&page={0}");
+            return recurringCategories.Select(recurringCategory => new Series(recurringCategory)).ToList();
         }
 
         /// <summary>
@@ -47,50 +59,29 @@ namespace Channel9Downloader.DataAccess
         }
 
         /// <summary>
-        /// Gets a list of all available series.
+        /// Gets a list of all available tags.
         /// </summary>
-        /// <returns>Returns a list of all available series.</returns>
-        public List<Series> GetAllSeries()
+        /// <returns>Returns a list of all available tags.</returns>
+        public List<Tag> GetAllTags()
         {
-            var recurringCategories = RetrieveShowsOrSeries("http://channel9.msdn.com/Browse/Series?sort=atoz&page={0}");
-            return recurringCategories.Select(recurringCategory => new Series(recurringCategory)).ToList();
+            return RetrieveTags();
         }
 
-        /// <summary>
-        /// Retrieves tags for all characters A to Z.
-        /// </summary>
-        /// <returns>Returns a list of all tags.</returns>
-        private List<Tag> RetrieveTags()
-        {
-            var result = new List<Tag>();
+        #endregion Public Methods
 
-            for (var c = (char)65; c <= 90; c++)
-            {
-                var links = GetTagsForCharacter(c);
-                result.AddRange(links);
-            }
-
-            return result;
-        }
+        #region Private Methods
 
         /// <summary>
-        /// Retrieves shows or series. Shows and series are shown on paginated websites and differ only in
-        /// the URL that is used to show them.
+        /// Creates an XML document from a specific URL.
         /// </summary>
-        /// <param name="baseUrl">The base URL used for retrieving shows or series.</param>
-        /// <returns>Returns a list of recurring categories.</returns>
-        private IEnumerable<RecurringCategory> RetrieveShowsOrSeries(string baseUrl)
+        /// <param name="url">The URL to retrieve.</param>
+        /// <returns>Returns an XML document.</returns>
+        private XDocument GetDocument(string url)
         {
-            var result = new List<RecurringCategory>();
-
-            int i = 0;
-            List<RecurringCategory> shows;
-            while ((shows = GetShowsOrSeriesFromPage(baseUrl, i++)) != null && shows.Count > 0)
-            {
-                result.AddRange(shows);
-            }
-
-            return result;
+            var data = _webDownloader.DownloadString(url);
+            data = data.Remove(0, 17);
+            data = data.Replace("&", string.Empty);
+            return XDocument.Parse(data);
         }
 
         /// <summary>
@@ -120,6 +111,23 @@ namespace Channel9Downloader.DataAccess
         }
 
         /// <summary>
+        /// Gets the div element which has class tab-content. This is essentially where all the content is stored
+        /// in the HTML page.
+        /// </summary>
+        /// <param name="document">The document to parse.</param>
+        /// <returns>Returns the content div element.</returns>
+        private XElement GetTabContent(XDocument document)
+        {
+            var bodyElement = document.Element("html").Element("body");
+
+            var tabContentDiv = from item in bodyElement.Descendants("div")
+                                where item.Attribute("class") != null && item.Attribute("class").Value == "tab-content"
+                                select item;
+
+            return tabContentDiv.ElementAt(0);
+        }
+
+        /// <summary>
         /// Gets all tags for a specific character.
         /// </summary>
         /// <param name="character">The character for which tags should be retrieved.</param>
@@ -145,33 +153,42 @@ namespace Channel9Downloader.DataAccess
         }
 
         /// <summary>
-        /// Creates an XML document from a specific URL.
+        /// Retrieves shows or series. Shows and series are shown on paginated websites and differ only in
+        /// the URL that is used to show them.
         /// </summary>
-        /// <param name="url">The URL to retrieve.</param>
-        /// <returns>Returns an XML document.</returns>
-        private XDocument GetDocument(string url)
+        /// <param name="baseUrl">The base URL used for retrieving shows or series.</param>
+        /// <returns>Returns a list of recurring categories.</returns>
+        private IEnumerable<RecurringCategory> RetrieveShowsOrSeries(string baseUrl)
         {
-            var data = _webDownloader.DownloadString(url);
-            data = data.Remove(0, 17);
-            data = data.Replace("&", string.Empty);
-            return XDocument.Parse(data);
+            var result = new List<RecurringCategory>();
+
+            int i = 0;
+            List<RecurringCategory> shows;
+            while ((shows = GetShowsOrSeriesFromPage(baseUrl, i++)) != null && shows.Count > 0)
+            {
+                result.AddRange(shows);
+            }
+
+            return result;
         }
 
         /// <summary>
-        /// Gets the div element which has class tab-content. This is essentially where all the content is stored
-        /// in the HTML page.
+        /// Retrieves tags for all characters A to Z.
         /// </summary>
-        /// <param name="document">The document to parse.</param>
-        /// <returns>Returns the content div element.</returns>
-        private XElement GetTabContent(XDocument document)
+        /// <returns>Returns a list of all tags.</returns>
+        private List<Tag> RetrieveTags()
         {
-            var bodyElement = document.Element("html").Element("body");
+            var result = new List<Tag>();
 
-            var tabContentDiv = from item in bodyElement.Descendants("div")
-                                where item.Attribute("class") != null && item.Attribute("class").Value == "tab-content"
-                                select item;
+            for (var c = (char)65; c <= 90; c++)
+            {
+                var links = GetTagsForCharacter(c);
+                result.AddRange(links);
+            }
 
-            return tabContentDiv.ElementAt(0);
+            return result;
         }
+
+        #endregion Private Methods
     }
 }

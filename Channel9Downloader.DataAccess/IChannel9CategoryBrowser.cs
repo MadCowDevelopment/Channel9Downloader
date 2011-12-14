@@ -9,11 +9,13 @@ namespace Channel9Downloader.DataAccess
     /// </summary>
     public interface IChannel9CategoryBrowser
     {
+        #region Methods
+
         /// <summary>
-        /// Gets a list of all available tags.
+        /// Gets a list of all available series.
         /// </summary>
-        /// <returns>Returns a list of all available tags.</returns>
-        List<Tag> GetAllTags();
+        /// <returns>Returns a list of all available series.</returns>
+        List<Series> GetAllSeries();
 
         /// <summary>
         /// Gets a list of all available shows.
@@ -22,9 +24,11 @@ namespace Channel9Downloader.DataAccess
         List<Show> GetAllShows();
 
         /// <summary>
-        /// Gets a list of all available series.
+        /// Gets a list of all available tags.
         /// </summary>
-        /// <returns>Returns a list of all available series.</returns>
-        List<Series> GetAllSeries();
+        /// <returns>Returns a list of all available tags.</returns>
+        List<Tag> GetAllTags();
+
+        #endregion Methods
     }
 }

@@ -34,7 +34,7 @@
     </UserControl.Resources>
 
     <ribbon:Ribbon x:Name="Ribbon" 
-                   SelectedItem="{Binding SelectedItem}" 
+                   SelectedItem="{Binding SelectedTab}" 
                    ItemsSource="{Binding Tabs}" 
                    ItemContainerStyle="{StaticResource RibbonTabStyle}">
         

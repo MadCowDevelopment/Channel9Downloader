@@ -5,9 +5,16 @@
     /// </summary>
     public class RecurringCategory : Category
     {
+        #region Public Properties
+
         /// <summary>
         /// Gets or sets the description.
         /// </summary>
-        public string Description { get; set; }
+        public string Description
+        {
+            get; set;
+        }
+
+        #endregion Public Properties
     }
 }

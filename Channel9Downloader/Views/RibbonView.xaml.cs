@@ -5,6 +5,8 @@
     /// </summary>
     public partial class RibbonView
     {
+        #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="RibbonView"/> class.
         /// </summary>
@@ -12,5 +14,7 @@
         {
             InitializeComponent();
         }
+
+        #endregion Constructors
     }
 }

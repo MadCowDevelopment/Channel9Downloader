@@ -9,6 +9,8 @@ namespace Channel9Downloader.ViewModels.Ribbon
     /// </summary>
     public class RibbonGroupVM : ObservableObject, IRibbonGroupVM
     {
+        #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="RibbonGroupVM"/> class.
         /// </summary>
@@ -17,14 +19,26 @@ namespace Channel9Downloader.ViewModels.Ribbon
             Items = new ObservableCollection<IRibbonItemVM>();
         }
 
+        #endregion Constructors
+
+        #region Public Properties
+
         /// <summary>
         /// Gets or sets the header.
         /// </summary>
-        public string Header { get; set; }
+        public string Header
+        {
+            get; set;
+        }
 
         /// <summary>
         /// Gets the items in this group.
         /// </summary>
-        public ObservableCollection<IRibbonItemVM> Items { get; private set; }
+        public ObservableCollection<IRibbonItemVM> Items
+        {
+            get; private set;
+        }
+
+        #endregion Public Properties
     }
 }
