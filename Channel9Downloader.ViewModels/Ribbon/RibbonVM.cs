@@ -12,7 +12,7 @@ namespace Channel9Downloader.ViewModels.Ribbon
     /// This class handles the ribbon viewmodel.
     /// </summary>
     [Export(typeof(IRibbonVM))]
-    [PartCreationPolicy(CreationPolicy.NonShared)]
+    [PartCreationPolicy(CreationPolicy.Shared)]
     public class RibbonVM : ObservableObject, IRibbonVM
     {
         #region Fields
@@ -34,30 +34,6 @@ namespace Channel9Downloader.ViewModels.Ribbon
             Tabs = new ObservableCollection<IRibbonTabVM>();
 
             InitializeRibbon();
-        }
-
-        /// <summary>
-        /// Initializes ribbon tabs, groups and items.
-        /// </summary>
-        private void InitializeRibbon()
-        {
-            var categories = new RibbonTabVM();
-            categories.Header = RibbonTabName.CATEGORIES;
-
-            var group = new RibbonGroupVM();
-            group.Header = "Some Group";
-
-            var button = new RibbonButtonVM();
-            button.Command = new RelayCommand(p => MessageBox.Show("Nice"));
-            button.Label = "Show";
-            button.LargeImageSource = @"..\Images\Ribbon\LargeIcon.png";
-            button.ToolTipDescription = "ToolTipDescription";
-            button.ToolTipTitle = "ToolTipTitle";
-            group.Items.Add(button);
-
-            categories.Groups.Add(group);
-            Tabs.Add(categories);
-            Tabs.Add(new RibbonTabVM { Header = RibbonTabName.DOWNLOADS });
         }
 
         #endregion Constructors
@@ -122,5 +98,33 @@ namespace Channel9Downloader.ViewModels.Ribbon
         }
 
         #endregion Protected Methods
+
+        #region Private Methods
+
+        /// <summary>
+        /// Initializes ribbon tabs, groups and items.
+        /// </summary>
+        private void InitializeRibbon()
+        {
+            var categories = new RibbonTabVM();
+            categories.Header = RibbonTabName.CATEGORIES;
+
+            var group = new RibbonGroupVM();
+            group.Header = "Some Group";
+
+            var button = new RibbonButtonVM();
+            button.Command = new RelayCommand(p => MessageBox.Show("Nice"));
+            button.Label = "Show";
+            button.LargeImageSource = @"..\Images\Ribbon\LargeIcon.png";
+            button.ToolTipDescription = "ToolTipDescription";
+            button.ToolTipTitle = "ToolTipTitle";
+            group.Items.Add(button);
+
+            categories.Groups.Add(group);
+            Tabs.Add(categories);
+            Tabs.Add(new RibbonTabVM { Header = RibbonTabName.DOWNLOADS });
+        }
+
+        #endregion Private Methods
     }
 }

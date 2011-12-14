@@ -12,14 +12,29 @@ namespace Channel9Downloader.ViewModels
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class MainWindowVM : SimpleViewModel, IMainWindowVM
     {
-        protected IViewModelBase _contentArea;
+        #region Fields
 
+        /// <summary>
+        /// Backing field for <see cref="ContentArea"/> property.
+        /// </summary>
+        private IViewModelBase _contentArea;
+
+        #endregion Fields
+
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MainWindowVM"/> class.
+        /// </summary>
+        /// <param name="ribbon">The ribbon that is used.</param>
         [ImportingConstructor]
         public MainWindowVM(IRibbonVM ribbon)
         {
             RibbonBar = ribbon;
             RibbonBar.SelectedTabChanged += RibbonBarSelectedTabChanged;
         }
+
+        #endregion Constructors
 
         #region Public Properties
 
@@ -32,7 +47,7 @@ namespace Channel9Downloader.ViewModels
             {
                 return _contentArea;
             }
-            
+
             private set
             {
                 _contentArea = value;
@@ -51,7 +66,7 @@ namespace Channel9Downloader.ViewModels
 
         #endregion Public Properties
 
-        #region Public Methods
+        #region Private Methods
 
         /// <summary>
         /// Handles the selected tab changed event of the ribbon.
@@ -74,6 +89,6 @@ namespace Channel9Downloader.ViewModels
             }
         }
 
-        #endregion Public Methods
+        #endregion Private Methods
     }
 }
