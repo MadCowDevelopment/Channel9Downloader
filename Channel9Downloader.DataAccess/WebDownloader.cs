@@ -1,10 +1,12 @@
-﻿using System.Net;
+﻿using System.ComponentModel.Composition;
+using System.Net;
 
 namespace Channel9Downloader.DataAccess
 {
     /// <summary>
     /// This class encapsulates the functionality of <see cref="WebClient"/>.
     /// </summary>
+    [Export(typeof(IWebDownloader))]
     public class WebDownloader : IWebDownloader
     {
         /// <summary>

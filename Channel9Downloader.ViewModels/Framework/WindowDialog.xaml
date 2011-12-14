@@ -1,0 +1,12 @@
+﻿<Framework:MvvmWindow
+    x:Class="Channel9Downloader.ViewModels.Framework.WindowDialog"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:Framework="clr-namespace:Channel9Downloader.ViewModels.Framework" Title="WindowDialog" 
+    WindowStyle="SingleBorderWindow" 
+    WindowStartupLocation="CenterOwner" 
+    SizeToContent="WidthAndHeight">
+    
+    <ContentPresenter x:Name="DialogPresenter" Content="{Binding .}"/>
+    
+</Framework:MvvmWindow>

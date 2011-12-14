@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Xml.Linq;
 using Channel9Downloader.Entities;
@@ -8,7 +9,8 @@ namespace Channel9Downloader.DataAccess
     /// <summary>
     /// This class is used to browse channel 9 categories.
     /// </summary>
-    public class Channel9CategoryBrowser
+    [Export(typeof(IChannel9CategoryBrowser))]
+    public class Channel9CategoryBrowser : IChannel9CategoryBrowser
     {
         /// <summary>
         /// The web downloader used for retrieving web resources.
@@ -19,6 +21,7 @@ namespace Channel9Downloader.DataAccess
         /// Initializes a new instance of the <see cref="Channel9CategoryBrowser"/> class.
         /// </summary>
         /// <param name="webDownloader">The web downloader used for retrieving web resources.</param>
+        [ImportingConstructor]
         public Channel9CategoryBrowser(IWebDownloader webDownloader)
         {
             _webDownloader = webDownloader;

@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Channel9Downloader.Test.Uni
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Channel9Downloader", "Channel9Downloader\Channel9Downloader.csproj", "{53B6D567-17D8-411A-A01A-8AF98FA5F23D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Channel9Downloader.ViewModels", "Channel9Downloader.ViewModels\Channel9Downloader.ViewModels.csproj", "{B728AE55-327E-4E4A-BCB6-CDFE72E4DF8C}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Channel9Downloader.vsmdi
@@ -81,6 +83,16 @@ Global
 		{53B6D567-17D8-411A-A01A-8AF98FA5F23D}.Release|Mixed Platforms.Build.0 = Release|x86
 		{53B6D567-17D8-411A-A01A-8AF98FA5F23D}.Release|x86.ActiveCfg = Release|x86
 		{53B6D567-17D8-411A-A01A-8AF98FA5F23D}.Release|x86.Build.0 = Release|x86
+		{B728AE55-327E-4E4A-BCB6-CDFE72E4DF8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B728AE55-327E-4E4A-BCB6-CDFE72E4DF8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B728AE55-327E-4E4A-BCB6-CDFE72E4DF8C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{B728AE55-327E-4E4A-BCB6-CDFE72E4DF8C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{B728AE55-327E-4E4A-BCB6-CDFE72E4DF8C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B728AE55-327E-4E4A-BCB6-CDFE72E4DF8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B728AE55-327E-4E4A-BCB6-CDFE72E4DF8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B728AE55-327E-4E4A-BCB6-CDFE72E4DF8C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{B728AE55-327E-4E4A-BCB6-CDFE72E4DF8C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{B728AE55-327E-4E4A-BCB6-CDFE72E4DF8C}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
