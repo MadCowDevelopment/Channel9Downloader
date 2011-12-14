@@ -4,11 +4,48 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:ribbon="clr-namespace:Microsoft.Windows.Controls.Ribbon;assembly=RibbonControlsLibrary" 
     mc:Ignorable="d" 
     d:DesignHeight="300" d:DesignWidth="300">
-    
-    <Grid>
-            
-    </Grid>
-    
+
+    <ribbon:Ribbon x:Name="Ribbon">
+        
+        <ribbon:Ribbon.ApplicationMenu>
+            <ribbon:RibbonApplicationMenu SmallImageSource="..\Images\Ribbon\LargeIcon.png">
+                <ribbon:RibbonApplicationMenuItem 
+                    Header="_Some menu entry"
+                    x:Name="RibbonSomeMenuEntry"
+                    Command="{Binding TODO_COMMAND}"
+                    ImageSource="..\Images\Ribbon\LargeIcon.png"/>
+                <ribbon:RibbonSeparator />
+                <ribbon:RibbonApplicationMenuItem 
+                    Header="_Another menu entry"
+                    x:Name="RibbonAnotherMenuEntry"
+                    Command="{Binding TODO_COMMAND2}"
+                    ImageSource="..\Images\Ribbon\LargeIcon.png"/>
+                <ribbon:RibbonApplicationMenu.AuxiliaryPaneContent>
+                    <ContentControl Content="{Binding RecentProjects}"/>
+                </ribbon:RibbonApplicationMenu.AuxiliaryPaneContent>
+            </ribbon:RibbonApplicationMenu>
+        </ribbon:Ribbon.ApplicationMenu>
+        
+        <ribbon:RibbonTab x:Name="HomeTab" Header="Home">
+            <ribbon:RibbonGroup x:Name="SomeGroup" Header="GroupHeader">
+                <ribbon:RibbonButton 
+                    x:Name="Button1" Label="Button1"
+                    LargeImageSource="..\Images\Ribbon\LargeIcon.png" 
+                    ToolTipDescription="Put description here"
+                    ToolTipTitle="ToolTipTitle"
+                    Command="{Binding TODO_COMMAND3}"/>
+                <ribbon:RibbonButton 
+                    x:Name="Button2" Label="Button2" 
+                    LargeImageSource="..\Images\Ribbon\LargeIcon.png" 
+                    ToolTipDescription="Put description here"
+                    ToolTipTitle="ToolTipTitle"
+                    Command="{Binding TODO_COMMAND4}"/>
+            </ribbon:RibbonGroup>
+
+        </ribbon:RibbonTab>
+    </ribbon:Ribbon>
+
 </UserControl>
