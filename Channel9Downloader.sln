@@ -14,11 +14,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Channel9Downloader.Entities", "Channel9Downloader.Entities\Channel9Downloader.Entities.csproj", "{B54175FB-049A-44AA-8261-533908DF1BE4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Channel9Downloader.Test.Unit", "Channel9Downloader.Test.Unit\Channel9Downloader.Test.Unit.csproj", "{673949F7-1FC7-42A5-BC07-0EE4C8CFBD5F}"
+EndProject
 Global
-	GlobalSection(SubversionScc) = preSolution
-		Svn-Managed = True
-		Manager = AnkhSVN - Subversion Support for Visual Studio
-	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Channel9Downloader.vsmdi
 	EndGlobalSection
@@ -61,8 +59,22 @@ Global
 		{B54175FB-049A-44AA-8261-533908DF1BE4}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{B54175FB-049A-44AA-8261-533908DF1BE4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{B54175FB-049A-44AA-8261-533908DF1BE4}.Release|x86.ActiveCfg = Release|Any CPU
+		{673949F7-1FC7-42A5-BC07-0EE4C8CFBD5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{673949F7-1FC7-42A5-BC07-0EE4C8CFBD5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{673949F7-1FC7-42A5-BC07-0EE4C8CFBD5F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{673949F7-1FC7-42A5-BC07-0EE4C8CFBD5F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{673949F7-1FC7-42A5-BC07-0EE4C8CFBD5F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{673949F7-1FC7-42A5-BC07-0EE4C8CFBD5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{673949F7-1FC7-42A5-BC07-0EE4C8CFBD5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{673949F7-1FC7-42A5-BC07-0EE4C8CFBD5F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{673949F7-1FC7-42A5-BC07-0EE4C8CFBD5F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{673949F7-1FC7-42A5-BC07-0EE4C8CFBD5F}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
 	EndGlobalSection
 EndGlobal
