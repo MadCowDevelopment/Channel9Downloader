@@ -5,10 +5,38 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:ribbon="clr-namespace:Microsoft.Windows.Controls.Ribbon;assembly=RibbonControlsLibrary" 
+    xmlns:ribbonVM="clr-namespace:Channel9Downloader.ViewModels.Ribbon;assembly=Channel9Downloader.ViewModels" 
     mc:Ignorable="d" 
     d:DesignHeight="300" d:DesignWidth="300">
+    
+    <UserControl.Resources>
+        <Style x:Key="RibbonGroupStyle" TargetType="ribbon:RibbonGroup">
+            <Setter Property="Header" Value="{Binding Header}" />
+            <Setter Property="ItemsSource" Value="{Binding Items}" />
+        </Style>
+        <Style x:Key="RibbonTabStyle" TargetType="ribbon:RibbonTab">
+            <Setter Property="Header" Value="{Binding Header}" />
+            <Setter Property="ItemsSource" Value="{Binding Groups}" />
+            <Setter Property="ItemContainerStyle" Value="{StaticResource RibbonGroupStyle}" />
+        </Style>
 
-    <ribbon:Ribbon x:Name="Ribbon">
+        <DataTemplate DataType="{x:Type ribbonVM:RibbonButtonVM}">
+            <StackPanel>
+                <ribbon:RibbonButton 
+                    Label="{Binding Label}"
+                    LargeImageSource="{Binding LargeImageSource}" 
+                    ToolTipDescription="{Binding ToolTipDescription}"
+                    ToolTipTitle="{Binding ToolTipTitle}"
+                    Command="{Binding Command}"/>
+            </StackPanel>
+        </DataTemplate>
+
+    </UserControl.Resources>
+
+    <ribbon:Ribbon x:Name="Ribbon" 
+                   SelectedItem="{Binding SelectedItem}" 
+                   ItemsSource="{Binding Tabs}" 
+                   ItemContainerStyle="{StaticResource RibbonTabStyle}">
         
         <ribbon:Ribbon.ApplicationMenu>
             <ribbon:RibbonApplicationMenu SmallImageSource="..\Images\Ribbon\LargeIcon.png">
@@ -28,24 +56,7 @@
                 </ribbon:RibbonApplicationMenu.AuxiliaryPaneContent>
             </ribbon:RibbonApplicationMenu>
         </ribbon:Ribbon.ApplicationMenu>
-        
-        <ribbon:RibbonTab x:Name="HomeTab" Header="Home">
-            <ribbon:RibbonGroup x:Name="SomeGroup" Header="GroupHeader">
-                <ribbon:RibbonButton 
-                    x:Name="Button1" Label="Button1"
-                    LargeImageSource="..\Images\Ribbon\LargeIcon.png" 
-                    ToolTipDescription="Put description here"
-                    ToolTipTitle="ToolTipTitle"
-                    Command="{Binding TODO_COMMAND3}"/>
-                <ribbon:RibbonButton 
-                    x:Name="Button2" Label="Button2" 
-                    LargeImageSource="..\Images\Ribbon\LargeIcon.png" 
-                    ToolTipDescription="Put description here"
-                    ToolTipTitle="ToolTipTitle"
-                    Command="{Binding TODO_COMMAND4}"/>
-            </ribbon:RibbonGroup>
 
-        </ribbon:RibbonTab>
     </ribbon:Ribbon>
 
 </UserControl>

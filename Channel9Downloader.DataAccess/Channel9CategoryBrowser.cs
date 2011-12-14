@@ -113,8 +113,7 @@ namespace Channel9Downloader.DataAccess
                     let title = entry.Element("a").Value
                     let relativePath = entry.Element("a").Attribute("href").Value
                     let description =
-                        entry.Elements("div").Where(p => p.Attribute("class").Value == "description").FirstOrDefault().
-                        Value.Trim()
+                        entry.Elements("div").Where(p => p.Attribute("class").Value == "description").FirstOrDefault().Value.Trim()
                     select
                         new RecurringCategory { Description = description, RelativePath = relativePath, Title = title })
                 .ToList();

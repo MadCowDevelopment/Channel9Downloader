@@ -8,6 +8,7 @@ namespace Channel9Downloader.ViewModels
     /// This class manages the main content area.
     /// </summary>
     [Export(typeof(IContentAreaVM))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     public class ContentAreaVM : ObservableObject, IContentAreaVM
     {
     }

@@ -77,10 +77,18 @@
     <Compile Include="Framework\WPFSaveFileService.cs" />
     <Compile Include="IContentAreaVM.cs" />
     <Compile Include="IMainWindowVM.cs" />
-    <Compile Include="IRibbonVM.cs" />
+    <Compile Include="Ribbon\IRibbonButtonVM.cs" />
+    <Compile Include="Ribbon\IRibbonGroupVM.cs" />
+    <Compile Include="Ribbon\IRibbonItemVM.cs" />
+    <Compile Include="Ribbon\IRibbonTabVM.cs" />
+    <Compile Include="Ribbon\IRibbonVM.cs" />
     <Compile Include="MainWindowVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RibbonVM.cs" />
+    <Compile Include="Ribbon\RibbonButtonVM.cs" />
+    <Compile Include="Ribbon\RibbonGroupVM.cs" />
+    <Compile Include="Ribbon\RibbonItemVM.cs" />
+    <Compile Include="Ribbon\RibbonTabVM.cs" />
+    <Compile Include="Ribbon\RibbonVM.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
