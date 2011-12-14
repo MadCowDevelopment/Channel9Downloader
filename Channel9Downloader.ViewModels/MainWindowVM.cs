@@ -12,21 +12,37 @@ namespace Channel9Downloader.ViewModels
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class MainWindowVM : SimpleViewModel, IMainWindowVM
     {
+        protected IViewModelBase _contentArea;
+
+        [ImportingConstructor]
+        public MainWindowVM(IRibbonVM ribbon)
+        {
+            RibbonBar = ribbon;
+            RibbonBar.SelectedTabChanged += RibbonBarSelectedTabChanged;
+        }
+
         #region Public Properties
 
         /// <summary>
         /// Gets the viewmodel for the main content.
         /// </summary>
-        [Import]
-        public IContentAreaVM ContentArea
+        public IViewModelBase ContentArea
         {
-            get; private set;
+            get
+            {
+                return _contentArea;
+            }
+            
+            private set
+            {
+                _contentArea = value;
+                RaisePropertyChanged();
+            }
         }
 
         /// <summary>
         /// Gets the viewmodel for the ribbon bar.
         /// </summary>
-        [Import]
         public IRibbonVM RibbonBar
         {
             get;
@@ -34,5 +50,30 @@ namespace Channel9Downloader.ViewModels
         }
 
         #endregion Public Properties
+
+        #region Public Methods
+
+        /// <summary>
+        /// Handles the selected tab changed event of the ribbon.
+        /// </summary>
+        /// <param name="sender">Sender of the event.</param>
+        /// <param name="e">Event args of the event.</param>
+        private void RibbonBarSelectedTabChanged(object sender, Events.SelectedTabChangedEventArgs e)
+        {
+            if (e.RibbonTabVM == null)
+            {
+                ContentArea = null;
+            }
+            else if (e.RibbonTabVM.Header == RibbonTabName.CATEGORIES)
+            {
+                ContentArea = new CategoriesVM();
+            }
+            else if (e.RibbonTabVM.Header == RibbonTabName.DOWNLOADS)
+            {
+                ContentArea = new DownloadsVM();
+            }
+        }
+
+        #endregion Public Methods
     }
 }
