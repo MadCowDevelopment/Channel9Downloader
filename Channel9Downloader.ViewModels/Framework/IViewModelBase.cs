@@ -1,6 +1,6 @@
 using System;
 
-namespace MvvmFramework
+namespace Channel9Downloader.ViewModels.Framework
 {
     /// <summary>
     /// This interface is for viewmodel base classes.

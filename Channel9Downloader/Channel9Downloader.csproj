@@ -59,6 +59,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -91,6 +94,16 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Channel9Downloader.Composition\Channel9Downloader.Composition.csproj">
+      <Project>{ECD4CA34-5AAB-4DA7-A13E-9407487888AC}</Project>
+      <Name>Channel9Downloader.Composition</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Channel9Downloader.ViewModels\Channel9Downloader.ViewModels.csproj">
+      <Project>{B728AE55-327E-4E4A-BCB6-CDFE72E4DF8C}</Project>
+      <Name>Channel9Downloader.ViewModels</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

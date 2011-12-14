@@ -4,10 +4,10 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Channel9Downloader.Entities")]
+[assembly: AssemblyTitle("Channel9Downloader.Composition")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyProduct("Channel9Downloader.Entities")]
+[assembly: AssemblyProduct("Channel9Downloader.Composition")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -17,4 +17,5 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("ea378c7e-dd26-4332-abda-25124bb4825f")]
+[assembly: Guid("dc2a4499-d877-47de-90c5-0301c45ea1df")]
+

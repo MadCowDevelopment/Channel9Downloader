@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Channel9Downloader.Test.Unit")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("M&M Software GmbH")]
+[assembly: AssemblyCompany("MadCowDevelopment")]
 [assembly: AssemblyProduct("Channel9Downloader.Test.Unit")]
-[assembly: AssemblyCopyright("Copyright © M&M Software GmbH 2011")]
+[assembly: AssemblyCopyright("Copyright © MadCowDevelopment 2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

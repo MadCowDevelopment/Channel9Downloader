@@ -41,6 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="IChannel9CategoryBrowser.cs" />
     <Compile Include="IWebDownloader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

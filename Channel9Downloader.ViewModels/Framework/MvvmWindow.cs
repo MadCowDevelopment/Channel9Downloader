@@ -1,7 +1,5 @@
 ﻿using System.Windows;
 
-using MvvmFramework;
-
 namespace Channel9Downloader.ViewModels.Framework
 {
     /// <summary>

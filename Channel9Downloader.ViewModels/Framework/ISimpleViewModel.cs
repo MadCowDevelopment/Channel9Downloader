@@ -1,8 +1,6 @@
 using System;
 
-using Channel9Downloader.ViewModels.Framework;
-
-namespace MvvmFramework
+namespace Channel9Downloader.ViewModels.Framework
 {
     /// <summary>
     /// This interface is for viewmodels that support lifetime events.
