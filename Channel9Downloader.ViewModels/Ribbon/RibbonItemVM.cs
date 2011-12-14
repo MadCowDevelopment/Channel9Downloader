@@ -1,4 +1,5 @@
-﻿using Channel9Downloader.ViewModels.Framework;
+﻿using Channel9Downloader.Entities;
+using Channel9Downloader.ViewModels.Framework;
 
 namespace Channel9Downloader.ViewModels.Ribbon
 {

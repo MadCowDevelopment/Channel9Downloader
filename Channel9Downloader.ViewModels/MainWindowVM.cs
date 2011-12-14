@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.Composition;
 
+using Channel9Downloader.Composition;
 using Channel9Downloader.ViewModels.Framework;
 using Channel9Downloader.ViewModels.Ribbon;
 
@@ -15,6 +16,11 @@ namespace Channel9Downloader.ViewModels
         #region Fields
 
         /// <summary>
+        /// The composer used for dependency injection.
+        /// </summary>
+        private readonly IDependencyComposer _composer;
+
+        /// <summary>
         /// Backing field for <see cref="ContentArea"/> property.
         /// </summary>
         private IViewModelBase _contentArea;
@@ -26,10 +32,13 @@ namespace Channel9Downloader.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindowVM"/> class.
         /// </summary>
+        /// <param name="composer">The composer used for dependency injection.</param>
         /// <param name="ribbon">The ribbon that is used.</param>
         [ImportingConstructor]
-        public MainWindowVM(IRibbonVM ribbon)
+        public MainWindowVM(IDependencyComposer composer, IRibbonVM ribbon)
         {
+            _composer = composer;
+
             RibbonBar = ribbon;
             RibbonBar.SelectedTabChanged += RibbonBarSelectedTabChanged;
         }
@@ -81,11 +90,11 @@ namespace Channel9Downloader.ViewModels
             }
             else if (e.RibbonTabVM.Header == RibbonTabName.CATEGORIES)
             {
-                ContentArea = new CategoriesVM();
+                ContentArea = _composer.GetExportedValue<ICategoriesVM>();
             }
             else if (e.RibbonTabVM.Header == RibbonTabName.DOWNLOADS)
             {
-                ContentArea = new DownloadsVM();
+                ContentArea = _composer.GetExportedValue<IDownloadsVM>();
             }
         }
 

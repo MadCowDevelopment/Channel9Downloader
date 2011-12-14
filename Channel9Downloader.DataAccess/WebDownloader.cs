@@ -7,6 +7,7 @@ namespace Channel9Downloader.DataAccess
     /// This class encapsulates the functionality of <see cref="WebClient"/>.
     /// </summary>
     [Export(typeof(IWebDownloader))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     public class WebDownloader : IWebDownloader
     {
         #region Public Methods

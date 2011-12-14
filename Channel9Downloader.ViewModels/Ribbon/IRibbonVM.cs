@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 
+using Channel9Downloader.Entities;
 using Channel9Downloader.ViewModels.Events;
 using Channel9Downloader.ViewModels.Framework;
 

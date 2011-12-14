@@ -133,6 +133,10 @@
       <Project>{ECD4CA34-5AAB-4DA7-A13E-9407487888AC}</Project>
       <Name>Channel9Downloader.Composition</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Channel9Downloader.Entities\Channel9Downloader.Entities.csproj">
+      <Project>{B54175FB-049A-44AA-8261-533908DF1BE4}</Project>
+      <Name>Channel9Downloader.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Channel9Downloader.ViewModels\Channel9Downloader.ViewModels.csproj">
       <Project>{B728AE55-327E-4E4A-BCB6-CDFE72E4DF8C}</Project>
       <Name>Channel9Downloader.ViewModels</Name>
