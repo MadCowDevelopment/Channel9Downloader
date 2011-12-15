@@ -3,18 +3,30 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
     xmlns:Views="clr-namespace:Channel9Downloader.Views" 
     xmlns:ViewModels="clr-namespace:Channel9Downloader.ViewModels;assembly=Channel9Downloader.ViewModels" 
-    xmlns:RibbonViewModels="clr-namespace:Channel9Downloader.ViewModels.Ribbon;assembly=Channel9Downloader.ViewModels">
+    xmlns:RibbonViewModels="clr-namespace:Channel9Downloader.ViewModels.Ribbon;assembly=Channel9Downloader.ViewModels" xmlns:Categories="clr-namespace:Channel9Downloader.ViewModels.Categories;assembly=Channel9Downloader.ViewModels">
     
     <DataTemplate DataType="{x:Type RibbonViewModels:RibbonVM}">
         <Views:RibbonView/>
     </DataTemplate>
     
-    <DataTemplate DataType="{x:Type ViewModels:CategoriesVM}">
+    <DataTemplate DataType="{x:Type Categories:CategoriesVM}">
         <Views:CategoriesView/>
     </DataTemplate>
     
     <DataTemplate DataType="{x:Type ViewModels:DownloadsVM}">
         <Views:DownloadsView/>
+    </DataTemplate>
+    
+    <DataTemplate DataType="{x:Type Categories:TagSelectionVM}">
+        <Views:TagSelectionView/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type Categories:ShowSelectionVM}">
+        <Views:ShowSelectionView/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type Categories:SeriesSelectionVM}">
+        <Views:SeriesSelectionView/>
     </DataTemplate>
 
 </ResourceDictionary>

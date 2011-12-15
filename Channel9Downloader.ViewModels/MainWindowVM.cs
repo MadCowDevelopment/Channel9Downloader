@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.Composition;
 
 using Channel9Downloader.Composition;
+using Channel9Downloader.ViewModels.Categories;
 using Channel9Downloader.ViewModels.Framework;
 using Channel9Downloader.ViewModels.Ribbon;
 

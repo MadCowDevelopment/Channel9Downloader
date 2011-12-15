@@ -23,6 +23,14 @@
             get; set;
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this category is enabled.
+        /// </summary>
+        public bool IsEnabled
+        {
+            get; set;
+        }
+
         #endregion Public Properties
     }
 }

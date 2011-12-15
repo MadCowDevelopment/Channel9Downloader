@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
-using System.Windows;
 
 using Channel9Downloader.ViewModels.Events;
 using Channel9Downloader.ViewModels.Framework;
@@ -29,11 +28,11 @@ namespace Channel9Downloader.ViewModels.Ribbon
         /// <summary>
         /// Initializes a new instance of the <see cref="RibbonVM"/> class.
         /// </summary>
-        public RibbonVM()
+        [ImportingConstructor]
+        public RibbonVM(IRibbonFactory ribbonFactory)
         {
-            Tabs = new ObservableCollection<IRibbonTabVM>();
-
-            InitializeRibbon();
+            var tabs = ribbonFactory.CreateRibbonTabs();
+            Tabs = new ObservableCollection<IRibbonTabVM>(tabs);
         }
 
         #endregion Constructors
@@ -98,33 +97,5 @@ namespace Channel9Downloader.ViewModels.Ribbon
         }
 
         #endregion Protected Methods
-
-        #region Private Methods
-
-        /// <summary>
-        /// Initializes ribbon tabs, groups and items.
-        /// </summary>
-        private void InitializeRibbon()
-        {
-            var categories = new RibbonTabVM();
-            categories.Header = RibbonTabName.CATEGORIES;
-
-            var group = new RibbonGroupVM();
-            group.Header = "Some Group";
-
-            var button = new RibbonButtonVM();
-            button.Command = new RelayCommand(p => MessageBox.Show("Nice"));
-            button.Label = "Show";
-            button.LargeImageSource = @"..\Images\Ribbon\LargeIcon.png";
-            button.ToolTipDescription = "ToolTipDescription";
-            button.ToolTipTitle = "ToolTipTitle";
-            group.Items.Add(button);
-
-            categories.Groups.Add(group);
-            Tabs.Add(categories);
-            Tabs.Add(new RibbonTabVM { Header = RibbonTabName.DOWNLOADS });
-        }
-
-        #endregion Private Methods
     }
 }
