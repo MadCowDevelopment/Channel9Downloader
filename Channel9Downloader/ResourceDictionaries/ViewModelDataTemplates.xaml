@@ -33,4 +33,8 @@
         <Controls:LoadingWait/>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type ViewModels:SettingsVM}">
+        <Views:SettingsView/>
+    </DataTemplate>
+
 </ResourceDictionary>

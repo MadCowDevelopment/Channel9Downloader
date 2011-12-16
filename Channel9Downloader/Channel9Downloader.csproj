@@ -69,11 +69,17 @@
     <Compile Include="Views\DownloadsView.xaml.cs">
       <DependentUpon>DownloadsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\GenericDialog.xaml.cs">
+      <DependentUpon>GenericDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\RibbonView.xaml.cs">
       <DependentUpon>RibbonView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SeriesSelectionView.xaml.cs">
       <DependentUpon>SeriesSelectionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SettingsView.xaml.cs">
+      <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ShowSelectionView.xaml.cs">
       <DependentUpon>ShowSelectionView.xaml</DependentUpon>
@@ -81,6 +87,10 @@
     <Compile Include="Views\TagSelectionView.xaml.cs">
       <DependentUpon>TagSelectionView.xaml</DependentUpon>
     </Compile>
+    <Page Include="ResourceDictionaries\RibbonResources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\CategoriesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -112,11 +122,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\GenericDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\RibbonView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SeriesSelectionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -186,6 +204,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Application.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Ribbon\SettingsLarge.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Ribbon\ExitLarge.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

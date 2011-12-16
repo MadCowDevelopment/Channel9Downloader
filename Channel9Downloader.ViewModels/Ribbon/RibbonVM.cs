@@ -23,20 +23,17 @@ namespace Channel9Downloader.ViewModels.Ribbon
 
         #endregion Fields
 
-        #region Constructors
+        [Import]
+        public IRibbonFactory RibbonFactory { get; set; }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RibbonVM"/> class.
-        /// </summary>
-        /// <param name="ribbonFactory">The ribbon factory used for creating ribbon items.</param>
-        [ImportingConstructor]
-        public RibbonVM(IRibbonFactory ribbonFactory)
+
+        public IMainWindowVM MainWindowVM { get; set; }
+
+        public void Initialize()
         {
-            var tabs = ribbonFactory.CreateRibbonTabs();
+            var tabs = RibbonFactory.CreateRibbonTabs();
             Tabs = new ObservableCollection<IRibbonTabVM>(tabs);
         }
-
-        #endregion Constructors
 
         #region Events
 

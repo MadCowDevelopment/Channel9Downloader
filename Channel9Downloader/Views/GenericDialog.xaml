@@ -1,0 +1,13 @@
+﻿<Window 
+    x:Class="Channel9Downloader.Views.GenericDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="{Binding DisplayName}" 
+    WindowStyle="SingleBorderWindow" 
+    WindowStartupLocation="CenterOwner" 
+    ResizeMode="NoResize"
+    SizeToContent="WidthAndHeight">
+
+    <ContentPresenter Content="{Binding}"/>
+
+</Window>

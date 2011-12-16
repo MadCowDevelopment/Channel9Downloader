@@ -1,7 +1,9 @@
-﻿using System.ComponentModel.Composition;
-
+﻿using System;
+using System.ComponentModel.Composition;
+using System.Windows.Input;
 using Channel9Downloader.Composition;
 using Channel9Downloader.ViewModels.Categories;
+using Channel9Downloader.ViewModels.Events;
 using Channel9Downloader.ViewModels.Framework;
 using Channel9Downloader.ViewModels.Ribbon;
 
@@ -11,7 +13,7 @@ namespace Channel9Downloader.ViewModels
     /// This class provides logic and binding for the main window.
     /// </summary>
     [Export(typeof(IMainWindowVM))]
-    [PartCreationPolicy(CreationPolicy.NonShared)]
+    [PartCreationPolicy(CreationPolicy.Shared)]
     public class MainWindowVM : SimpleViewModel, IMainWindowVM
     {
         #region Fields
@@ -34,13 +36,15 @@ namespace Channel9Downloader.ViewModels
         /// Initializes a new instance of the <see cref="MainWindowVM"/> class.
         /// </summary>
         /// <param name="composer">The composer used for dependency injection.</param>
-        /// <param name="ribbon">The ribbon that is used.</param>
         [ImportingConstructor]
-        public MainWindowVM(IDependencyComposer composer, IRibbonVM ribbon)
+        public MainWindowVM(IDependencyComposer composer)
         {
             _composer = composer;
+        }
 
-            RibbonBar = ribbon;
+        public void Initialize()
+        {
+            RibbonBar.Initialize();
             RibbonBar.SelectedTabChanged += RibbonBarSelectedTabChanged;
         }
 
@@ -68,6 +72,7 @@ namespace Channel9Downloader.ViewModels
         /// <summary>
         /// Gets the viewmodel for the ribbon bar.
         /// </summary>
+        [Import]
         public IRibbonVM RibbonBar
         {
             get;
@@ -100,5 +105,30 @@ namespace Channel9Downloader.ViewModels
         }
 
         #endregion Private Methods
+
+        private ICommand _showSettingsViewCommand;
+
+        public ICommand ShowSettingsViewCommand
+        {
+            get 
+            {
+                return _showSettingsViewCommand ??
+                       (_showSettingsViewCommand = new RelayCommand(p => OnShowSettingsView()));
+            }
+        }
+
+        private void OnShowSettingsView()
+        {
+            var settingsVM = _composer.GetExportedValue<ISettingsVM>();
+            OnDialogRequested(new ShowDialogEventArgs(settingsVM));
+        }
+
+        public event EventHandler<ShowDialogEventArgs> DialogRequested;
+
+        public void OnDialogRequested(ShowDialogEventArgs e)
+        {
+            var handler = DialogRequested;
+            if (handler != null) handler(this, e);
+        }
     }
 }

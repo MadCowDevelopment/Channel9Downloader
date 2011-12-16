@@ -58,6 +58,7 @@
     <Compile Include="Categories\TagSelectionVM.cs" />
     <Compile Include="DownloadsVM.cs" />
     <Compile Include="Events\SelectedTabChangedEventArgs.cs" />
+    <Compile Include="Events\ShowDialogEventArgs.cs" />
     <Compile Include="Framework\AdornerViewModel.cs" />
     <Compile Include="Framework\CloseRequestEventArgs.cs" />
     <Compile Include="Framework\DialogService.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="IDownloadsVM.cs" />
     <Compile Include="ILoadingWait.cs" />
     <Compile Include="IMainWindowVM.cs" />
+    <Compile Include="ISettingsVM.cs" />
     <Compile Include="LoadingWaitVM.cs" />
     <Compile Include="Ribbon\IRibbonButtonVM.cs" />
     <Compile Include="Ribbon\IRibbonFactory.cs" />
@@ -105,6 +107,7 @@
     <Compile Include="Ribbon\RibbonTabName.cs" />
     <Compile Include="Ribbon\RibbonTabVM.cs" />
     <Compile Include="Ribbon\RibbonVM.cs" />
+    <Compile Include="SettingsVM.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Channel9Downloader.Composition\Channel9Downloader.Composition.csproj">

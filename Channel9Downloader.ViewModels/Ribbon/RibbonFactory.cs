@@ -11,28 +11,15 @@ namespace Channel9Downloader.ViewModels.Ribbon
     [Export(typeof(IRibbonFactory))]
     public class RibbonFactory : IRibbonFactory
     {
-        #region Fields
+        #region Public Properties
 
-        /// <summary>
-        /// The categories viewmodel.
-        /// </summary>
-        private readonly ICategoriesVM _categoriesVM;
+        [Import]
+        public IMainWindowVM MainWindowVM { get; set; }
 
-        #endregion Fields
+        [Import]
+        public ICategoriesVM CategoriesVM { get; set; }
 
-        #region Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RibbonFactory"/> class.
-        /// </summary>
-        /// <param name="categoriesVM">The categories viewmodel.</param>
-        [ImportingConstructor]
-        public RibbonFactory(ICategoriesVM categoriesVM)
-        {
-            _categoriesVM = categoriesVM;
-        }
-
-        #endregion Constructors
+        #endregion
 
         #region Public Methods
 
@@ -43,9 +30,7 @@ namespace Channel9Downloader.ViewModels.Ribbon
         public List<IRibbonTabVM> CreateRibbonTabs()
         {
             var result = new List<IRibbonTabVM>();
-
             result.Add(CreateCategoryTab());
-
             return result;
         }
 
@@ -67,7 +52,7 @@ namespace Channel9Downloader.ViewModels.Ribbon
             groupCategories.Header = "Categories";
 
             var buttonTags = new RibbonButtonVM();
-            buttonTags.Command = _categoriesVM.ShowTagSelectionCommand;
+            buttonTags.Command = CategoriesVM.ShowTagSelectionCommand;
             buttonTags.Label = "Tags";
             buttonTags.LargeImageSource = @"..\Images\Ribbon\TagLarge.png";
             buttonTags.ToolTipDescription = "Select Tags that should be automatically downloaded.";
@@ -75,7 +60,7 @@ namespace Channel9Downloader.ViewModels.Ribbon
             groupCategories.Items.Add(buttonTags);
 
             var buttonShows = new RibbonButtonVM();
-            buttonShows.Command = _categoriesVM.ShowShowSelectionCommand;
+            buttonShows.Command = CategoriesVM.ShowShowSelectionCommand;
             buttonShows.Label = "Shows";
             buttonShows.LargeImageSource = @"..\Images\Ribbon\ShowLarge.png";
             buttonShows.ToolTipDescription = "Select Shows that should be automatically downloaded.";
@@ -83,7 +68,7 @@ namespace Channel9Downloader.ViewModels.Ribbon
             groupCategories.Items.Add(buttonShows);
 
             var buttonSeries = new RibbonButtonVM();
-            buttonSeries.Command = _categoriesVM.ShowSeriesSelectionCommand;
+            buttonSeries.Command = CategoriesVM.ShowSeriesSelectionCommand;
             buttonSeries.Label = "Series";
             buttonSeries.LargeImageSource = @"..\Images\Ribbon\SeriesLarge.png";
             buttonSeries.ToolTipDescription = "Select Series that should be automatically downloaded.";
@@ -97,7 +82,7 @@ namespace Channel9Downloader.ViewModels.Ribbon
             groupUpdate.Header = "Update";
 
             var buttonUpdate = new RibbonButtonVM();
-            buttonUpdate.Command = _categoriesVM.UpdateCategoriesCommand;
+            buttonUpdate.Command = CategoriesVM.UpdateCategoriesCommand;
             buttonUpdate.Label = "Update";
             buttonUpdate.LargeImageSource = @"..\Images\Ribbon\UpdateLarge.png";
             buttonUpdate.ToolTipDescription = "Update available tags from website.";

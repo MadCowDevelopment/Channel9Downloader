@@ -94,6 +94,7 @@ namespace Channel9Downloader.DataAccess
         private List<Series> GetAllSeries()
         {
             var recurringCategories = RetrieveShowsOrSeries("http://channel9.msdn.com/Browse/Series?sort=atoz&page={0}");
+            
             return recurringCategories.Select(recurringCategory => new Series(recurringCategory)).ToList();
         }
 

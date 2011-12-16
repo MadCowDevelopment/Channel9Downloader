@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 
-using Channel9Downloader.Entities;
 using Channel9Downloader.ViewModels.Events;
 using Channel9Downloader.ViewModels.Framework;
 
@@ -40,5 +39,11 @@ namespace Channel9Downloader.ViewModels.Ribbon
         }
 
         #endregion Properties
+
+        IRibbonFactory RibbonFactory { get; set; }
+
+        IMainWindowVM MainWindowVM { get; set; }
+
+        void Initialize();
     }
 }

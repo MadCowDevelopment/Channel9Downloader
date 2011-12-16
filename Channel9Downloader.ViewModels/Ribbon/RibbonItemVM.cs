@@ -8,5 +8,6 @@ namespace Channel9Downloader.ViewModels.Ribbon
     /// </summary>
     public abstract class RibbonItemVM : ObservableObject, IRibbonItemVM
     {
+        public bool IsDropDownOpen { get; set; }
     }
 }
