@@ -2,9 +2,8 @@
 
 using Channel9Downloader.Composition;
 using Channel9Downloader.ViewModels;
-using Channel9Downloader.ViewModels.Categories;
 
-namespace Channel9Downloader.Views
+namespace Channel9Downloader
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

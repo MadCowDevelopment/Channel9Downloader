@@ -2,7 +2,7 @@
     x:Class="Channel9Downloader.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    StartupUri="Views\MainWindow.xaml">
+    StartupUri="MainWindow.xaml">
     
     <Application.Resources>
         <ResourceDictionary>

@@ -12,8 +12,8 @@ namespace Channel9Downloader.DataAccess
     /// <summary>
     /// This class is used to browse channel 9 categories.
     /// </summary>
-    [Export(typeof(ICategoryDownloader))]
-    public class CategoryDownloader : ICategoryDownloader
+    [Export(typeof(ICategoryScraper))]
+    public class CategoryScraper : ICategoryScraper
     {
         #region Fields
 
@@ -27,11 +27,11 @@ namespace Channel9Downloader.DataAccess
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CategoryDownloader"/> class.
+        /// Initializes a new instance of the <see cref="CategoryScraper"/> class.
         /// </summary>
         /// <param name="webDownloader">The web downloader used for retrieving web resources.</param>
         [ImportingConstructor]
-        public CategoryDownloader(IWebDownloader webDownloader)
+        public CategoryScraper(IWebDownloader webDownloader)
         {
             _webDownloader = webDownloader;
         }

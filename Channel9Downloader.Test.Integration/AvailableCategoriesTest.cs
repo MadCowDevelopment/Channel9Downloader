@@ -73,10 +73,10 @@ namespace Channel9Downloader.Test.Integration
         /// Creates a category browser.
         /// </summary>
         /// <returns>Returns a category browser.</returns>
-        private CategoryDownloader CreateChannel9CategoryBrowser()
+        private CategoryScraper CreateChannel9CategoryBrowser()
         {
             var webDownloader = new WebDownloader();
-            return new CategoryDownloader(webDownloader);
+            return new CategoryScraper(webDownloader);
         }
 
         #endregion Private Methods

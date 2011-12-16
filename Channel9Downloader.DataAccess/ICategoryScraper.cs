@@ -7,7 +7,7 @@ namespace Channel9Downloader.DataAccess
     /// <summary>
     /// This interface provides methods for retrieving different categories.
     /// </summary>
-    public interface ICategoryDownloader
+    public interface ICategoryScraper
     {
         #region Methods
 

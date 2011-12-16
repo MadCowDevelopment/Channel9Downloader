@@ -19,9 +19,9 @@ namespace Channel9Downloader.DataAccess
         private readonly ICategoriesDataAccess _categoriesDataAccess;
 
         /// <summary>
-        /// Downloader used for retrieving categories from the channel 9 website.
+        /// Scraper used for retrieving categories from the channel 9 website.
         /// </summary>
-        private readonly ICategoryDownloader _categoryDownloader;
+        private readonly ICategoryScraper _categoryScraper;
 
         /// <summary>
         /// Folder utils used for retrieving the user folder.
@@ -35,16 +35,16 @@ namespace Channel9Downloader.DataAccess
         /// <summary>
         /// Initializes a new instance of the <see cref="CategoryRepository"/> class.
         /// </summary>
-        /// <param name="categoryDownloader">Downloader used for retrieving categories from the channel 9 website.</param>
+        /// <param name="categoryScraper">Scraper used for retrieving categories from the channel 9 website.</param>
         /// <param name="folderUtils">Folder utils used for retrieving the user folder.</param>
         /// <param name="categoriesDataAccess">The data access for categories.</param>
         [ImportingConstructor]
         public CategoryRepository(
-            ICategoryDownloader categoryDownloader,
+            ICategoryScraper categoryScraper,
             IFolderUtils folderUtils,
             ICategoriesDataAccess categoriesDataAccess)
         {
-            _categoryDownloader = categoryDownloader;
+            _categoryScraper = categoryScraper;
             _folderUtils = folderUtils;
             _categoriesDataAccess = categoriesDataAccess;
         }
@@ -64,9 +64,9 @@ namespace Channel9Downloader.DataAccess
 
             if (categories == null)
             {
-                var tags = _categoryDownloader.GetAllCategories<Tag>();
-                var shows = _categoryDownloader.GetAllCategories<Show>();
-                var series = _categoryDownloader.GetAllCategories<Series>();
+                var tags = _categoryScraper.GetAllCategories<Tag>();
+                var shows = _categoryScraper.GetAllCategories<Show>();
+                var series = _categoryScraper.GetAllCategories<Series>();
                 categories = new Categories(tags, shows, series);
 
                 _categoriesDataAccess.SaveCategories(categories, filename);
@@ -81,9 +81,9 @@ namespace Channel9Downloader.DataAccess
         public void UpdateCategories()
         {
             var filename = CreateFilenameForCategory();
-            var tags = _categoryDownloader.GetAllCategories<Tag>();
-            var shows = _categoryDownloader.GetAllCategories<Show>();
-            var series = _categoryDownloader.GetAllCategories<Series>();
+            var tags = _categoryScraper.GetAllCategories<Tag>();
+            var shows = _categoryScraper.GetAllCategories<Show>();
+            var series = _categoryScraper.GetAllCategories<Series>();
             var categories = new Categories(tags, shows, series);
 
             _categoriesDataAccess.SaveCategories(categories, filename);
