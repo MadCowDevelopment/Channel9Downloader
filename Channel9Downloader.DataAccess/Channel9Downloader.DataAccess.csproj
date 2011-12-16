@@ -49,14 +49,17 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="CategoriesDataAccess.cs" />
+    <Compile Include="CategoryRepository.cs" />
     <Compile Include="DataContractDataAccess.cs" />
     <Compile Include="FolderUtils.cs" />
-    <Compile Include="IChannel9CategoryBrowser.cs" />
-    <Compile Include="IDataContractDataAccess.cs" />
+    <Compile Include="ICategoriesDataAccess.cs" />
+    <Compile Include="ICategoryDownloader.cs" />
+    <Compile Include="ICategoryRepository.cs" />
     <Compile Include="IFolderUtils.cs" />
     <Compile Include="IWebDownloader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Channel9CategoryBrowser.cs" />
+    <Compile Include="CategoryDownloader.cs" />
     <Compile Include="WebDownloader.cs" />
   </ItemGroup>
   <ItemGroup>

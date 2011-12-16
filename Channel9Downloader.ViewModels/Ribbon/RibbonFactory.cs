@@ -62,8 +62,9 @@ namespace Channel9Downloader.ViewModels.Ribbon
             var categories = new RibbonTabVM();
             categories.Header = RibbonTabName.CATEGORIES;
 
-            var group = new RibbonGroupVM();
-            group.Header = "Categories";
+            // Set up group 'Categories'
+            var groupCategories = new RibbonGroupVM();
+            groupCategories.Header = "Categories";
 
             var buttonTags = new RibbonButtonVM();
             buttonTags.Command = _categoriesVM.ShowTagSelectionCommand;
@@ -71,7 +72,7 @@ namespace Channel9Downloader.ViewModels.Ribbon
             buttonTags.LargeImageSource = @"..\Images\Ribbon\TagLarge.png";
             buttonTags.ToolTipDescription = "Select Tags that should be automatically downloaded.";
             buttonTags.ToolTipTitle = "Tags";
-            group.Items.Add(buttonTags);
+            groupCategories.Items.Add(buttonTags);
 
             var buttonShows = new RibbonButtonVM();
             buttonShows.Command = _categoriesVM.ShowShowSelectionCommand;
@@ -79,7 +80,7 @@ namespace Channel9Downloader.ViewModels.Ribbon
             buttonShows.LargeImageSource = @"..\Images\Ribbon\ShowLarge.png";
             buttonShows.ToolTipDescription = "Select Shows that should be automatically downloaded.";
             buttonShows.ToolTipTitle = "Shows";
-            group.Items.Add(buttonShows);
+            groupCategories.Items.Add(buttonShows);
 
             var buttonSeries = new RibbonButtonVM();
             buttonSeries.Command = _categoriesVM.ShowSeriesSelectionCommand;
@@ -87,9 +88,23 @@ namespace Channel9Downloader.ViewModels.Ribbon
             buttonSeries.LargeImageSource = @"..\Images\Ribbon\SeriesLarge.png";
             buttonSeries.ToolTipDescription = "Select Series that should be automatically downloaded.";
             buttonSeries.ToolTipTitle = "Series";
-            group.Items.Add(buttonSeries);
+            groupCategories.Items.Add(buttonSeries);
 
-            categories.Groups.Add(group);
+            categories.Groups.Add(groupCategories);
+
+            // Set up group 'Update'
+            var groupUpdate = new RibbonGroupVM();
+            groupUpdate.Header = "Update";
+
+            var buttonUpdate = new RibbonButtonVM();
+            buttonUpdate.Command = _categoriesVM.UpdateCategoriesCommand;
+            buttonUpdate.Label = "Update";
+            buttonUpdate.LargeImageSource = @"..\Images\Ribbon\UpdateLarge.png";
+            buttonUpdate.ToolTipDescription = "Update available tags from website.";
+            buttonUpdate.ToolTipTitle = "Update";
+            groupUpdate.Items.Add(buttonUpdate);
+
+            categories.Groups.Add(groupUpdate);
 
             return categories;
         }

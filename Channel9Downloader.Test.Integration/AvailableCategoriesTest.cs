@@ -1,4 +1,5 @@
 ﻿using Channel9Downloader.DataAccess;
+using Channel9Downloader.Entities;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -33,7 +34,7 @@ namespace Channel9Downloader.Test.Integration
         {
             var browser = CreateChannel9CategoryBrowser();
 
-            var series = browser.GetAllSeries();
+            var series = browser.GetAllCategories<Series>();
 
             Assert.IsTrue(series.Count > 0);
         }
@@ -46,7 +47,7 @@ namespace Channel9Downloader.Test.Integration
         {
             var browser = CreateChannel9CategoryBrowser();
 
-            var shows = browser.GetAllShows();
+            var shows = browser.GetAllCategories<Show>();
 
             Assert.IsTrue(shows.Count > 0);
         }
@@ -59,7 +60,7 @@ namespace Channel9Downloader.Test.Integration
         {
             var browser = CreateChannel9CategoryBrowser();
 
-            var tags = browser.GetAllTags();
+            var tags = browser.GetAllCategories<Tag>();
 
             Assert.IsTrue(tags.Count > 0);
         }
@@ -72,10 +73,10 @@ namespace Channel9Downloader.Test.Integration
         /// Creates a category browser.
         /// </summary>
         /// <returns>Returns a category browser.</returns>
-        private Channel9CategoryBrowser CreateChannel9CategoryBrowser()
+        private CategoryDownloader CreateChannel9CategoryBrowser()
         {
             var webDownloader = new WebDownloader();
-            return new Channel9CategoryBrowser(webDownloader);
+            return new CategoryDownloader(webDownloader);
         }
 
         #endregion Private Methods

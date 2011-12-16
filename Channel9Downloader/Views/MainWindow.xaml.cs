@@ -2,6 +2,7 @@
 
 using Channel9Downloader.Composition;
 using Channel9Downloader.ViewModels;
+using Channel9Downloader.ViewModels.Categories;
 
 namespace Channel9Downloader.Views
 {
@@ -23,7 +24,6 @@ namespace Channel9Downloader.Views
             {
                 var composer = new DependencyComposer();
                 composer.ComposeExportedValue<IDependencyComposer>(composer);
-
                 DataContext = composer.GetExportedValue<IMainWindowVM>();
             }
             catch (Exception e)

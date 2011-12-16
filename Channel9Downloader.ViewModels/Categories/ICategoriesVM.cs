@@ -20,14 +20,6 @@ namespace Channel9Downloader.ViewModels.Categories
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the viewmodel is busy.
-        /// </summary>
-        bool IsBusy
-        {
-            get; set;
-        }
-
-        /// <summary>
         /// Gets a command that saves the selection.
         /// </summary>
         ICommand SaveSelectionCommand
@@ -55,6 +47,14 @@ namespace Channel9Downloader.ViewModels.Categories
         /// Gets a command that shows the tag selection.
         /// </summary>
         ICommand ShowTagSelectionCommand
+        {
+            get;
+        }
+
+        /// <summary>
+        /// Gets a command that updates the categories.
+        /// </summary>
+        ICommand UpdateCategoriesCommand
         {
             get;
         }

@@ -1,8 +1,11 @@
-﻿namespace Channel9Downloader.Entities
+﻿using System.Runtime.Serialization;
+
+namespace Channel9Downloader.Entities
 {
     /// <summary>
     /// This class holds information about a series.
     /// </summary>
+    [DataContract]
     public class Series : RecurringCategory
     {
         #region Constructors

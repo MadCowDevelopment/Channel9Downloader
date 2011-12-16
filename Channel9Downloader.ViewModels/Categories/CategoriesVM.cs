@@ -1,9 +1,9 @@
-﻿using System;
-using System.ComponentModel.Composition;
+﻿using System.ComponentModel.Composition;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
 using Channel9Downloader.Composition;
+using Channel9Downloader.DataAccess;
 using Channel9Downloader.ViewModels.Framework;
 
 namespace Channel9Downloader.ViewModels.Categories
@@ -18,6 +18,11 @@ namespace Channel9Downloader.ViewModels.Categories
         #region Fields
 
         /// <summary>
+        /// The repository used for retrieving categories.
+        /// </summary>
+        private readonly ICategoryRepository _categoryRepository;
+
+        /// <summary>
         /// The dependency composer used for retrieving instances.
         /// </summary>
         private readonly IDependencyComposer _dependencyComposer;
@@ -26,11 +31,6 @@ namespace Channel9Downloader.ViewModels.Categories
         /// Backing field for <see cref="CurrentContent"/> property.
         /// </summary>
         private IBaseViewModel _currentContent;
-
-        /// <summary>
-        /// Backing field for <see cref="IsBusy"/> property.
-        /// </summary>
-        private bool _isBusy;
 
         /// <summary>
         /// Backing field for <see cref="SaveSelectionCommand"/> command.
@@ -67,6 +67,11 @@ namespace Channel9Downloader.ViewModels.Categories
         /// </summary>
         private ITagSelectionVM _tagSelectionVM;
 
+        /// <summary>
+        /// Backing field for <see cref="UpdateCategoriesCommand"/> command.
+        /// </summary>
+        private ICommand _updateCategoriesCommand;
+
         #endregion Fields
 
         #region Constructors
@@ -76,13 +81,18 @@ namespace Channel9Downloader.ViewModels.Categories
         /// </summary>
         /// <param name="dependencyComposer">The dependency composer used for creating instances.</param>
         /// <param name="loadingWaitVM">The loading wait viewmodel.</param>
+        /// <param name="categoryRepository">The repository used for retrieving categories.</param>
         [ImportingConstructor]
         public CategoriesVM(
             IDependencyComposer dependencyComposer,
-            ILoadingWaitVM loadingWaitVM)
+            ILoadingWaitVM loadingWaitVM,
+            ICategoryRepository categoryRepository)
         {
             _dependencyComposer = dependencyComposer;
+            _categoryRepository = categoryRepository;
             AdornerContent = loadingWaitVM;
+
+            InitializeCategoriesAsync(TaskScheduler.FromCurrentSynchronizationContext());
         }
 
         #endregion Constructors
@@ -107,29 +117,6 @@ namespace Channel9Downloader.ViewModels.Categories
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the viewmodel is busy.
-        /// </summary>
-        public bool IsBusy
-        {
-            get
-            {
-                return _isBusy;
-            }
-
-            set
-            {
-                if (_isBusy == value)
-                {
-                    return;
-                }
-
-                _isBusy = value;
-                RaisePropertyChanged();
-                IsAdornerVisible = value;
-            }
-        }
-
-        /// <summary>
         /// Gets a command that saves the selection.
         /// </summary>
         public ICommand SaveSelectionCommand
@@ -137,7 +124,7 @@ namespace Channel9Downloader.ViewModels.Categories
             get
             {
                 return _saveSelectionCommand
-                       ?? (_saveSelectionCommand = new RelayCommand(p => OnSaveSelection(), p => !IsBusy));
+                       ?? (_saveSelectionCommand = new RelayCommand(p => OnSaveSelection(), p => !IsAdornerVisible));
             }
         }
 
@@ -149,7 +136,9 @@ namespace Channel9Downloader.ViewModels.Categories
             get
             {
                 return _showSeriesSelectionCommand
-                       ?? (_showSeriesSelectionCommand = new RelayCommand(p => OnShowSeriesSelection(), p => !IsBusy));
+                       ??
+                       (_showSeriesSelectionCommand =
+                        new RelayCommand(p => OnShowSeriesSelection(), p => !IsAdornerVisible));
             }
         }
 
@@ -161,7 +150,8 @@ namespace Channel9Downloader.ViewModels.Categories
             get
             {
                 return _showShowSelectionCommand
-                       ?? (_showShowSelectionCommand = new RelayCommand(p => OnShowShowSelection(), p => !IsBusy));
+                       ??
+                       (_showShowSelectionCommand = new RelayCommand(p => OnShowShowSelection(), p => !IsAdornerVisible));
             }
         }
 
@@ -173,13 +163,61 @@ namespace Channel9Downloader.ViewModels.Categories
             get
             {
                 return _showTagSelectionCommand
-                       ?? (_showTagSelectionCommand = new RelayCommand(p => OnShowTagSelection(), p => !IsBusy));
+                       ??
+                       (_showTagSelectionCommand = new RelayCommand(p => OnShowTagSelection(), p => !IsAdornerVisible));
+            }
+        }
+
+        /// <summary>
+        /// Gets a command that updates the categories.
+        /// </summary>
+        public ICommand UpdateCategoriesCommand
+        {
+            get
+            {
+                return _updateCategoriesCommand
+                       ??
+                       (_updateCategoriesCommand = new RelayCommand(p => OnUpdateCategories(), p => !IsAdornerVisible));
             }
         }
 
         #endregion Public Properties
 
         #region Private Methods
+
+        /// <summary>
+        /// Initializes categories in the background.
+        /// </summary>
+        /// <param name="continuationTaskScheduler">The task scheduler that should be used for the continuation.
+        /// This should usually be the scheduler of the UI thread.</param>
+        private void InitializeCategoriesAsync(TaskScheduler continuationTaskScheduler)
+        {
+            IsAdornerVisible = true;
+            Entities.Categories categories = null;
+            var task = new Task(() =>
+                {
+                    categories = _categoryRepository.GetCategories();
+                });
+
+            task.ContinueWith(x =>
+                {
+                    _seriesSelectionVM = _dependencyComposer.GetExportedValue<ISeriesSelectionVM>();
+                    _seriesSelectionVM.Initialize(categories.Series);
+
+                    _showSelectionVM = _dependencyComposer.GetExportedValue<IShowSelectionVM>();
+                    _showSelectionVM.Initialize(categories.Shows);
+
+                    _tagSelectionVM = _dependencyComposer.GetExportedValue<ITagSelectionVM>();
+                    _tagSelectionVM.Initialize(categories.Tags);
+
+                    CurrentContent = _tagSelectionVM;
+
+                    IsAdornerVisible = false;
+                    CommandManager.InvalidateRequerySuggested();
+                }, continuationTaskScheduler);
+
+            task.Start();
+        }
 
         /// <summary>
         /// Saves the selection.
@@ -194,23 +232,7 @@ namespace Channel9Downloader.ViewModels.Categories
         /// </summary>
         private void OnShowSeriesSelection()
         {
-            if (_seriesSelectionVM == null)
-            {
-                IsBusy = true;
-                _seriesSelectionVM = _dependencyComposer.GetExportedValue<ISeriesSelectionVM>();
-
-                var task = new Task(() => _seriesSelectionVM.Initialize());
-                task.ContinueWith(x =>
-                    {
-                        IsBusy = false;
-                        CurrentContent = _seriesSelectionVM;
-                    });
-                task.Start();
-            }
-            else
-            {
-                CurrentContent = _seriesSelectionVM;
-            }
+            CurrentContent = _seriesSelectionVM;
         }
 
         /// <summary>
@@ -218,23 +240,7 @@ namespace Channel9Downloader.ViewModels.Categories
         /// </summary>
         private void OnShowShowSelection()
         {
-            if (_showSelectionVM == null)
-            {
-                IsBusy = true;
-                _showSelectionVM = _dependencyComposer.GetExportedValue<IShowSelectionVM>();
-
-                var task = new Task(() => _showSelectionVM.Initialize());
-                task.ContinueWith(x =>
-                {
-                    IsBusy = false;
-                    CurrentContent = _showSelectionVM;
-                });
-                task.Start();
-            }
-            else
-            {
-                CurrentContent = _showSelectionVM;
-            }
+            CurrentContent = _showSelectionVM;
         }
 
         /// <summary>
@@ -242,23 +248,28 @@ namespace Channel9Downloader.ViewModels.Categories
         /// </summary>
         private void OnShowTagSelection()
         {
-            if (_tagSelectionVM == null)
-            {
-                IsBusy = true;
-                _tagSelectionVM = _dependencyComposer.GetExportedValue<ITagSelectionVM>();
+            CurrentContent = _tagSelectionVM;
+        }
 
-                var task = new Task(() => _tagSelectionVM.Initialize());
-                task.ContinueWith(x =>
-                {
-                    IsBusy = false;
-                    CurrentContent = _tagSelectionVM;
-                });
-                task.Start();
-            }
-            else
-            {
-                CurrentContent = _tagSelectionVM;
-            }
+        /// <summary>
+        /// Updates the available categories.
+        /// </summary>
+        private void OnUpdateCategories()
+        {
+            UpdateCategoriesAsync(TaskScheduler.FromCurrentSynchronizationContext());
+        }
+
+        /// <summary>
+        /// Updates the available categories asynchronously.
+        /// </summary>
+        /// <param name="continuationTaskScheduler">The task scheduler that should be used for the continuation.
+        /// This should usually be the scheduler of the UI thread.</param>
+        private void UpdateCategoriesAsync(TaskScheduler continuationTaskScheduler)
+        {
+            IsAdornerVisible = true;
+            var task = new Task(() => _categoryRepository.UpdateCategories());
+            task.ContinueWith(x => InitializeCategoriesAsync(continuationTaskScheduler));
+            task.Start();
         }
 
         #endregion Private Methods

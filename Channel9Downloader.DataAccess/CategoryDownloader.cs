@@ -12,8 +12,8 @@ namespace Channel9Downloader.DataAccess
     /// <summary>
     /// This class is used to browse channel 9 categories.
     /// </summary>
-    [Export(typeof(IChannel9CategoryBrowser))]
-    public class Channel9CategoryBrowser : IChannel9CategoryBrowser
+    [Export(typeof(ICategoryDownloader))]
+    public class CategoryDownloader : ICategoryDownloader
     {
         #region Fields
 
@@ -27,11 +27,11 @@ namespace Channel9Downloader.DataAccess
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Channel9CategoryBrowser"/> class.
+        /// Initializes a new instance of the <see cref="CategoryDownloader"/> class.
         /// </summary>
         /// <param name="webDownloader">The web downloader used for retrieving web resources.</param>
         [ImportingConstructor]
-        public Channel9CategoryBrowser(IWebDownloader webDownloader)
+        public CategoryDownloader(IWebDownloader webDownloader)
         {
             _webDownloader = webDownloader;
         }
@@ -41,32 +41,29 @@ namespace Channel9Downloader.DataAccess
         #region Public Methods
 
         /// <summary>
-        /// Gets a list of all available series.
+        /// Gets a list of all categories.
         /// </summary>
-        /// <returns>Returns a list of all available series.</returns>
-        public List<Series> GetAllSeries()
+        /// <typeparam name="T">The type of the category.</typeparam>
+        /// <returns>Returns a list of all categories.</returns>
+        public List<T> GetAllCategories<T>()
+            where T : Category
         {
-            var recurringCategories = RetrieveShowsOrSeries("http://channel9.msdn.com/Browse/Series?sort=atoz&page={0}");
-            return recurringCategories.Select(recurringCategory => new Series(recurringCategory)).ToList();
-        }
+            if (typeof(T) == typeof(Tag))
+            {
+                return (List<T>)(object)GetAllTags();
+            }
 
-        /// <summary>
-        /// Gets a list of all available shows.
-        /// </summary>
-        /// <returns>Returns a list of all available shows.</returns>
-        public List<Show> GetAllShows()
-        {
-            var recurringCategories = RetrieveShowsOrSeries("http://channel9.msdn.com/Browse/Shows?sort=atoz&page={0}");
-            return recurringCategories.Select(recurringCategory => new Show(recurringCategory)).ToList();
-        }
+            if (typeof(T) == typeof(Show))
+            {
+                return (List<T>)(object)GetAllShows();
+            }
 
-        /// <summary>
-        /// Gets a list of all available tags.
-        /// </summary>
-        /// <returns>Returns a list of all available tags.</returns>
-        public List<Tag> GetAllTags()
-        {
-            return RetrieveTags();
+            if (typeof(T) == typeof(Series))
+            {
+                return (List<T>)(object)GetAllSeries();
+            }
+
+            return new List<T>();
         }
 
         #endregion Public Methods
@@ -88,6 +85,35 @@ namespace Channel9Downloader.DataAccess
 
             var doc = XDocument.Load(sgmlReader);
             return doc;
+        }
+
+        /// <summary>
+        /// Gets a list of all available series.
+        /// </summary>
+        /// <returns>Returns a list of all available series.</returns>
+        private List<Series> GetAllSeries()
+        {
+            var recurringCategories = RetrieveShowsOrSeries("http://channel9.msdn.com/Browse/Series?sort=atoz&page={0}");
+            return recurringCategories.Select(recurringCategory => new Series(recurringCategory)).ToList();
+        }
+
+        /// <summary>
+        /// Gets a list of all available shows.
+        /// </summary>
+        /// <returns>Returns a list of all available shows.</returns>
+        private List<Show> GetAllShows()
+        {
+            var recurringCategories = RetrieveShowsOrSeries("http://channel9.msdn.com/Browse/Shows?sort=atoz&page={0}");
+            return recurringCategories.Select(recurringCategory => new Show(recurringCategory)).ToList();
+        }
+
+        /// <summary>
+        /// Gets a list of all available tags.
+        /// </summary>
+        /// <returns>Returns a list of all available tags.</returns>
+        private List<Tag> GetAllTags()
+        {
+            return RetrieveTags();
         }
 
         /// <summary>

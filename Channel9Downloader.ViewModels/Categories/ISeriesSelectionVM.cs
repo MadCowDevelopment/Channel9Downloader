@@ -1,5 +1,7 @@
-﻿using System.Windows.Data;
+﻿using System.Collections.Generic;
+using System.Windows.Data;
 
+using Channel9Downloader.Entities;
 using Channel9Downloader.ViewModels.Framework;
 
 namespace Channel9Downloader.ViewModels.Categories
@@ -24,9 +26,11 @@ namespace Channel9Downloader.ViewModels.Categories
         #region Methods
 
         /// <summary>
-        /// Initializes the viewmodel.
+        /// Initializes this view.
         /// </summary>
-        void Initialize();
+        /// <param name="series">The series which are used to initialize this viewmodel.
+        /// </param>
+        void Initialize(List<Series> series);
 
         #endregion Methods
     }
