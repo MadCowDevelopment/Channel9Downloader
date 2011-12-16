@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
 using System.Windows.Data;
 
 using Channel9Downloader.DataAccess;
@@ -10,8 +11,17 @@ namespace Channel9Downloader.ViewModels.Categories
     /// This class manages the show selection view.
     /// </summary>
     [Export(typeof(IShowSelectionVM))]
-    public class ShowSelectionVM : ViewModelBase, IShowSelectionVM
+    public class ShowSelectionVM : BaseViewModel, IShowSelectionVM
     {
+        #region Fields
+
+        /// <summary>
+        /// The category browser.
+        /// </summary>
+        private readonly IChannel9CategoryBrowser _categoryBrowser;
+
+        #endregion Fields
+
         #region Constructors
 
         /// <summary>
@@ -21,8 +31,7 @@ namespace Channel9Downloader.ViewModels.Categories
         [ImportingConstructor]
         public ShowSelectionVM(IChannel9CategoryBrowser categoryBrowser)
         {
-            var shows = categoryBrowser.GetAllShows();
-            ShowCollectionView = (CollectionView)CollectionViewSource.GetDefaultView(shows);
+            _categoryBrowser = categoryBrowser;
         }
 
         #endregion Constructors
@@ -38,5 +47,18 @@ namespace Channel9Downloader.ViewModels.Categories
         }
 
         #endregion Public Properties
+
+        #region Public Methods
+
+        /// <summary>
+        /// Initializes this viewmodel.
+        /// </summary>
+        public void Initialize()
+        {
+            var shows = _categoryBrowser.GetAllShows();
+            ShowCollectionView = (CollectionView)CollectionViewSource.GetDefaultView(shows);
+        }
+
+        #endregion Public Methods
     }
 }

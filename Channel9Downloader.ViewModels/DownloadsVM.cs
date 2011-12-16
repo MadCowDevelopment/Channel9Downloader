@@ -9,7 +9,7 @@ namespace Channel9Downloader.ViewModels
     /// </summary>
     [Export(typeof(IDownloadsVM))]
     [PartCreationPolicy(CreationPolicy.Shared)]
-    public class DownloadsVM : ViewModelBase, IDownloadsVM
+    public class DownloadsVM : BaseViewModel, IDownloadsVM
     {
     }
 }

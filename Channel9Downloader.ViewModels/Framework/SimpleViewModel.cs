@@ -5,7 +5,7 @@ namespace Channel9Downloader.ViewModels.Framework
     /// <summary>
     /// This class serves as base class for view models that require lifetime events.
     /// </summary>
-    public class SimpleViewModel : ViewModelBase, ISimpleViewModel
+    public class SimpleViewModel : BaseViewModel, ISimpleViewModel
     {
         #region Fields
 

@@ -5,7 +5,7 @@ namespace Channel9Downloader.ViewModels.Framework
     /// <summary>
     /// This interface is for viewmodel base classes.
     /// </summary>
-    public interface IViewModelBase : IValidatingObject, IDisposable
+    public interface IBaseViewModel : IValidatingObject, IDisposable
     {
         #region Properties
 

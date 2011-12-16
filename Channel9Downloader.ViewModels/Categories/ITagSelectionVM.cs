@@ -7,7 +7,7 @@ namespace Channel9Downloader.ViewModels.Categories
     /// <summary>
     /// This interface is used for the tag selection viewmodel.
     /// </summary>
-    public interface ITagSelectionVM : IViewModelBase
+    public interface ITagSelectionVM : IBaseViewModel
     {
         #region Properties
 
@@ -20,5 +20,14 @@ namespace Channel9Downloader.ViewModels.Categories
         }
 
         #endregion Properties
+
+        #region Methods
+
+        /// <summary>
+        /// Initializes the viewmodel.
+        /// </summary>
+        void Initialize();
+
+        #endregion Methods
     }
 }

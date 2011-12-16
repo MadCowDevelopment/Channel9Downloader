@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
 using System.Windows.Data;
 
 using Channel9Downloader.DataAccess;
@@ -10,8 +11,17 @@ namespace Channel9Downloader.ViewModels.Categories
     /// This class manages the series selection view.
     /// </summary>
     [Export(typeof(ISeriesSelectionVM))]
-    public class SeriesSelectionVM : ViewModelBase, ISeriesSelectionVM
+    public class SeriesSelectionVM : BaseViewModel, ISeriesSelectionVM
     {
+        #region Fields
+
+        /// <summary>
+        /// The category browser.
+        /// </summary>
+        private readonly IChannel9CategoryBrowser _categoryBrowser;
+
+        #endregion Fields
+
         #region Constructors
 
         /// <summary>
@@ -21,8 +31,7 @@ namespace Channel9Downloader.ViewModels.Categories
         [ImportingConstructor]
         public SeriesSelectionVM(IChannel9CategoryBrowser categoryBrowser)
         {
-            var series = categoryBrowser.GetAllSeries();
-            SeriesCollectionView = (CollectionView)CollectionViewSource.GetDefaultView(series);
+            _categoryBrowser = categoryBrowser;
         }
 
         #endregion Constructors
@@ -38,5 +47,18 @@ namespace Channel9Downloader.ViewModels.Categories
         }
 
         #endregion Public Properties
+
+        #region Public Methods
+
+        /// <summary>
+        /// Initializes this view.
+        /// </summary>
+        public void Initialize()
+        {
+            var series = _categoryBrowser.GetAllSeries();
+            SeriesCollectionView = (CollectionView)CollectionViewSource.GetDefaultView(series);
+        }
+
+        #endregion Public Methods
     }
 }

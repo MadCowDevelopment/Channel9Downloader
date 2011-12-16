@@ -7,7 +7,7 @@ namespace Channel9Downloader.ViewModels.Framework
     /// <summary>
     /// Provides common functionality for ViewModel classes
     /// </summary>
-    public abstract class ViewModelBase : ValidatingObject, IViewModelBase
+    public abstract class BaseViewModel : ValidatingObject, IBaseViewModel
     {
         #region Fields
 
@@ -21,12 +21,12 @@ namespace Channel9Downloader.ViewModels.Framework
         #if DEBUG
 
         /// <summary>
-        /// Finalizes an instance of the <see cref="ViewModelBase"/> class. 
+        /// Finalizes an instance of the <see cref="BaseViewModel"/> class. 
         /// Useful for ensuring that ViewModel objects are properly garbage collected.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly", 
             Justification = "This finalizer will only be executed in debug mode.")]
-        ~ViewModelBase()
+        ~BaseViewModel()
         {
             string msg = string.Format(
                 CultureInfo.CurrentCulture, "{0} ({1}) ({2}) Finalized", GetType().Name, DisplayName, GetHashCode());
@@ -90,7 +90,7 @@ namespace Channel9Downloader.ViewModels.Framework
         }
 
         /// <summary>
-        /// Finalizes an instance of the <see cref="ViewModelBase"/> class.
+        /// Finalizes an instance of the <see cref="BaseViewModel"/> class.
         /// Child classes can override this method to perform 
         /// clean-up logic, such as removing event handlers.
         /// </summary>

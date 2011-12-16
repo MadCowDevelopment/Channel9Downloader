@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
 using System.Windows.Data;
 
 using Channel9Downloader.Converters;
@@ -11,8 +12,17 @@ namespace Channel9Downloader.ViewModels.Categories
     /// This class manages the tag selection view.
     /// </summary>
     [Export(typeof(ITagSelectionVM))]
-    public class TagSelectionVM : ViewModelBase, ITagSelectionVM
+    public class TagSelectionVM : BaseViewModel, ITagSelectionVM
     {
+        #region Fields
+
+        /// <summary>
+        /// The category browser.
+        /// </summary>
+        private readonly IChannel9CategoryBrowser _categoryBrowser;
+
+        #endregion Fields
+
         #region Constructors
 
         /// <summary>
@@ -22,9 +32,7 @@ namespace Channel9Downloader.ViewModels.Categories
         [ImportingConstructor]
         public TagSelectionVM(IChannel9CategoryBrowser categoryBrowser)
         {
-            var tags = categoryBrowser.GetAllTags();
-            TagsCollectionView = (CollectionView)CollectionViewSource.GetDefaultView(tags);
-            TagsCollectionView.GroupDescriptions.Add(new PropertyGroupDescription("Title", new TagTitleToCharacterConverter()));
+            _categoryBrowser = categoryBrowser;
         }
 
         #endregion Constructors
@@ -40,5 +48,19 @@ namespace Channel9Downloader.ViewModels.Categories
         }
 
         #endregion Public Properties
+
+        #region Public Methods
+
+        /// <summary>
+        /// Initializes this viewmodel.
+        /// </summary>
+        public void Initialize()
+        {
+            var tags = _categoryBrowser.GetAllTags();
+            TagsCollectionView = (CollectionView)CollectionViewSource.GetDefaultView(tags);
+            TagsCollectionView.GroupDescriptions.Add(new PropertyGroupDescription("Title", new TagTitleToCharacterConverter()));
+        }
+
+        #endregion Public Methods
     }
 }

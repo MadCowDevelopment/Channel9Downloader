@@ -5,7 +5,7 @@ namespace Channel9Downloader.ViewModels.Framework
     /// <summary>
     /// This interface is for viewmodels that support lifetime events.
     /// </summary>
-    public interface ISimpleViewModel : IViewModelBase
+    public interface ISimpleViewModel : IBaseViewModel
     {
         #region Events
 

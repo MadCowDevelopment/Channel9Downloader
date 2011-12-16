@@ -58,8 +58,10 @@
     <Compile Include="Categories\TagSelectionVM.cs" />
     <Compile Include="DownloadsVM.cs" />
     <Compile Include="Events\SelectedTabChangedEventArgs.cs" />
+    <Compile Include="Framework\AdornerViewModel.cs" />
     <Compile Include="Framework\CloseRequestEventArgs.cs" />
     <Compile Include="Framework\DialogService.cs" />
+    <Compile Include="Framework\IAdornerViewModel.cs" />
     <Compile Include="Framework\IDialogService.cs" />
     <Compile Include="Framework\IMessageBoxService.cs" />
     <Compile Include="Framework\IObservableObject.cs" />
@@ -68,14 +70,14 @@
     <Compile Include="Framework\ISaveFileService.cs" />
     <Compile Include="Framework\ISimpleViewModel.cs" />
     <Compile Include="Framework\IValidatingObject.cs" />
-    <Compile Include="Framework\IViewModelBase.cs" />
+    <Compile Include="Framework\IBaseViewModel.cs" />
     <Compile Include="Framework\IViewService.cs" />
     <Compile Include="Framework\MvvmWindow.cs" />
     <Compile Include="Framework\ObservableObject.cs" />
     <Compile Include="Framework\RelayCommand.cs" />
     <Compile Include="Framework\SimpleViewModel.cs" />
     <Compile Include="Framework\ValidatingObject.cs" />
-    <Compile Include="Framework\ViewModelBase.cs" />
+    <Compile Include="Framework\BaseViewModel.cs" />
     <Compile Include="Framework\WindowDialog.xaml.cs">
       <DependentUpon>WindowDialog.xaml</DependentUpon>
     </Compile>
@@ -85,7 +87,9 @@
     <Compile Include="Framework\WPFSaveFileService.cs" />
     <Compile Include="Categories\ICategoriesVM.cs" />
     <Compile Include="IDownloadsVM.cs" />
+    <Compile Include="ILoadingWait.cs" />
     <Compile Include="IMainWindowVM.cs" />
+    <Compile Include="LoadingWaitVM.cs" />
     <Compile Include="Ribbon\IRibbonButtonVM.cs" />
     <Compile Include="Ribbon\IRibbonFactory.cs" />
     <Compile Include="Ribbon\IRibbonGroupVM.cs" />

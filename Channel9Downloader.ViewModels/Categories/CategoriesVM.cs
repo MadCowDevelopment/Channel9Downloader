@@ -1,6 +1,9 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
+using Channel9Downloader.Composition;
 using Channel9Downloader.ViewModels.Framework;
 
 namespace Channel9Downloader.ViewModels.Categories
@@ -10,34 +13,39 @@ namespace Channel9Downloader.ViewModels.Categories
     /// </summary>
     [Export(typeof(ICategoriesVM))]
     [PartCreationPolicy(CreationPolicy.Shared)]
-    public class CategoriesVM : ViewModelBase, ICategoriesVM
+    public class CategoriesVM : AdornerViewModel, ICategoriesVM
     {
         #region Fields
 
         /// <summary>
-        /// The series selection viewmodel.
+        /// The dependency composer used for retrieving instances.
         /// </summary>
-        private readonly ISeriesSelectionVM _seriesSelectionVM;
-
-        /// <summary>
-        /// The show selection viewmodel.
-        /// </summary>
-        private readonly IShowSelectionVM _showSelectionVM;
-
-        /// <summary>
-        /// The tag selection viewmodel.
-        /// </summary>
-        private readonly ITagSelectionVM _tagSelectionVM;
+        private readonly IDependencyComposer _dependencyComposer;
 
         /// <summary>
         /// Backing field for <see cref="CurrentContent"/> property.
         /// </summary>
-        private IViewModelBase _currentContent;
+        private IBaseViewModel _currentContent;
+
+        /// <summary>
+        /// Backing field for <see cref="IsBusy"/> property.
+        /// </summary>
+        private bool _isBusy;
 
         /// <summary>
         /// Backing field for <see cref="SaveSelectionCommand"/> command.
         /// </summary>
         private ICommand _saveSelectionCommand;
+
+        /// <summary>
+        /// The series selection viewmodel.
+        /// </summary>
+        private ISeriesSelectionVM _seriesSelectionVM;
+
+        /// <summary>
+        /// The show selection viewmodel.
+        /// </summary>
+        private IShowSelectionVM _showSelectionVM;
 
         /// <summary>
         /// Backing field for <see cref="ShowSeriesSelectionCommand"/> command.
@@ -54,6 +62,11 @@ namespace Channel9Downloader.ViewModels.Categories
         /// </summary>
         private ICommand _showTagSelectionCommand;
 
+        /// <summary>
+        /// The tag selection viewmodel.
+        /// </summary>
+        private ITagSelectionVM _tagSelectionVM;
+
         #endregion Fields
 
         #region Constructors
@@ -61,18 +74,15 @@ namespace Channel9Downloader.ViewModels.Categories
         /// <summary>
         /// Initializes a new instance of the <see cref="CategoriesVM"/> class.
         /// </summary>
-        /// <param name="tagSelectionVM">The tag selection viewmodel.</param>
-        /// <param name="showSelectionVM">The show selection viewmodel.</param>
-        /// <param name="seriesSelectionVM">The series selection viewmodel.</param>
+        /// <param name="dependencyComposer">The dependency composer used for creating instances.</param>
+        /// <param name="loadingWaitVM">The loading wait viewmodel.</param>
         [ImportingConstructor]
         public CategoriesVM(
-            ITagSelectionVM tagSelectionVM,
-            IShowSelectionVM showSelectionVM,
-            ISeriesSelectionVM seriesSelectionVM)
+            IDependencyComposer dependencyComposer,
+            ILoadingWaitVM loadingWaitVM)
         {
-            _tagSelectionVM = tagSelectionVM;
-            _showSelectionVM = showSelectionVM;
-            _seriesSelectionVM = seriesSelectionVM;
+            _dependencyComposer = dependencyComposer;
+            AdornerContent = loadingWaitVM;
         }
 
         #endregion Constructors
@@ -82,7 +92,7 @@ namespace Channel9Downloader.ViewModels.Categories
         /// <summary>
         /// Gets or sets the current content that should be shown in the view.
         /// </summary>
-        public IViewModelBase CurrentContent
+        public IBaseViewModel CurrentContent
         {
             get
             {
@@ -97,13 +107,37 @@ namespace Channel9Downloader.ViewModels.Categories
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the viewmodel is busy.
+        /// </summary>
+        public bool IsBusy
+        {
+            get
+            {
+                return _isBusy;
+            }
+
+            set
+            {
+                if (_isBusy == value)
+                {
+                    return;
+                }
+
+                _isBusy = value;
+                RaisePropertyChanged();
+                IsAdornerVisible = value;
+            }
+        }
+
+        /// <summary>
         /// Gets a command that saves the selection.
         /// </summary>
         public ICommand SaveSelectionCommand
         {
             get
             {
-                return _saveSelectionCommand ?? (_saveSelectionCommand = new RelayCommand(p => OnSaveSelection()));
+                return _saveSelectionCommand
+                       ?? (_saveSelectionCommand = new RelayCommand(p => OnSaveSelection(), p => !IsBusy));
             }
         }
 
@@ -114,7 +148,8 @@ namespace Channel9Downloader.ViewModels.Categories
         {
             get
             {
-                return _showSeriesSelectionCommand ?? (_showSeriesSelectionCommand = new RelayCommand(p => OnShowSeriesSelection()));
+                return _showSeriesSelectionCommand
+                       ?? (_showSeriesSelectionCommand = new RelayCommand(p => OnShowSeriesSelection(), p => !IsBusy));
             }
         }
 
@@ -125,7 +160,8 @@ namespace Channel9Downloader.ViewModels.Categories
         {
             get
             {
-                return _showShowSelectionCommand ?? (_showShowSelectionCommand = new RelayCommand(p => OnShowShowSelection()));
+                return _showShowSelectionCommand
+                       ?? (_showShowSelectionCommand = new RelayCommand(p => OnShowShowSelection(), p => !IsBusy));
             }
         }
 
@@ -136,7 +172,8 @@ namespace Channel9Downloader.ViewModels.Categories
         {
             get
             {
-                return _showTagSelectionCommand ?? (_showTagSelectionCommand = new RelayCommand(p => OnShowTagSelection()));
+                return _showTagSelectionCommand
+                       ?? (_showTagSelectionCommand = new RelayCommand(p => OnShowTagSelection(), p => !IsBusy));
             }
         }
 
@@ -157,7 +194,23 @@ namespace Channel9Downloader.ViewModels.Categories
         /// </summary>
         private void OnShowSeriesSelection()
         {
-            CurrentContent = _seriesSelectionVM;
+            if (_seriesSelectionVM == null)
+            {
+                IsBusy = true;
+                _seriesSelectionVM = _dependencyComposer.GetExportedValue<ISeriesSelectionVM>();
+
+                var task = new Task(() => _seriesSelectionVM.Initialize());
+                task.ContinueWith(x =>
+                    {
+                        IsBusy = false;
+                        CurrentContent = _seriesSelectionVM;
+                    });
+                task.Start();
+            }
+            else
+            {
+                CurrentContent = _seriesSelectionVM;
+            }
         }
 
         /// <summary>
@@ -165,7 +218,23 @@ namespace Channel9Downloader.ViewModels.Categories
         /// </summary>
         private void OnShowShowSelection()
         {
-            CurrentContent = _showSelectionVM;
+            if (_showSelectionVM == null)
+            {
+                IsBusy = true;
+                _showSelectionVM = _dependencyComposer.GetExportedValue<IShowSelectionVM>();
+
+                var task = new Task(() => _showSelectionVM.Initialize());
+                task.ContinueWith(x =>
+                {
+                    IsBusy = false;
+                    CurrentContent = _showSelectionVM;
+                });
+                task.Start();
+            }
+            else
+            {
+                CurrentContent = _showSelectionVM;
+            }
         }
 
         /// <summary>
@@ -173,7 +242,23 @@ namespace Channel9Downloader.ViewModels.Categories
         /// </summary>
         private void OnShowTagSelection()
         {
-            CurrentContent = _tagSelectionVM;
+            if (_tagSelectionVM == null)
+            {
+                IsBusy = true;
+                _tagSelectionVM = _dependencyComposer.GetExportedValue<ITagSelectionVM>();
+
+                var task = new Task(() => _tagSelectionVM.Initialize());
+                task.ContinueWith(x =>
+                {
+                    IsBusy = false;
+                    CurrentContent = _tagSelectionVM;
+                });
+                task.Start();
+            }
+            else
+            {
+                CurrentContent = _tagSelectionVM;
+            }
         }
 
         #endregion Private Methods

@@ -7,14 +7,22 @@ namespace Channel9Downloader.ViewModels.Categories
     /// <summary>
     /// This interface is for the categories viewmodel.
     /// </summary>
-    public interface ICategoriesVM : IViewModelBase
+    public interface ICategoriesVM : IAdornerViewModel
     {
         #region Properties
 
         /// <summary>
         /// Gets or sets the current content that should be shown in the view.
         /// </summary>
-        IViewModelBase CurrentContent
+        IBaseViewModel CurrentContent
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the viewmodel is busy.
+        /// </summary>
+        bool IsBusy
         {
             get; set;
         }

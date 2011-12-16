@@ -3,9 +3,9 @@
 namespace Channel9Downloader.ViewModels
 {
     /// <summary>
-    /// This interface is for the downloads viewmodel.
+    /// This interface is for the loading wait viewmodel.
     /// </summary>
-    public interface IDownloadsVM : IBaseViewModel
+    public interface ILoadingWaitVM : IBaseViewModel
     {
     }
 }

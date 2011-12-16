@@ -24,7 +24,7 @@ namespace Channel9Downloader.ViewModels
         /// <summary>
         /// Backing field for <see cref="ContentArea"/> property.
         /// </summary>
-        private IViewModelBase _contentArea;
+        private IBaseViewModel _contentArea;
 
         #endregion Fields
 
@@ -51,7 +51,7 @@ namespace Channel9Downloader.ViewModels
         /// <summary>
         /// Gets the viewmodel for the main content.
         /// </summary>
-        public IViewModelBase ContentArea
+        public IBaseViewModel ContentArea
         {
             get
             {

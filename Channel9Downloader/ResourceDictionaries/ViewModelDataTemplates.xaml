@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
     xmlns:Views="clr-namespace:Channel9Downloader.Views" 
     xmlns:ViewModels="clr-namespace:Channel9Downloader.ViewModels;assembly=Channel9Downloader.ViewModels" 
-    xmlns:RibbonViewModels="clr-namespace:Channel9Downloader.ViewModels.Ribbon;assembly=Channel9Downloader.ViewModels" xmlns:Categories="clr-namespace:Channel9Downloader.ViewModels.Categories;assembly=Channel9Downloader.ViewModels">
+    xmlns:RibbonViewModels="clr-namespace:Channel9Downloader.ViewModels.Ribbon;assembly=Channel9Downloader.ViewModels" xmlns:Categories="clr-namespace:Channel9Downloader.ViewModels.Categories;assembly=Channel9Downloader.ViewModels" xmlns:Controls="clr-namespace:Channel9Downloader.Controls;assembly=Channel9Downloader.Controls">
     
     <DataTemplate DataType="{x:Type RibbonViewModels:RibbonVM}">
         <Views:RibbonView/>
@@ -27,6 +27,10 @@
 
     <DataTemplate DataType="{x:Type Categories:SeriesSelectionVM}">
         <Views:SeriesSelectionView/>
+    </DataTemplate>
+    
+    <DataTemplate DataType="{x:Type ViewModels:LoadingWaitVM}">
+        <Controls:LoadingWait/>
     </DataTemplate>
 
 </ResourceDictionary>
