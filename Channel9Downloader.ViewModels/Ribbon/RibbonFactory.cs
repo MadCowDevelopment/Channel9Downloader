@@ -1,20 +1,45 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
+
 using Channel9Downloader.ViewModels.Categories;
 
 namespace Channel9Downloader.ViewModels.Ribbon
 {
+    /// <summary>
+    /// This class creates the ribbon.
+    /// </summary>
     [Export(typeof(IRibbonFactory))]
     public class RibbonFactory : IRibbonFactory
     {
+        #region Fields
+
+        /// <summary>
+        /// The categories viewmodel.
+        /// </summary>
         private readonly ICategoriesVM _categoriesVM;
 
+        #endregion Fields
+
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RibbonFactory"/> class.
+        /// </summary>
+        /// <param name="categoriesVM">The categories viewmodel.</param>
         [ImportingConstructor]
         public RibbonFactory(ICategoriesVM categoriesVM)
         {
             _categoriesVM = categoriesVM;
         }
 
+        #endregion Constructors
+
+        #region Public Methods
+
+        /// <summary>
+        /// Creates the ribbon tabs.
+        /// </summary>
+        /// <returns>Returns a list of all ribbon tabs.</returns>
         public List<IRibbonTabVM> CreateRibbonTabs()
         {
             var result = new List<IRibbonTabVM>();
@@ -24,6 +49,14 @@ namespace Channel9Downloader.ViewModels.Ribbon
             return result;
         }
 
+        #endregion Public Methods
+
+        #region Private Methods
+
+        /// <summary>
+        /// Creates the category tab.
+        /// </summary>
+        /// <returns>Returns the category tab.</returns>
         private RibbonTabVM CreateCategoryTab()
         {
             var categories = new RibbonTabVM();
@@ -61,6 +94,6 @@ namespace Channel9Downloader.ViewModels.Ribbon
             return categories;
         }
 
-
+        #endregion Private Methods
     }
 }

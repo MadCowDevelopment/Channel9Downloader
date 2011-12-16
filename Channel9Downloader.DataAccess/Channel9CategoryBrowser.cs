@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
-using System.Web;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -76,6 +74,23 @@ namespace Channel9Downloader.DataAccess
         #region Private Methods
 
         /// <summary>
+        /// Returns an <see cref="XDocument"/> from <see cref="TextReader"/> that contains HTML.
+        /// </summary>
+        /// <param name="reader">The reader used for getting HTML.</param>
+        /// <returns>Returns an XML representation of the HTML.</returns>
+        private XDocument FromHtml(TextReader reader)
+        {
+            var sgmlReader = new Sgml.SgmlReader();
+            sgmlReader.DocType = "HTML";
+            sgmlReader.WhitespaceHandling = WhitespaceHandling.All;
+            sgmlReader.CaseFolding = Sgml.CaseFolding.ToLower;
+            sgmlReader.InputStream = reader;
+
+            var doc = XDocument.Load(sgmlReader);
+            return doc;
+        }
+
+        /// <summary>
         /// Creates an XML document from a specific URL.
         /// </summary>
         /// <param name="url">The URL to retrieve.</param>
@@ -85,20 +100,6 @@ namespace Channel9Downloader.DataAccess
             var data = _webDownloader.DownloadString(url);
             var textReader = new StringReader(data);
             var doc = FromHtml(textReader);
-            return doc;
-        }
-
-        XDocument FromHtml(TextReader reader)
-        {
-            // setup SGMLReader
-            var sgmlReader = new Sgml.SgmlReader();
-            sgmlReader.DocType = "HTML";
-            sgmlReader.WhitespaceHandling = WhitespaceHandling.All;
-            sgmlReader.CaseFolding = Sgml.CaseFolding.ToLower;
-            sgmlReader.InputStream = reader;
-
-            // create document
-            XDocument doc = XDocument.Load(sgmlReader);
             return doc;
         }
 

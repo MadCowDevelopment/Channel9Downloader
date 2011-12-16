@@ -107,6 +107,10 @@
       <Project>{ECD4CA34-5AAB-4DA7-A13E-9407487888AC}</Project>
       <Name>Channel9Downloader.Composition</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Channel9Downloader.Converters\Channel9Downloader.Converters.csproj">
+      <Project>{6ADFC673-BDC2-4168-AB60-48E9BF1A6434}</Project>
+      <Name>Channel9Downloader.Converters</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Channel9Downloader.DataAccess\Channel9Downloader.DataAccess.csproj">
       <Project>{6CC64101-3534-4EF2-A59D-DB8559F4C613}</Project>
       <Name>Channel9Downloader.DataAccess</Name>

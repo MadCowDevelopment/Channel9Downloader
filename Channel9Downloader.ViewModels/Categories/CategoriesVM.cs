@@ -1,7 +1,6 @@
-﻿using System;
-using System.ComponentModel.Composition;
+﻿using System.ComponentModel.Composition;
 using System.Windows.Input;
-using Channel9Downloader.Composition;
+
 using Channel9Downloader.ViewModels.Framework;
 
 namespace Channel9Downloader.ViewModels.Categories
@@ -13,22 +12,58 @@ namespace Channel9Downloader.ViewModels.Categories
     [PartCreationPolicy(CreationPolicy.Shared)]
     public class CategoriesVM : ViewModelBase, ICategoriesVM
     {
-        private ICommand _showTagSelectionCommand;
+        #region Fields
 
-        private ICommand _showShowSelectionCommand;
+        /// <summary>
+        /// The series selection viewmodel.
+        /// </summary>
+        private readonly ISeriesSelectionVM _seriesSelectionVM;
 
-        private ICommand _showSeriesSelectionCommand;
+        /// <summary>
+        /// The show selection viewmodel.
+        /// </summary>
+        private readonly IShowSelectionVM _showSelectionVM;
 
+        /// <summary>
+        /// The tag selection viewmodel.
+        /// </summary>
+        private readonly ITagSelectionVM _tagSelectionVM;
+
+        /// <summary>
+        /// Backing field for <see cref="CurrentContent"/> property.
+        /// </summary>
+        private IViewModelBase _currentContent;
+
+        /// <summary>
+        /// Backing field for <see cref="SaveSelectionCommand"/> command.
+        /// </summary>
         private ICommand _saveSelectionCommand;
 
-        private IViewModelBase _currentSelectionView;
+        /// <summary>
+        /// Backing field for <see cref="ShowSeriesSelectionCommand"/> command.
+        /// </summary>
+        private ICommand _showSeriesSelectionCommand;
 
-        private IShowSelectionVM _showSelectionVM;
+        /// <summary>
+        /// Backing field for <see cref="ShowShowSelectionCommand"/> command.
+        /// </summary>
+        private ICommand _showShowSelectionCommand;
 
-        private ITagSelectionVM _tagSelectionVM;
+        /// <summary>
+        /// Backing field for <see cref="ShowTagSelectionCommand"/> command.
+        /// </summary>
+        private ICommand _showTagSelectionCommand;
 
-        private ISeriesSelectionVM _seriesSelectionVM;
+        #endregion Fields
 
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CategoriesVM"/> class.
+        /// </summary>
+        /// <param name="tagSelectionVM">The tag selection viewmodel.</param>
+        /// <param name="showSelectionVM">The show selection viewmodel.</param>
+        /// <param name="seriesSelectionVM">The series selection viewmodel.</param>
         [ImportingConstructor]
         public CategoriesVM(
             ITagSelectionVM tagSelectionVM,
@@ -40,30 +75,30 @@ namespace Channel9Downloader.ViewModels.Categories
             _seriesSelectionVM = seriesSelectionVM;
         }
 
-        public ICommand ShowTagSelectionCommand
+        #endregion Constructors
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the current content that should be shown in the view.
+        /// </summary>
+        public IViewModelBase CurrentContent
         {
             get
             {
-                return _showTagSelectionCommand ?? (_showTagSelectionCommand = new RelayCommand(p => OnShowTagSelection()));
+                return _currentContent;
             }
-        }
 
-        public ICommand ShowShowSelectionCommand
-        {
-            get
+            set
             {
-                return _showShowSelectionCommand ?? (_showShowSelectionCommand = new RelayCommand(p => OnShowShowSelection()));
+                _currentContent = value;
+                RaisePropertyChanged();
             }
         }
 
-        public ICommand ShowSeriesSelectionCommand
-        {
-            get
-            {
-                return _showSeriesSelectionCommand ?? (_showSeriesSelectionCommand = new RelayCommand(p => OnShowSeriesSelection()));
-            }
-        }
-
+        /// <summary>
+        /// Gets a command that saves the selection.
+        /// </summary>
         public ICommand SaveSelectionCommand
         {
             get
@@ -72,38 +107,75 @@ namespace Channel9Downloader.ViewModels.Categories
             }
         }
 
-        public IViewModelBase CurrentContent
+        /// <summary>
+        /// Gets a command that shows the series selection.
+        /// </summary>
+        public ICommand ShowSeriesSelectionCommand
         {
             get
             {
-                return _currentSelectionView;
+                return _showSeriesSelectionCommand ?? (_showSeriesSelectionCommand = new RelayCommand(p => OnShowSeriesSelection()));
             }
+        }
 
-            set
+        /// <summary>
+        /// Gets a command that shows the show selection.
+        /// </summary>
+        public ICommand ShowShowSelectionCommand
+        {
+            get
             {
-                _currentSelectionView = value;
-                RaisePropertyChanged();
+                return _showShowSelectionCommand ?? (_showShowSelectionCommand = new RelayCommand(p => OnShowShowSelection()));
             }
         }
 
-        private void OnShowShowSelection()
+        /// <summary>
+        /// Gets a command that shows the tag selection.
+        /// </summary>
+        public ICommand ShowTagSelectionCommand
         {
-            CurrentContent = _showSelectionVM;
+            get
+            {
+                return _showTagSelectionCommand ?? (_showTagSelectionCommand = new RelayCommand(p => OnShowTagSelection()));
+            }
         }
 
-        private void OnShowTagSelection()
+        #endregion Public Properties
+
+        #region Private Methods
+
+        /// <summary>
+        /// Saves the selection.
+        /// </summary>
+        private void OnSaveSelection()
         {
-            CurrentContent = _tagSelectionVM;
+            // TODO: Save selection!!
         }
 
+        /// <summary>
+        /// Shows the series selection view.
+        /// </summary>
         private void OnShowSeriesSelection()
         {
             CurrentContent = _seriesSelectionVM;
         }
 
-        private void OnSaveSelection()
+        /// <summary>
+        /// Shows the show selection view.
+        /// </summary>
+        private void OnShowShowSelection()
         {
-            // TODO: Save selection!!
+            CurrentContent = _showSelectionVM;
         }
+
+        /// <summary>
+        /// Shows the tag selection view.
+        /// </summary>
+        private void OnShowTagSelection()
+        {
+            CurrentContent = _tagSelectionVM;
+        }
+
+        #endregion Private Methods
     }
 }

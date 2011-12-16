@@ -28,6 +28,7 @@ namespace Channel9Downloader.ViewModels.Ribbon
         /// <summary>
         /// Initializes a new instance of the <see cref="RibbonVM"/> class.
         /// </summary>
+        /// <param name="ribbonFactory">The ribbon factory used for creating ribbon items.</param>
         [ImportingConstructor]
         public RibbonVM(IRibbonFactory ribbonFactory)
         {
