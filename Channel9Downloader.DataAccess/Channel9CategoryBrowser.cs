@@ -1,6 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.IO;
 using System.Linq;
+using System.Web;
+using System.Xml;
 using System.Xml.Linq;
 
 using Channel9Downloader.Entities;
@@ -79,9 +83,23 @@ namespace Channel9Downloader.DataAccess
         private XDocument GetDocument(string url)
         {
             var data = _webDownloader.DownloadString(url);
-            data = data.Remove(0, 17);
-            data = data.Replace("&", string.Empty);
-            return XDocument.Parse(data);
+            var textReader = new StringReader(data);
+            var doc = FromHtml(textReader);
+            return doc;
+        }
+
+        XDocument FromHtml(TextReader reader)
+        {
+            // setup SGMLReader
+            var sgmlReader = new Sgml.SgmlReader();
+            sgmlReader.DocType = "HTML";
+            sgmlReader.WhitespaceHandling = WhitespaceHandling.All;
+            sgmlReader.CaseFolding = Sgml.CaseFolding.ToLower;
+            sgmlReader.InputStream = reader;
+
+            // create document
+            XDocument doc = XDocument.Load(sgmlReader);
+            return doc;
         }
 
         /// <summary>
