@@ -20,6 +20,15 @@ namespace Channel9Downloader.DataAccess
         void DownloadData(string address, string filename);
 
         /// <summary>
+        /// Downloads a file asynchronously.
+        /// </summary>
+        /// <param name="address">The address of the resource to download.</param>
+        /// <param name="filename">The name of the local file that is to receive the data.</param>
+        /// <param name="downloadItem">The download item.</param>
+        /// <returns>Returns a Task.</returns>
+        Task<object> DownloadFileAsync(string address, string filename, DownloadItem downloadItem);
+
+        /// <summary>
         /// Downloads the requested resource as a String. 
         /// The resource to download is specified as a String containing the URI.
         /// </summary>
@@ -34,8 +43,6 @@ namespace Channel9Downloader.DataAccess
         /// <param name="address">The address of the resource to download.</param>
         /// <returns>Returns the downloaded resource as a XDocument.</returns>
         XDocument DownloadXHTML(string address);
-
-        Task<object> DownloadFileAsync(string address, string filename, DownloadItem downloadItem);
 
         #endregion Methods
     }

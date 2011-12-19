@@ -44,6 +44,13 @@ namespace Channel9Downloader.DataAccess
             webClient.DownloadFile(new Uri(address), filename);
         }
 
+        /// <summary>
+        /// Downloads a file asynchronously.
+        /// </summary>
+        /// <param name="address">The address of the resource to download.</param>
+        /// <param name="filename">The name of the local file that is to receive the data.</param>
+        /// <param name="downloadItem">The download item.</param>
+        /// <returns>Returns a Task.</returns>
         public Task<object> DownloadFileAsync(string address, string filename, DownloadItem downloadItem)
         {
             var tcs = new TaskCompletionSource<object>();

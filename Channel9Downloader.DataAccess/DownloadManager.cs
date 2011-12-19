@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 
 using Channel9Downloader.Entities;
 
@@ -84,7 +82,13 @@ namespace Channel9Downloader.DataAccess
             private set;
         }
 
-        public List<DownloadItem> Downloads { get; private set; }
+        /// <summary>
+        /// Gets a list of all downloads (includes currently running downloads.
+        /// </summary>
+        public List<DownloadItem> Downloads
+        {
+            get; private set;
+        }
 
         #endregion Public Properties
 

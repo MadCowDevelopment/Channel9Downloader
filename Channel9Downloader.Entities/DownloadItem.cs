@@ -12,6 +12,11 @@
         /// </summary>
         private bool _isDownloading;
 
+        /// <summary>
+        /// Backing field for <see cref="ProgressPercentage"/> property.
+        /// </summary>
+        private int _progressPercentage;
+
         #endregion Fields
 
         #region Public Properties
@@ -41,8 +46,9 @@
             }
         }
 
-        private int _progressPercentage;
-
+        /// <summary>
+        /// Gets or sets the download progress in percent.
+        /// </summary>
         public int ProgressPercentage
         {
             get

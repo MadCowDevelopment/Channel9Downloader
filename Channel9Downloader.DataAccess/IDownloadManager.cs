@@ -22,7 +22,10 @@ namespace Channel9Downloader.DataAccess
         /// <summary>
         /// Gets all downloads.
         /// </summary>
-        List<DownloadItem> Downloads { get; }
+        List<DownloadItem> Downloads
+        {
+            get;
+        }
 
         #endregion Properties
 
