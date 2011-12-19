@@ -2,9 +2,7 @@
 
 using Channel9Downloader.Composition;
 using Channel9Downloader.ViewModels;
-using Channel9Downloader.ViewModels.Events;
 using Channel9Downloader.ViewModels.Framework;
-using Channel9Downloader.Views;
 
 namespace Channel9Downloader
 {
@@ -40,7 +38,6 @@ namespace Channel9Downloader
 
                 _mainWindowVM.Initialize();
                 _mainWindowVM.CloseRequest += MainWindowVMCloseRequest;
-                _mainWindowVM.DialogRequested += MainWindowVMDialogRequested;
             }
             catch (Exception e)
             {
@@ -50,21 +47,6 @@ namespace Channel9Downloader
         }
 
         #endregion Constructors
-
-        #region Private Static Methods
-
-        /// <summary>
-        /// Event handler for the dialog requested event.
-        /// </summary>
-        /// <param name="sender">Sender of the event.</param>
-        /// <param name="e">Event args of the event.</param>
-        private static void MainWindowVMDialogRequested(object sender, DialogRequestEventArgs e)
-        {
-            var dialog = new GenericDialog(e.ViewModel);
-            dialog.ShowDialog();
-        }
-
-        #endregion Private Static Methods
 
         #region Private Methods
 

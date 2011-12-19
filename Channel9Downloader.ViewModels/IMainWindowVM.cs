@@ -1,7 +1,5 @@
-﻿using System;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 
-using Channel9Downloader.ViewModels.Events;
 using Channel9Downloader.ViewModels.Framework;
 
 namespace Channel9Downloader.ViewModels
@@ -11,15 +9,6 @@ namespace Channel9Downloader.ViewModels
     /// </summary>
     public interface IMainWindowVM : ISimpleViewModel
     {
-        #region Events
-
-        /// <summary>
-        /// This event is fired when a dialog is requested.
-        /// </summary>
-        event EventHandler<DialogRequestEventArgs> DialogRequested;
-
-        #endregion Events
-
         #region Properties
 
         /// <summary>

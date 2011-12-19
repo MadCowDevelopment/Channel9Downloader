@@ -72,9 +72,6 @@
     <Compile Include="Views\DownloadsView.xaml.cs">
       <DependentUpon>DownloadsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\GenericDialog.xaml.cs">
-      <DependentUpon>GenericDialog.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\RibbonView.xaml.cs">
       <DependentUpon>RibbonView.xaml</DependentUpon>
     </Compile>
@@ -122,10 +119,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ContentAreaView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\GenericDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

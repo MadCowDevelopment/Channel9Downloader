@@ -58,7 +58,6 @@
     <Compile Include="Categories\TagSelectionVM.cs" />
     <Compile Include="DownloadsVM.cs" />
     <Compile Include="Events\SelectedTabChangedEventArgs.cs" />
-    <Compile Include="Events\DialogRequestEventArgs.cs" />
     <Compile Include="Framework\AdornerViewModel.cs" />
     <Compile Include="Framework\CloseRequestEventArgs.cs" />
     <Compile Include="Framework\DialogService.cs" />

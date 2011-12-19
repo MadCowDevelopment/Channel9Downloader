@@ -57,15 +57,6 @@ namespace Channel9Downloader.ViewModels
 
         #endregion Constructors
 
-        #region Events
-
-        /// <summary>
-        /// This event is used when a dialog is requested.
-        /// </summary>
-        public event EventHandler<DialogRequestEventArgs> DialogRequested;
-
-        #endregion Events
-
         #region Public Properties
 
         /// <summary>
@@ -130,19 +121,6 @@ namespace Channel9Downloader.ViewModels
         {
             InitializeRibbon();
             InitializeSettings();
-        }
-
-        /// <summary>
-        /// Raises the <see cref="DialogRequested"/> event.
-        /// </summary>
-        /// <param name="e">Event args of the event.</param>
-        public void RaiseDialogRequested(DialogRequestEventArgs e)
-        {
-            var handler = DialogRequested;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
         }
 
         #endregion Public Methods
