@@ -1,9 +1,7 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
@@ -57,6 +55,8 @@ namespace Channel9Downloader.DataAccess
             var webClient = new WebClient();
             webClient.DownloadFileCompleted += (obj, args) =>
                 {
+                    downloadItem.DownloadState = DownloadState.Finished;
+
                     if (args.Cancelled)
                     {
                         tcs.TrySetCanceled();
@@ -68,18 +68,21 @@ namespace Channel9Downloader.DataAccess
                         tcs.TrySetException(args.Error);
                         return;
                     }
-
+                    
                     tcs.TrySetResult(null);
                 };
 
             webClient.DownloadProgressChanged += (obj, args) =>
                 {
                     downloadItem.ProgressPercentage = args.ProgressPercentage;
+                    downloadItem.BytesReceived = args.BytesReceived;
+                    downloadItem.TotalBytesToReceive = args.TotalBytesToReceive;
                 };
 
             try
             {
                 webClient.DownloadFileAsync(new Uri(address), filename);
+                downloadItem.DownloadState = DownloadState.Downloading;
             }
             catch (UriFormatException ex)
             {

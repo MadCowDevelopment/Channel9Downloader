@@ -3,9 +3,16 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:controls="clr-namespace:Channel9Downloader.Controls;assembly=Channel9Downloader.Controls" mc:Ignorable="d" 
-    d:DesignHeight="300" d:DesignWidth="300">
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:controls="clr-namespace:Channel9Downloader.Controls;assembly=Channel9Downloader.Controls" 
+    xmlns:Converters="clr-namespace:Channel9Downloader.Converters;assembly=Channel9Downloader.Converters" 
+    mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300">
 
+    <UserControl.Resources>
+        <Converters:BytesToDisplayValueConverter x:Key="BytesToDisplayValueConverter"/>
+        <Converters:BytesPerSecondToDisplayValueConverter x:Key="BytesPerSecondToDisplayValueConverter"/>
+        <Converters:RemainingTimeToDisplayValueConverter x:Key="RemainingTimeToDisplayValueConverter"/>
+    </UserControl.Resources>
     <controls:AdornedControl 
         Name="LoadingAdorner" IsAdornerVisible="{Binding IsAdornerVisible}"
         AdornerContent="{Binding AdornerContent}">
@@ -33,7 +40,6 @@
             </ListView.ItemContainerStyle>
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Category" DisplayMemberBinding="{Binding Category.Title}"/>
                     <GridViewColumn Header="Title" DisplayMemberBinding="{Binding RssItem.Title}"/>
                     <GridViewColumn Header="Progress">
                         <GridViewColumn.CellTemplate>
@@ -42,6 +48,37 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
+                    <GridViewColumn Header="Size">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock 
+                                    Text="{Binding TotalBytesToReceive, 
+                                    Converter={StaticResource BytesToDisplayValueConverter}}" 
+                                    Width="100"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Speed">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock 
+                                    Text="{Binding BytesPerSecond, 
+                                    Converter={StaticResource BytesPerSecondToDisplayValueConverter}}" 
+                                    Width="100"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="ETA">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock 
+                                    Text="{Binding RemainingTime, 
+                                    Converter={StaticResource RemainingTimeToDisplayValueConverter}}" 
+                                    Width="100"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Category" DisplayMemberBinding="{Binding Category.Title}"/>
                 </GridView>
             </ListView.View>
         </ListView>

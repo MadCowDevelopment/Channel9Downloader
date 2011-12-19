@@ -48,6 +48,7 @@
     <Compile Include="Categories.cs" />
     <Compile Include="Category.cs" />
     <Compile Include="DownloadItem.cs" />
+    <Compile Include="DownloadState.cs" />
     <Compile Include="IObservableModel.cs" />
     <Compile Include="MediaContent.cs" />
     <Compile Include="ObservableModel.cs" />

@@ -1,8 +1,9 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Threading.Tasks;
-
+using System.Windows.Threading;
 using Channel9Downloader.DataAccess;
+using Channel9Downloader.DataAccess.Events;
 using Channel9Downloader.Entities;
 using Channel9Downloader.ViewModels.Framework;
 
@@ -23,11 +24,6 @@ namespace Channel9Downloader.ViewModels
         private readonly IDownloadManager _downloadManager;
 
         /// <summary>
-        /// Backing field for <see cref="Downloads"/> property.
-        /// </summary>
-        private ObservableCollection<DownloadItem> _downloads;
-
-        /// <summary>
         /// The application settings.
         /// </summary>
         private Settings _settings;
@@ -44,6 +40,10 @@ namespace Channel9Downloader.ViewModels
         public DownloadsVM(IDownloadManager downloadManager)
         {
             _downloadManager = downloadManager;
+            _downloadManager.DownloadAdded += DownloadManagerDownloadAdded;
+
+            _uiDispatcher = Dispatcher.CurrentDispatcher;
+
             AdornerContent = new LoadingWaitVM();
             Downloads = new ObservableCollection<DownloadItem>();
         }
@@ -55,19 +55,7 @@ namespace Channel9Downloader.ViewModels
         /// <summary>
         /// Gets a list of all downloads.
         /// </summary>
-        public ObservableCollection<DownloadItem> Downloads
-        {
-            get
-            {
-                return _downloads;
-            }
-
-            private set
-            {
-                _downloads = value;
-                RaisePropertyChanged();
-            }
-        }
+        public ObservableCollection<DownloadItem> Downloads { get; private set; }
 
         #endregion Public Properties
 
@@ -80,7 +68,7 @@ namespace Channel9Downloader.ViewModels
         public void Initialize(Settings settings)
         {
             _settings = settings;
-            InitializeDownloadManagerAsync(TaskScheduler.FromCurrentSynchronizationContext());
+            InitializeDownloadManagerAsync();
         }
 
         #endregion Public Methods
@@ -90,23 +78,34 @@ namespace Channel9Downloader.ViewModels
         /// <summary>
         /// Initializes categories in the background.
         /// </summary>
-        /// <param name="continuationTaskScheduler">The task scheduler that should be used for the continuation.
-        /// This should usually be the scheduler of the UI thread.</param>
-        private void InitializeDownloadManagerAsync(TaskScheduler continuationTaskScheduler)
+        private void InitializeDownloadManagerAsync()
         {
             IsAdornerVisible = true;
             var task = new Task(() => _downloadManager.Initialize(_settings));
-
-            task.ContinueWith(
-                x =>
-                    {
-                        Downloads = new ObservableCollection<DownloadItem>(_downloadManager.Downloads);
-                        IsAdornerVisible = false;
-                    },
-                continuationTaskScheduler);
-
+            task.ContinueWith(p => IsAdornerVisible = false);
             task.Start();
         }
+
+        /// <summary>
+        /// The main thread dispatcher.
+        /// </summary>
+        private readonly Dispatcher _uiDispatcher;
+
+        /// <summary>
+        /// Handles the DownloadAdded event.
+        /// </summary>
+        /// <param name="sender">Sender of the event.</param>
+        /// <param name="e">Event args of the event.</param>
+        private void DownloadManagerDownloadAdded(object sender, DownloadAddedEventArgs e)
+        {
+            _uiDispatcher.Invoke(new CollectionInitializerDelegate(p => Downloads.Add(p)), e.DownloadItem);
+        }
+
+        /// <summary>
+        /// This delegate is used for adding items to the download collection.
+        /// </summary>
+        /// <param name="downloadItem">The download to be added.</param>
+        private delegate void CollectionInitializerDelegate(DownloadItem downloadItem);
 
         #endregion Private Methods
     }

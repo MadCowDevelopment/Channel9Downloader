@@ -1,5 +1,5 @@
-using System.Collections.Generic;
-
+using System;
+using Channel9Downloader.DataAccess.Events;
 using Channel9Downloader.Entities;
 
 namespace Channel9Downloader.DataAccess
@@ -9,26 +9,6 @@ namespace Channel9Downloader.DataAccess
     /// </summary>
     public interface IDownloadManager
     {
-        #region Properties
-
-        /// <summary>
-        /// Gets the download queue.
-        /// </summary>
-        Queue<DownloadItem> DownloadQueue
-        {
-            get;
-        }
-
-        /// <summary>
-        /// Gets all downloads.
-        /// </summary>
-        List<DownloadItem> Downloads
-        {
-            get;
-        }
-
-        #endregion Properties
-
         #region Methods
 
         /// <summary>
@@ -36,6 +16,11 @@ namespace Channel9Downloader.DataAccess
         /// </summary>
         /// <param name="settings">The application settings.</param>
         void Initialize(Settings settings);
+
+        /// <summary>
+        /// This event is raised when a new download has been added.
+        /// </summary>
+        event EventHandler<DownloadAddedEventArgs> DownloadAdded;
 
         #endregion Methods
     }

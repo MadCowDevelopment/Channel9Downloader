@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
-
+using Channel9Downloader.DataAccess.Events;
 using Channel9Downloader.Entities;
 
 namespace Channel9Downloader.DataAccess
@@ -66,7 +66,7 @@ namespace Channel9Downloader.DataAccess
             _rssRepository = rssRepository;
             _webDownloader = webDownloader;
 
-            DownloadQueue = new Queue<DownloadItem>();
+            _downloadQueue = new Queue<DownloadItem>();
         }
 
         #endregion Constructors
@@ -76,19 +76,7 @@ namespace Channel9Downloader.DataAccess
         /// <summary>
         /// Gets the download queue (all downloads that have not started yet).
         /// </summary>
-        public Queue<DownloadItem> DownloadQueue
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// Gets a list of all downloads (includes currently running downloads.
-        /// </summary>
-        public List<DownloadItem> Downloads
-        {
-            get; private set;
-        }
+        private readonly Queue<DownloadItem> _downloadQueue;
 
         #endregion Public Properties
 
@@ -139,14 +127,28 @@ namespace Channel9Downloader.DataAccess
 
             // Add all downloads that are not already on the list.
             foreach (var availableItem in
-                availableItems.Where(availableItem => !DownloadQueue.Any(p => p.RssItem.Guid == availableItem.RssItem.Guid)))
+                availableItems.Where(availableItem => !_downloadQueue.Any(p => p.RssItem.Guid == availableItem.RssItem.Guid)))
             {
-                DownloadQueue.Enqueue(availableItem);
+                _downloadQueue.Enqueue(availableItem);
+                RaiseDownloadAdded(new DownloadAddedEventArgs(availableItem));
             }
 
-            Downloads = new List<DownloadItem>(DownloadQueue);
-
             StartDownloads();
+        }
+
+        /// <summary>
+        /// This event is raised when a download has finished.
+        /// </summary>
+        public event EventHandler<DownloadAddedEventArgs> DownloadAdded;
+
+        /// <summary>
+        /// Raises the <see cref="DownloadAdded"/> event.
+        /// </summary>
+        /// <param name="e">Event args of the event.</param>
+        public void RaiseDownloadAdded(DownloadAddedEventArgs e)
+        {
+            var handler = DownloadAdded;
+            if (handler != null) handler(this, e);
         }
 
         #endregion Public Methods
@@ -203,11 +205,11 @@ namespace Channel9Downloader.DataAccess
         /// </summary>
         private void StartDownloads()
         {
-            while (_numberOfRunningDownloads < _settings.MaximumParallelDownloads && DownloadQueue.Count > 0)
+            while (_numberOfRunningDownloads < _settings.MaximumParallelDownloads && _downloadQueue.Count > 0)
             {
                 _numberOfRunningDownloads++;
 
-                var downloadItem = DownloadQueue.Dequeue();
+                var downloadItem = _downloadQueue.Dequeue();
                 var address = GetDownloadAddress(downloadItem);
                 var filename = CreateLocalFilename(address);
                 var task = _webDownloader.DownloadFileAsync(address, filename, downloadItem);
