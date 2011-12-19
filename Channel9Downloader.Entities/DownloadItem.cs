@@ -41,6 +41,22 @@
             }
         }
 
+        private int _progressPercentage;
+
+        public int ProgressPercentage
+        {
+            get
+            {
+                return _progressPercentage;
+            }
+
+            set
+            {
+                _progressPercentage = value;
+                RaisePropertyChanged();
+            }
+        }
+
         /// <summary>
         /// Gets or sets the RSS item.
         /// </summary>

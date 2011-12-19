@@ -1,8 +1,14 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
 using System.IO;
+using System.Linq;
 using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
+
+using Channel9Downloader.Entities;
 
 namespace Channel9Downloader.DataAccess
 {
@@ -35,7 +41,45 @@ namespace Channel9Downloader.DataAccess
         public void DownloadData(string address, string filename)
         {
             var webClient = new WebClient();
-            webClient.DownloadFile(address, filename);
+            webClient.DownloadFile(new Uri(address), filename);
+        }
+
+        public Task<object> DownloadFileAsync(string address, string filename, DownloadItem downloadItem)
+        {
+            var tcs = new TaskCompletionSource<object>();
+            var webClient = new WebClient();
+            webClient.DownloadFileCompleted += (obj, args) =>
+                {
+                    if (args.Cancelled)
+                    {
+                        tcs.TrySetCanceled();
+                        return;
+                    }
+
+                    if (args.Error != null)
+                    {
+                        tcs.TrySetException(args.Error);
+                        return;
+                    }
+
+                    tcs.TrySetResult(null);
+                };
+
+            webClient.DownloadProgressChanged += (obj, args) =>
+                {
+                    downloadItem.ProgressPercentage = args.ProgressPercentage;
+                };
+
+            try
+            {
+                webClient.DownloadFileAsync(new Uri(address), filename);
+            }
+            catch (UriFormatException ex)
+            {
+                tcs.TrySetException(ex);
+            }
+
+            return tcs.Task;
         }
 
         /// <summary>

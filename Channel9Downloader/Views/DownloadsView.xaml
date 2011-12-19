@@ -35,6 +35,13 @@
                 <GridView>
                     <GridViewColumn Header="Category" DisplayMemberBinding="{Binding Category.Title}"/>
                     <GridViewColumn Header="Title" DisplayMemberBinding="{Binding RssItem.Title}"/>
+                    <GridViewColumn Header="Progress">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <ProgressBar Value="{Binding ProgressPercentage}" Height="12" Width="250"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>

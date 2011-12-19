@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
@@ -67,7 +68,7 @@ namespace Channel9Downloader.DataAccess
             _rssRepository = rssRepository;
             _webDownloader = webDownloader;
 
-            Downloads = new Queue<DownloadItem>();
+            DownloadQueue = new Queue<DownloadItem>();
         }
 
         #endregion Constructors
@@ -77,10 +78,13 @@ namespace Channel9Downloader.DataAccess
         /// <summary>
         /// Gets the download queue (all downloads that have not started yet).
         /// </summary>
-        public Queue<DownloadItem> Downloads
+        public Queue<DownloadItem> DownloadQueue
         {
-            get; private set;
+            get;
+            private set;
         }
+
+        public List<DownloadItem> Downloads { get; private set; }
 
         #endregion Public Properties
 
@@ -131,10 +135,12 @@ namespace Channel9Downloader.DataAccess
 
             // Add all downloads that are not already on the list.
             foreach (var availableItem in
-                availableItems.Where(availableItem => !Downloads.Any(p => p.RssItem.Guid == availableItem.RssItem.Guid)))
+                availableItems.Where(availableItem => !DownloadQueue.Any(p => p.RssItem.Guid == availableItem.RssItem.Guid)))
             {
-                Downloads.Enqueue(availableItem);
+                DownloadQueue.Enqueue(availableItem);
             }
+
+            Downloads = new List<DownloadItem>(DownloadQueue);
 
             StartDownloads();
         }
@@ -193,34 +199,20 @@ namespace Channel9Downloader.DataAccess
         /// </summary>
         private void StartDownloads()
         {
-            while (_numberOfRunningDownloads < _settings.MaximumParallelDownloads && Downloads.Count > 0)
+            while (_numberOfRunningDownloads < _settings.MaximumParallelDownloads && DownloadQueue.Count > 0)
             {
                 _numberOfRunningDownloads++;
-                var task = new Task<DownloadItem>(() =>
-                    {
-                        DownloadItem downloadItem = null;
-                        try
+
+                var downloadItem = DownloadQueue.Dequeue();
+                var address = GetDownloadAddress(downloadItem);
+                var filename = CreateLocalFilename(address);
+                var task = _webDownloader.DownloadFileAsync(address, filename, downloadItem);
+                task.ContinueWith(
+                    x =>
                         {
-                            downloadItem = Downloads.Dequeue();
-                            var address = GetDownloadAddress(downloadItem);
-                            var filename = CreateLocalFilename(address);
-                            _webDownloader.DownloadData(address, filename);
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine(e);
-                        }
-
-                        return downloadItem;
-                    });
-
-                task.ContinueWith(x =>
-                    {
-                        _numberOfRunningDownloads--;
-                        StartDownloads();
-                    });
-
-                task.Start();
+                            _numberOfRunningDownloads--;
+                            StartDownloads();
+                        });
             }
         }
 

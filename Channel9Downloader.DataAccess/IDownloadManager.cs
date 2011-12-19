@@ -14,10 +14,15 @@ namespace Channel9Downloader.DataAccess
         /// <summary>
         /// Gets the download queue.
         /// </summary>
-        Queue<DownloadItem> Downloads
+        Queue<DownloadItem> DownloadQueue
         {
             get;
         }
+
+        /// <summary>
+        /// Gets all downloads.
+        /// </summary>
+        List<DownloadItem> Downloads { get; }
 
         #endregion Properties
 

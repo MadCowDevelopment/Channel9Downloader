@@ -1,4 +1,7 @@
+using System.Threading.Tasks;
 using System.Xml.Linq;
+
+using Channel9Downloader.Entities;
 
 namespace Channel9Downloader.DataAccess
 {
@@ -31,6 +34,8 @@ namespace Channel9Downloader.DataAccess
         /// <param name="address">The address of the resource to download.</param>
         /// <returns>Returns the downloaded resource as a XDocument.</returns>
         XDocument DownloadXHTML(string address);
+
+        Task<object> DownloadFileAsync(string address, string filename, DownloadItem downloadItem);
 
         #endregion Methods
     }
