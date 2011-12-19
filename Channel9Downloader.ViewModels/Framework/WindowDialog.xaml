@@ -5,8 +5,9 @@
     xmlns:Framework="clr-namespace:Channel9Downloader.ViewModels.Framework" Title="WindowDialog" 
     WindowStyle="SingleBorderWindow" 
     WindowStartupLocation="CenterOwner" 
+    ResizeMode="NoResize"
     SizeToContent="WidthAndHeight">
     
-    <ContentPresenter x:Name="DialogPresenter" Content="{Binding .}"/>
+    <ContentPresenter x:Name="DialogPresenter" Content="{Binding}"/>
     
 </Framework:MvvmWindow>

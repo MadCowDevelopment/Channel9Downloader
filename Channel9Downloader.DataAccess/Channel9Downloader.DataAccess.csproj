@@ -57,9 +57,13 @@
     <Compile Include="ICategoryScraper.cs" />
     <Compile Include="ICategoryRepository.cs" />
     <Compile Include="IFolderUtils.cs" />
+    <Compile Include="ISettingsDataAccess.cs" />
+    <Compile Include="ISettingsManager.cs" />
     <Compile Include="IWebDownloader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CategoryScraper.cs" />
+    <Compile Include="SettingsDataAccess.cs" />
+    <Compile Include="SettingsManager.cs" />
     <Compile Include="WebDownloader.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -23,6 +23,14 @@ namespace Channel9Downloader.ViewModels.Ribbon
         #region Properties
 
         /// <summary>
+        /// Gets or sets the ribbon factory.
+        /// </summary>
+        IRibbonFactory RibbonFactory
+        {
+            get; set;
+        }
+
+        /// <summary>
         /// Gets or sets the selected tab.
         /// </summary>
         IRibbonTabVM SelectedTab
@@ -40,10 +48,13 @@ namespace Channel9Downloader.ViewModels.Ribbon
 
         #endregion Properties
 
-        IRibbonFactory RibbonFactory { get; set; }
+        #region Methods
 
-        IMainWindowVM MainWindowVM { get; set; }
-
+        /// <summary>
+        /// Initializes the viewmodel.
+        /// </summary>
         void Initialize();
+
+        #endregion Methods
     }
 }

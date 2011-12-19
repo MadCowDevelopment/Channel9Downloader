@@ -13,13 +13,25 @@ namespace Channel9Downloader.ViewModels.Ribbon
     {
         #region Public Properties
 
+        /// <summary>
+        /// Gets or sets the categories viewmodel.
+        /// </summary>
         [Import]
-        public IMainWindowVM MainWindowVM { get; set; }
+        public ICategoriesVM CategoriesVM
+        {
+            get; set;
+        }
 
+        /// <summary>
+        /// Gets or sets the main window viewmodel.
+        /// </summary>
         [Import]
-        public ICategoriesVM CategoriesVM { get; set; }
+        public IMainWindowVM MainWindowVM
+        {
+            get; set;
+        }
 
-        #endregion
+        #endregion Public Properties
 
         #region Public Methods
 

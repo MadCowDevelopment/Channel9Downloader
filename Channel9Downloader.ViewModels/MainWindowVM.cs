@@ -1,7 +1,10 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 using System.Windows.Input;
+
 using Channel9Downloader.Composition;
+using Channel9Downloader.DataAccess;
+using Channel9Downloader.Entities;
 using Channel9Downloader.ViewModels.Categories;
 using Channel9Downloader.ViewModels.Events;
 using Channel9Downloader.ViewModels.Framework;
@@ -28,6 +31,16 @@ namespace Channel9Downloader.ViewModels
         /// </summary>
         private IBaseViewModel _contentArea;
 
+        /// <summary>
+        /// Backing field for <see cref="ShowSettingsViewCommand"/> property.
+        /// </summary>
+        private ICommand _showSettingsViewCommand;
+
+        /// <summary>
+        /// The application settings.
+        /// </summary>
+        private Settings _settings;
+
         #endregion Fields
 
         #region Constructors
@@ -42,13 +55,16 @@ namespace Channel9Downloader.ViewModels
             _composer = composer;
         }
 
-        public void Initialize()
-        {
-            RibbonBar.Initialize();
-            RibbonBar.SelectedTabChanged += RibbonBarSelectedTabChanged;
-        }
-
         #endregion Constructors
+
+        #region Events
+
+        /// <summary>
+        /// This event is used when a dialog is requested.
+        /// </summary>
+        public event EventHandler<DialogRequestEventArgs> DialogRequested;
+
+        #endregion Events
 
         #region Public Properties
 
@@ -78,17 +94,95 @@ namespace Channel9Downloader.ViewModels
             get;
             private set;
         }
+        
+        /// <summary>
+        /// Gets or sets the dialog service.
+        /// </summary>
+        [Import]
+        public IDialogService DialogService { get; set; }
+
+        /// <summary>
+        /// Gets or sets the settings manager.
+        /// </summary>
+        [Import]
+        public ISettingsManager SettingsManager { get; set; }
+
+        /// <summary>
+        /// Gets a command to show the settings view.
+        /// </summary>
+        public ICommand ShowSettingsViewCommand
+        {
+            get
+            {
+                return _showSettingsViewCommand ??
+                       (_showSettingsViewCommand = new RelayCommand(p => OnShowSettingsView()));
+            }
+        }
 
         #endregion Public Properties
 
+        #region Public Methods
+
+        /// <summary>
+        /// Initializes this viewmodel.
+        /// </summary>
+        public void Initialize()
+        {
+            InitializeRibbon();
+            InitializeSettings();
+        }
+
+        /// <summary>
+        /// Raises the <see cref="DialogRequested"/> event.
+        /// </summary>
+        /// <param name="e">Event args of the event.</param>
+        public void RaiseDialogRequested(DialogRequestEventArgs e)
+        {
+            var handler = DialogRequested;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        #endregion Public Methods
+
         #region Private Methods
+
+        /// <summary>
+        /// Initializes the ribbon.
+        /// </summary>
+        private void InitializeRibbon()
+        {
+            RibbonBar.Initialize();
+            RibbonBar.SelectedTabChanged += RibbonBarSelectedTabChanged;
+        }
+
+        /// <summary>
+        /// Initializes the application settings.
+        /// </summary>
+        private void InitializeSettings()
+        {
+            _settings = SettingsManager.LoadSettings();
+            _composer.ComposeExportedValue(_settings);
+        }
+
+        /// <summary>
+        /// Requests the settings view.
+        /// </summary>
+        private void OnShowSettingsView()
+        {
+            var settingsVM = _composer.GetExportedValue<ISettingsVM>();
+            DialogService.ShowDialog(settingsVM.DisplayName, settingsVM);
+            SettingsManager.SaveSettings(_settings);
+        }
 
         /// <summary>
         /// Handles the selected tab changed event of the ribbon.
         /// </summary>
         /// <param name="sender">Sender of the event.</param>
         /// <param name="e">Event args of the event.</param>
-        private void RibbonBarSelectedTabChanged(object sender, Events.SelectedTabChangedEventArgs e)
+        private void RibbonBarSelectedTabChanged(object sender, SelectedTabChangedEventArgs e)
         {
             if (e.RibbonTabVM == null)
             {
@@ -105,30 +199,5 @@ namespace Channel9Downloader.ViewModels
         }
 
         #endregion Private Methods
-
-        private ICommand _showSettingsViewCommand;
-
-        public ICommand ShowSettingsViewCommand
-        {
-            get 
-            {
-                return _showSettingsViewCommand ??
-                       (_showSettingsViewCommand = new RelayCommand(p => OnShowSettingsView()));
-            }
-        }
-
-        private void OnShowSettingsView()
-        {
-            var settingsVM = _composer.GetExportedValue<ISettingsVM>();
-            OnDialogRequested(new ShowDialogEventArgs(settingsVM));
-        }
-
-        public event EventHandler<ShowDialogEventArgs> DialogRequested;
-
-        public void OnDialogRequested(ShowDialogEventArgs e)
-        {
-            var handler = DialogRequested;
-            if (handler != null) handler(this, e);
-        }
     }
 }

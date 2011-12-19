@@ -23,18 +23,6 @@ namespace Channel9Downloader.ViewModels.Ribbon
 
         #endregion Fields
 
-        [Import]
-        public IRibbonFactory RibbonFactory { get; set; }
-
-
-        public IMainWindowVM MainWindowVM { get; set; }
-
-        public void Initialize()
-        {
-            var tabs = RibbonFactory.CreateRibbonTabs();
-            Tabs = new ObservableCollection<IRibbonTabVM>(tabs);
-        }
-
         #region Events
 
         /// <summary>
@@ -45,6 +33,15 @@ namespace Channel9Downloader.ViewModels.Ribbon
         #endregion Events
 
         #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the ribbon factory.
+        /// </summary>
+        [Import]
+        public IRibbonFactory RibbonFactory
+        {
+            get; set;
+        }
 
         /// <summary>
         /// Gets or sets the selected tab.
@@ -78,6 +75,19 @@ namespace Channel9Downloader.ViewModels.Ribbon
         }
 
         #endregion Public Properties
+
+        #region Public Methods
+
+        /// <summary>
+        /// Initializes this viewmodel.
+        /// </summary>
+        public void Initialize()
+        {
+            var tabs = RibbonFactory.CreateRibbonTabs();
+            Tabs = new ObservableCollection<IRibbonTabVM>(tabs);
+        }
+
+        #endregion Public Methods
 
         #region Protected Methods
 

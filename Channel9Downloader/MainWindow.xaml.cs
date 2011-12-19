@@ -13,10 +13,14 @@ namespace Channel9Downloader
     /// </summary>
     public partial class MainWindow
     {
+        #region Fields
+
         /// <summary>
         /// The DataContext for this view.
         /// </summary>
         private readonly IMainWindowVM _mainWindowVM;
+
+        #endregion Fields
 
         #region Constructors
 
@@ -45,17 +49,35 @@ namespace Channel9Downloader
             }
         }
 
-        private static void MainWindowVMDialogRequested(object sender, ShowDialogEventArgs e)
+        #endregion Constructors
+
+        #region Private Static Methods
+
+        /// <summary>
+        /// Event handler for the dialog requested event.
+        /// </summary>
+        /// <param name="sender">Sender of the event.</param>
+        /// <param name="e">Event args of the event.</param>
+        private static void MainWindowVMDialogRequested(object sender, DialogRequestEventArgs e)
         {
             var dialog = new GenericDialog(e.ViewModel);
             dialog.ShowDialog();
         }
 
+        #endregion Private Static Methods
+
+        #region Private Methods
+
+        /// <summary>
+        /// Event handler for the close request.
+        /// </summary>
+        /// <param name="sender">Sender of the event.</param>
+        /// <param name="e">Event args of the event.</param>
         private void MainWindowVMCloseRequest(object sender, CloseRequestEventArgs e)
         {
             Close();
         }
 
-        #endregion Constructors
+        #endregion Private Methods
     }
 }
