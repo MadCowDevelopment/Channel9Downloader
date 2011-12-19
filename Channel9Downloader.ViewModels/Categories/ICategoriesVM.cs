@@ -1,5 +1,7 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
 
+using Channel9Downloader.ViewModels.Events;
 using Channel9Downloader.ViewModels.Framework;
 
 namespace Channel9Downloader.ViewModels.Categories
@@ -60,5 +62,14 @@ namespace Channel9Downloader.ViewModels.Categories
         }
 
         #endregion Properties
+
+        #region Methods
+
+        /// <summary>
+        /// Initializes this viewmodel.
+        /// </summary>
+        void Initialize();
+
+        #endregion Methods
     }
 }

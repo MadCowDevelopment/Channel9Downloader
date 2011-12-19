@@ -16,6 +16,11 @@ namespace Channel9Downloader.DataAccess
         Categories GetCategories();
 
         /// <summary>
+        /// Saves the categories.
+        /// </summary>
+        void SaveCategories();
+
+        /// <summary>
         /// Updates the available categories.
         /// </summary>
         void UpdateCategories();

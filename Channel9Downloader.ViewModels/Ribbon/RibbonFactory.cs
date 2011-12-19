@@ -43,6 +43,7 @@ namespace Channel9Downloader.ViewModels.Ribbon
         {
             var result = new List<IRibbonTabVM>();
             result.Add(CreateCategoryTab());
+            result.Add(CreateDownloadTab());
             return result;
         }
 
@@ -103,7 +104,33 @@ namespace Channel9Downloader.ViewModels.Ribbon
 
             categories.Groups.Add(groupUpdate);
 
+            // Set up group 'Selection'
+            var groupSelection = new RibbonGroupVM();
+            groupSelection.Header = "Selection";
+
+            var buttonSaveSelection = new RibbonButtonVM();
+            buttonSaveSelection.Command = CategoriesVM.SaveSelectionCommand;
+            buttonSaveSelection.Label = "Save";
+            buttonSaveSelection.LargeImageSource = @"..\Images\Ribbon\SaveSelectionLarge.png";
+            buttonSaveSelection.ToolTipDescription = "Save the category selection.";
+            buttonSaveSelection.ToolTipTitle = "Save selection";
+            groupSelection.Items.Add(buttonSaveSelection);
+
+            categories.Groups.Add(groupSelection);
+
             return categories;
+        }
+
+        /// <summary>
+        /// Creates the download tab.
+        /// </summary>
+        /// <returns>Returns the download tab.</returns>
+        private IRibbonTabVM CreateDownloadTab()
+        {
+            var downloads = new RibbonTabVM();
+            downloads.Header = RibbonTabName.DOWNLOADS;
+
+            return downloads;
         }
 
         #endregion Private Methods

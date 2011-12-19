@@ -1,9 +1,11 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
 using Channel9Downloader.Composition;
 using Channel9Downloader.DataAccess;
+using Channel9Downloader.ViewModels.Events;
 using Channel9Downloader.ViewModels.Framework;
 
 namespace Channel9Downloader.ViewModels.Categories
@@ -91,8 +93,6 @@ namespace Channel9Downloader.ViewModels.Categories
             _dependencyComposer = dependencyComposer;
             _categoryRepository = categoryRepository;
             AdornerContent = loadingWaitVM;
-
-            InitializeCategoriesAsync(TaskScheduler.FromCurrentSynchronizationContext());
         }
 
         #endregion Constructors
@@ -183,6 +183,18 @@ namespace Channel9Downloader.ViewModels.Categories
 
         #endregion Public Properties
 
+        #region Public Methods
+
+        /// <summary>
+        /// Initializes this class.
+        /// </summary>
+        public void Initialize()
+        {
+            InitializeCategoriesAsync(TaskScheduler.FromCurrentSynchronizationContext());
+        }
+
+        #endregion Public Methods
+
         #region Private Methods
 
         /// <summary>
@@ -224,7 +236,7 @@ namespace Channel9Downloader.ViewModels.Categories
         /// </summary>
         private void OnSaveSelection()
         {
-            // TODO: Save selection!!
+            _categoryRepository.SaveCategories();
         }
 
         /// <summary>

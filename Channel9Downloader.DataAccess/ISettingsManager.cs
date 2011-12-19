@@ -7,6 +7,8 @@ namespace Channel9Downloader.DataAccess
     /// </summary>
     public interface ISettingsManager
     {
+        #region Methods
+
         /// <summary>
         /// Loads the settings.
         /// </summary>
@@ -18,5 +20,7 @@ namespace Channel9Downloader.DataAccess
         /// </summary>
         /// <param name="settings">The settings to save.</param>
         void SaveSettings(Settings settings);
+
+        #endregion Methods
     }
 }

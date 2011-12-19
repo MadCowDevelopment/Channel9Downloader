@@ -19,6 +19,11 @@ namespace Channel9Downloader.DataAccess
         private readonly ICategoriesDataAccess _categoriesDataAccess;
 
         /// <summary>
+        /// This object serves as lock for categories.
+        /// </summary>
+        private readonly object _categoryLock = new object();
+
+        /// <summary>
         /// Scraper used for retrieving categories from the channel 9 website.
         /// </summary>
         private readonly ICategoryScraper _categoryScraper;
@@ -27,6 +32,11 @@ namespace Channel9Downloader.DataAccess
         /// Folder utils used for retrieving the user folder.
         /// </summary>
         private readonly IFolderUtils _folderUtils;
+
+        /// <summary>
+        /// Contains all available categories.
+        /// </summary>
+        private Categories _categories;
 
         #endregion Fields
 
@@ -59,20 +69,35 @@ namespace Channel9Downloader.DataAccess
         /// <returns>Returns a list of all categories.</returns>
         public Categories GetCategories()
         {
-            var filename = CreateFilenameForCategory();
-            var categories = _categoriesDataAccess.LoadCategories(filename);
-
-            if (categories == null)
+            lock (_categoryLock)
             {
-                var tags = _categoryScraper.GetAllCategories<Tag>();
-                var shows = _categoryScraper.GetAllCategories<Show>();
-                var series = _categoryScraper.GetAllCategories<Series>();
-                categories = new Categories(tags, shows, series);
+                if (_categories != null)
+                {
+                    return _categories;
+                }
 
-                _categoriesDataAccess.SaveCategories(categories, filename);
+                var filename = CreateFilenameForCategory();
+                _categories = _categoriesDataAccess.LoadCategories(filename);
+
+                if (_categories == null)
+                {
+                    RetrieveCategories();
+                }
+
+                return _categories;
             }
+        }
 
-            return categories;
+        /// <summary>
+        /// Saves the categories.
+        /// </summary>
+        public void SaveCategories()
+        {
+            lock (_categoryLock)
+            {
+                var filename = CreateFilenameForCategory();
+                _categoriesDataAccess.SaveCategories(_categories, filename);
+            }
         }
 
         /// <summary>
@@ -80,13 +105,10 @@ namespace Channel9Downloader.DataAccess
         /// </summary>
         public void UpdateCategories()
         {
-            var filename = CreateFilenameForCategory();
-            var tags = _categoryScraper.GetAllCategories<Tag>();
-            var shows = _categoryScraper.GetAllCategories<Show>();
-            var series = _categoryScraper.GetAllCategories<Series>();
-            var categories = new Categories(tags, shows, series);
-
-            _categoriesDataAccess.SaveCategories(categories, filename);
+            lock (_categoryLock)
+            {
+                RetrieveCategories();
+            }
         }
 
         #endregion Public Methods
@@ -102,6 +124,20 @@ namespace Channel9Downloader.DataAccess
             var userFolder = _folderUtils.GetUserDataPath();
             var filename = Path.Combine(userFolder, "Categories.data");
             return filename;
+        }
+
+        /// <summary>
+        /// Retrieves the categories from the channel 9 site.
+        /// </summary>
+        private void RetrieveCategories()
+        {
+            var filename = CreateFilenameForCategory();
+            var tags = _categoryScraper.GetAllCategories<Tag>();
+            var shows = _categoryScraper.GetAllCategories<Show>();
+            var series = _categoryScraper.GetAllCategories<Series>();
+            _categories = new Categories(tags, shows, series);
+
+            _categoriesDataAccess.SaveCategories(_categories, filename);
         }
 
         #endregion Private Methods

@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 
 namespace Channel9Downloader.Entities
 {
@@ -8,6 +9,13 @@ namespace Channel9Downloader.Entities
     [DataContract]
     public class Settings : ObservableModel
     {
+        #region Fields
+
+        /// <summary>
+        /// Property name for <see cref="MaximumParallelDownloads"/> property.
+        /// </summary>
+        public const string PROP_MAXIMUM_PARALLEL_DOWNLOADS = "MaximumParallelDownloads";
+
         /// <summary>
         /// Backing field for <see cref="DownloadFolder"/> property.
         /// </summary>
@@ -18,6 +26,8 @@ namespace Channel9Downloader.Entities
         /// </summary>
         private int _maximumParallelDownloads;
 
+        #endregion Fields
+
         #region Constructors
 
         /// <summary>
@@ -26,7 +36,7 @@ namespace Channel9Downloader.Entities
         public Settings()
         {
             DownloadFolder = string.Empty;
-            MaximumParallelDownloads = 5;
+            MaximumParallelDownloads = 2;
         }
 
         #endregion Constructors
@@ -65,7 +75,7 @@ namespace Channel9Downloader.Entities
             set
             {
                 _maximumParallelDownloads = value;
-                RaisePropertyChanged();
+                RaisePropertyChanged(PROP_MAXIMUM_PARALLEL_DOWNLOADS);
             }
         }
 

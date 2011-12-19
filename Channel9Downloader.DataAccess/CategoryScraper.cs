@@ -71,23 +71,6 @@ namespace Channel9Downloader.DataAccess
         #region Private Methods
 
         /// <summary>
-        /// Returns an <see cref="XDocument"/> from <see cref="TextReader"/> that contains HTML.
-        /// </summary>
-        /// <param name="reader">The reader used for getting HTML.</param>
-        /// <returns>Returns an XML representation of the HTML.</returns>
-        private XDocument FromHtml(TextReader reader)
-        {
-            var sgmlReader = new Sgml.SgmlReader();
-            sgmlReader.DocType = "HTML";
-            sgmlReader.WhitespaceHandling = WhitespaceHandling.All;
-            sgmlReader.CaseFolding = Sgml.CaseFolding.ToLower;
-            sgmlReader.InputStream = reader;
-
-            var doc = XDocument.Load(sgmlReader);
-            return doc;
-        }
-
-        /// <summary>
         /// Gets a list of all available series.
         /// </summary>
         /// <returns>Returns a list of all available series.</returns>
@@ -124,9 +107,7 @@ namespace Channel9Downloader.DataAccess
         /// <returns>Returns an XML document.</returns>
         private XDocument GetDocument(string url)
         {
-            var data = _webDownloader.DownloadString(url);
-            var textReader = new StringReader(data);
-            var doc = FromHtml(textReader);
+            var doc = _webDownloader.DownloadXHTML(url);
             return doc;
         }
 

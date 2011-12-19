@@ -1,7 +1,7 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
 using System.IO;
 using System.Runtime.Serialization;
-using System;
 
 using Channel9Downloader.Entities;
 
@@ -13,6 +13,8 @@ namespace Channel9Downloader.DataAccess
     [Export(typeof(ISettingsManager))]
     public class SettingsManager : ISettingsManager
     {
+        #region Fields
+
         /// <summary>
         /// Folder utils for access to specific OS folders.
         /// </summary>
@@ -28,6 +30,10 @@ namespace Channel9Downloader.DataAccess
         /// </summary>
         private readonly string _settingsFilename;
 
+        #endregion Fields
+
+        #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SettingsManager"/> class.
         /// </summary>
@@ -40,6 +46,10 @@ namespace Channel9Downloader.DataAccess
             _settingsDataAccess = settingsDataAccess;
             _settingsFilename = Path.Combine(_folderUtils.GetUserDataPath(), "settings.xml");
         }
+
+        #endregion Constructors
+
+        #region Public Methods
 
         /// <summary>
         /// Loads the settings.
@@ -87,5 +97,7 @@ namespace Channel9Downloader.DataAccess
                 Console.WriteLine();
             }
         }
+
+        #endregion Public Methods
     }
 }

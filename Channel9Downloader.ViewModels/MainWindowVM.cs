@@ -22,9 +22,19 @@ namespace Channel9Downloader.ViewModels
         #region Fields
 
         /// <summary>
+        /// The categories viewmodel.
+        /// </summary>
+        private readonly ICategoriesVM _categoriesVM;
+
+        /// <summary>
         /// The composer used for dependency injection.
         /// </summary>
         private readonly IDependencyComposer _composer;
+
+        /// <summary>
+        /// The downloads viewmodel.
+        /// </summary>
+        private readonly IDownloadsVM _downloadsVM;
 
         /// <summary>
         /// Backing field for <see cref="ContentArea"/> property.
@@ -32,14 +42,14 @@ namespace Channel9Downloader.ViewModels
         private IBaseViewModel _contentArea;
 
         /// <summary>
-        /// Backing field for <see cref="ShowSettingsViewCommand"/> property.
-        /// </summary>
-        private ICommand _showSettingsViewCommand;
-
-        /// <summary>
         /// The application settings.
         /// </summary>
         private Settings _settings;
+
+        /// <summary>
+        /// Backing field for <see cref="ShowSettingsViewCommand"/> property.
+        /// </summary>
+        private ICommand _showSettingsViewCommand;
 
         #endregion Fields
 
@@ -49,10 +59,17 @@ namespace Channel9Downloader.ViewModels
         /// Initializes a new instance of the <see cref="MainWindowVM"/> class.
         /// </summary>
         /// <param name="composer">The composer used for dependency injection.</param>
+        /// <param name="categoriesVM">The categories viewmodel.</param>
+        /// <param name="downloadsVM">The downloads viewmodel.</param>
         [ImportingConstructor]
-        public MainWindowVM(IDependencyComposer composer)
+        public MainWindowVM(
+            IDependencyComposer composer,
+            ICategoriesVM categoriesVM,
+            IDownloadsVM downloadsVM)
         {
             _composer = composer;
+            _categoriesVM = categoriesVM;
+            _downloadsVM = downloadsVM;
         }
 
         #endregion Constructors
@@ -77,6 +94,15 @@ namespace Channel9Downloader.ViewModels
         }
 
         /// <summary>
+        /// Gets or sets the dialog service.
+        /// </summary>
+        [Import]
+        public IDialogService DialogService
+        {
+            get; set;
+        }
+
+        /// <summary>
         /// Gets the viewmodel for the ribbon bar.
         /// </summary>
         [Import]
@@ -85,18 +111,15 @@ namespace Channel9Downloader.ViewModels
             get;
             private set;
         }
-        
-        /// <summary>
-        /// Gets or sets the dialog service.
-        /// </summary>
-        [Import]
-        public IDialogService DialogService { get; set; }
 
         /// <summary>
         /// Gets or sets the settings manager.
         /// </summary>
         [Import]
-        public ISettingsManager SettingsManager { get; set; }
+        public ISettingsManager SettingsManager
+        {
+            get; set;
+        }
 
         /// <summary>
         /// Gets a command to show the settings view.
@@ -121,11 +144,29 @@ namespace Channel9Downloader.ViewModels
         {
             InitializeRibbon();
             InitializeSettings();
+            InitializeCategories();
+            InitializeDownloads();
         }
 
         #endregion Public Methods
 
         #region Private Methods
+
+        /// <summary>
+        /// Initialize the categories.
+        /// </summary>
+        private void InitializeCategories()
+        {
+            _categoriesVM.Initialize();
+        }
+
+        /// <summary>
+        /// Initializes the downloads.
+        /// </summary>
+        private void InitializeDownloads()
+        {
+            _downloadsVM.Initialize(_settings);
+        }
 
         /// <summary>
         /// Initializes the ribbon.
@@ -168,11 +209,11 @@ namespace Channel9Downloader.ViewModels
             }
             else if (e.RibbonTabVM.Header == RibbonTabName.CATEGORIES)
             {
-                ContentArea = _composer.GetExportedValue<ICategoriesVM>();
+                ContentArea = _categoriesVM;
             }
             else if (e.RibbonTabVM.Header == RibbonTabName.DOWNLOADS)
             {
-                ContentArea = _composer.GetExportedValue<IDownloadsVM>();
+                ContentArea = _downloadsVM;
             }
         }
 
