@@ -1,11 +1,9 @@
-﻿using System;
-using System.ComponentModel.Composition;
+﻿using System.ComponentModel.Composition;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
 using Channel9Downloader.Composition;
 using Channel9Downloader.DataAccess;
-using Channel9Downloader.ViewModels.Events;
 using Channel9Downloader.ViewModels.Framework;
 
 namespace Channel9Downloader.ViewModels.Categories
@@ -112,7 +110,7 @@ namespace Channel9Downloader.ViewModels.Categories
             set
             {
                 _currentContent = value;
-                RaisePropertyChanged();
+                RaisePropertyChanged(() => CurrentContent);
             }
         }
 

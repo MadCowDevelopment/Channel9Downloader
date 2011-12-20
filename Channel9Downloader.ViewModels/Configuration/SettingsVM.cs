@@ -78,7 +78,7 @@ namespace Channel9Downloader.ViewModels.Configuration
             set
             {
                 _settings = value;
-                RaisePropertyChanged();
+                RaisePropertyChanged(() => Settings);
             }
         }
 

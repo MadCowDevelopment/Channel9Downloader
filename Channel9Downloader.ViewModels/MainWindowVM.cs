@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.Composition;
+﻿using System.ComponentModel.Composition;
 using System.Windows.Input;
 
 using Channel9Downloader.Composition;
@@ -89,7 +88,7 @@ namespace Channel9Downloader.ViewModels
             private set
             {
                 _contentArea = value;
-                RaisePropertyChanged();
+                RaisePropertyChanged(() => ContentArea);
             }
         }
 

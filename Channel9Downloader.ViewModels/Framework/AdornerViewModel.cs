@@ -34,7 +34,7 @@
             set
             {
                 _adornerContent = value;
-                RaisePropertyChanged();
+                RaisePropertyChanged(() => AdornerContent);
             }
         }
 
@@ -51,7 +51,7 @@
             set
             {
                 _isAdornerVisible = value;
-                RaisePropertyChanged();
+                RaisePropertyChanged(() => IsAdornerVisible);
             }
         }
 
