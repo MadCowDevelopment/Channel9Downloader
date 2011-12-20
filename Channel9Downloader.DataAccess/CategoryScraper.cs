@@ -189,7 +189,7 @@ namespace Channel9Downloader.DataAccess
         {
             var result = new List<RecurringCategory>();
 
-            int i = 0;
+            int i = 1;
             List<RecurringCategory> shows;
             while ((shows = GetShowsOrSeriesFromPage(baseUrl, i++)) != null && shows.Count > 0)
             {
