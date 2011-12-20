@@ -6,8 +6,11 @@ namespace Channel9Downloader.Entities
     /// This class serves as base class for different video categories.
     /// </summary>
     [DataContract]
-    public abstract class Category
+    public abstract class Category : ObservableModel
     {
+        private bool _isEnabled;
+        public const string PROP_IS_ENABLED = "IsEnabled";
+
         #region Public Properties
 
         /// <summary>
@@ -16,7 +19,16 @@ namespace Channel9Downloader.Entities
         [DataMember]
         public bool IsEnabled
         {
-            get; set;
+            get
+            {
+                return _isEnabled;
+            }
+
+            set
+            {
+                _isEnabled = value;
+                RaisePropertyChanged(PROP_IS_ENABLED);
+            }
         }
 
         /// <summary>

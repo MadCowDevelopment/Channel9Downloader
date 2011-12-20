@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Windows.Data;
 
-using Channel9Downloader.DataAccess;
 using Channel9Downloader.Entities;
 using Channel9Downloader.ViewModels.Framework;
 

@@ -83,7 +83,7 @@ namespace Channel9Downloader.Entities
             set
             {
                 _bytesPerSecond = value;
-                RaisePropertyChanged();
+                RaisePropertyChanged(() => BytesPerSecond);
             }
         }
 
@@ -100,7 +100,7 @@ namespace Channel9Downloader.Entities
             set
             {
                 _bytesReceived = value;
-                RaisePropertyChanged();
+                RaisePropertyChanged(() => BytesReceived);
 
                 if (DateTime.Now - _lastUpdate > TimeSpan.FromSeconds(1))
                 {
@@ -160,7 +160,7 @@ namespace Channel9Downloader.Entities
             set
             {
                 _progressPercentage = value;
-                RaisePropertyChanged();
+                RaisePropertyChanged(() => ProgressPercentage);
             }
         }
 
@@ -177,7 +177,7 @@ namespace Channel9Downloader.Entities
             set
             {
                 _remainingTime = value;
-                RaisePropertyChanged();
+                RaisePropertyChanged(() => RemainingTime);
             }
         }
 
@@ -208,7 +208,7 @@ namespace Channel9Downloader.Entities
                 }
 
                 _totalBytesToReceive = value;
-                RaisePropertyChanged();
+                RaisePropertyChanged(() => TotalBytesToReceive);
             }
         }
 

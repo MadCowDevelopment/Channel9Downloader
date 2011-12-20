@@ -46,6 +46,7 @@
     </Compile>
     <Compile Include="BytesPerSecondToDisplayValueConverter.cs" />
     <Compile Include="BytesToDisplayValueConverter.cs" />
+    <Compile Include="IsEnabledToDisplayTextConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemainingTimeToDisplayValueConverter.cs" />
     <Compile Include="TagTitleToCharacterConverter.cs" />
