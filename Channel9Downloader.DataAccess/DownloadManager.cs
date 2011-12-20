@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
+
 using Channel9Downloader.DataAccess.Events;
 using Channel9Downloader.Entities;
 
@@ -20,6 +21,11 @@ namespace Channel9Downloader.DataAccess
         /// The repository used for retrieving categories.
         /// </summary>
         private readonly ICategoryRepository _categoryRepository;
+
+        /// <summary>
+        /// Gets the download queue (all downloads that have not started yet).
+        /// </summary>
+        private readonly Queue<DownloadItem> _downloadQueue;
 
         /// <summary>
         /// The repository used for retrieving RSS items.
@@ -71,14 +77,14 @@ namespace Channel9Downloader.DataAccess
 
         #endregion Constructors
 
-        #region Public Properties
+        #region Events
 
         /// <summary>
-        /// Gets the download queue (all downloads that have not started yet).
+        /// This event is raised when a download has finished.
         /// </summary>
-        private readonly Queue<DownloadItem> _downloadQueue;
+        public event EventHandler<DownloadAddedEventArgs> DownloadAdded;
 
-        #endregion Public Properties
+        #endregion Events
 
         #region Public Methods
 
@@ -137,18 +143,16 @@ namespace Channel9Downloader.DataAccess
         }
 
         /// <summary>
-        /// This event is raised when a download has finished.
-        /// </summary>
-        public event EventHandler<DownloadAddedEventArgs> DownloadAdded;
-
-        /// <summary>
         /// Raises the <see cref="DownloadAdded"/> event.
         /// </summary>
         /// <param name="e">Event args of the event.</param>
         public void RaiseDownloadAdded(DownloadAddedEventArgs e)
         {
             var handler = DownloadAdded;
-            if (handler != null) handler(this, e);
+            if (handler != null)
+            {
+                handler(this, e);
+            }
         }
 
         #endregion Public Methods

@@ -68,7 +68,7 @@ namespace Channel9Downloader.DataAccess
                         tcs.TrySetException(args.Error);
                         return;
                     }
-                    
+
                     tcs.TrySetResult(null);
                 };
 

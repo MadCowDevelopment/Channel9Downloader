@@ -10,13 +10,89 @@ namespace Channel9Downloader.Entities
         #region Fields
 
         /// <summary>
+        /// Backing field for <see cref="BytesPerSecond"/> property.
+        /// </summary>
+        private double _bytesPerSecond;
+
+        /// <summary>
+        /// Backing field for <see cref="BytesReceived"/> property.
+        /// </summary>
+        private long _bytesReceived;
+
+        /// <summary>
+        /// The time when the download has started.
+        /// </summary>
+        private DateTime _downloadStartTime;
+        
+        /// <summary>
+        /// Backing field for <see cref="DownloadState"/> property.
+        /// </summary>
+        private DownloadState _downloadState;
+
+        /// <summary>
+        /// Saves the last update of download speed and ETA.
+        /// </summary>
+        private DateTime _lastUpdate;
+
+        /// <summary>
         /// Backing field for <see cref="ProgressPercentage"/> property.
         /// </summary>
         private int _progressPercentage;
 
+        /// <summary>
+        /// Backing field for <see cref="RemainingTime"/> property.
+        /// </summary>
+        private TimeSpan _remainingTime;
+
+        /// <summary>
+        /// Backing field for <see cref="TotalBytesToReceive"/> property.
+        /// </summary>
+        private long _totalBytesToReceive;
+
         #endregion Fields
 
         #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the average bytes per second download speed.
+        /// </summary>
+        public double BytesPerSecond
+        {
+            get
+            {
+                return _bytesPerSecond;
+            }
+
+            set
+            {
+                _bytesPerSecond = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the number of bytes received.
+        /// </summary>
+        public long BytesReceived
+        {
+            get
+            {
+                return _bytesReceived;
+            }
+
+            set
+            {
+                _bytesReceived = value;
+                RaisePropertyChanged();
+
+                if (DateTime.Now - _lastUpdate > TimeSpan.FromSeconds(1))
+                {
+                    CalculateBytesPerSecond();
+                    CalculateEta();
+                    _lastUpdate = DateTime.Now;
+                }
+            }
+        }
 
         /// <summary>
         /// Gets or sets the category.
@@ -27,8 +103,9 @@ namespace Channel9Downloader.Entities
             set;
         }
 
-        private DownloadState _downloadState;
-
+        /// <summary>
+        /// Gets or sets the current download state.
+        /// </summary>
         public DownloadState DownloadState
         {
             get
@@ -55,8 +132,6 @@ namespace Channel9Downloader.Entities
             }
         }
 
-        private DateTime _downloadStartTime;
-
         /// <summary>
         /// Gets or sets the download progress in percent.
         /// </summary>
@@ -73,83 +148,6 @@ namespace Channel9Downloader.Entities
                 RaisePropertyChanged();
             }
         }
-
-        private double _bytesPerSecond;
-
-        public double BytesPerSecond
-        {
-            get
-            {
-                return _bytesPerSecond;
-            }
-
-            set
-            {
-                _bytesPerSecond = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        private long _bytesReceived;
-
-        private long _totalBytesToReceive;
-
-        public long BytesReceived
-        {
-            get
-            {
-                return _bytesReceived;
-            }
-
-            set
-            {
-                _bytesReceived = value;
-                RaisePropertyChanged();
-
-                if (DateTime.Now - _lastUpdate > TimeSpan.FromSeconds(1))
-                {
-                    CalculateBytesPerSecond();
-                    CalculateEta();
-                    _lastUpdate = DateTime.Now;
-                }
-            }
-        }
-
-        private DateTime _lastUpdate;
-
-        private void CalculateEta()
-        {
-            if (DownloadState != DownloadState.Downloading ||
-                ProgressPercentage >= 100)
-            {
-                RemainingTime = TimeSpan.FromSeconds(0);
-            }
-            else
-            {
-                var remainingBytes = TotalBytesToReceive - BytesReceived;
-                var eta = remainingBytes / BytesPerSecond;
-                RemainingTime = TimeSpan.FromSeconds(eta);
-            }
-        }
-
-        private void CalculateBytesPerSecond()
-        {
-            if (DownloadState != DownloadState.Downloading  ||
-                _downloadStartTime == default(DateTime) ||
-                TotalBytesToReceive == 0)
-            {
-                BytesPerSecond = 0;
-            }
-            else
-            {
-                var duration = DateTime.Now - _downloadStartTime;
-
-                var bytesPerSecond = BytesReceived / duration.TotalSeconds;
-                BytesPerSecond = bytesPerSecond;
-            }
-        }
-
-        private TimeSpan _remainingTime;
 
         /// <summary>
         /// Gets or sets the remaining time in seconds.
@@ -168,6 +166,18 @@ namespace Channel9Downloader.Entities
             }
         }
 
+        /// <summary>
+        /// Gets or sets the RSS item.
+        /// </summary>
+        public RssItem RssItem
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets or sets the total size of the download.
+        /// </summary>
         public long TotalBytesToReceive
         {
             get
@@ -187,15 +197,48 @@ namespace Channel9Downloader.Entities
             }
         }
 
+        #endregion Public Properties
+
+        #region Private Methods
+
         /// <summary>
-        /// Gets or sets the RSS item.
+        /// Calculates the bytes per second.
         /// </summary>
-        public RssItem RssItem
+        private void CalculateBytesPerSecond()
         {
-            get;
-            set;
+            if (DownloadState != DownloadState.Downloading  ||
+                _downloadStartTime == default(DateTime) ||
+                TotalBytesToReceive == 0)
+            {
+                BytesPerSecond = 0;
+            }
+            else
+            {
+                var duration = DateTime.Now - _downloadStartTime;
+
+                var bytesPerSecond = BytesReceived / duration.TotalSeconds;
+                BytesPerSecond = bytesPerSecond;
+            }
         }
 
-        #endregion Public Properties
+        /// <summary>
+        /// Calculates the remaining time until the download is finished.
+        /// </summary>
+        private void CalculateEta()
+        {
+            if (DownloadState != DownloadState.Downloading ||
+                ProgressPercentage >= 100)
+            {
+                RemainingTime = TimeSpan.FromSeconds(0);
+            }
+            else
+            {
+                var remainingBytes = TotalBytesToReceive - BytesReceived;
+                var eta = remainingBytes / BytesPerSecond;
+                RemainingTime = TimeSpan.FromSeconds(eta);
+            }
+        }
+
+        #endregion Private Methods
     }
 }

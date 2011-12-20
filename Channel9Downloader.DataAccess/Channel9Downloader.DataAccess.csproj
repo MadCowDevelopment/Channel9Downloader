@@ -54,7 +54,6 @@
     <Compile Include="DataContractDataAccess.cs" />
     <Compile Include="DownloadManager.cs" />
     <Compile Include="Events\DownloadAddedEventArgs.cs" />
-    <Compile Include="Events\DownloadManagerInitializedEventArgs.cs" />
     <Compile Include="FolderUtils.cs" />
     <Compile Include="ICategoriesDataAccess.cs" />
     <Compile Include="ICategoryScraper.cs" />

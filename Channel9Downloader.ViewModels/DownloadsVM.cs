@@ -2,6 +2,7 @@
 using System.ComponentModel.Composition;
 using System.Threading.Tasks;
 using System.Windows.Threading;
+
 using Channel9Downloader.DataAccess;
 using Channel9Downloader.DataAccess.Events;
 using Channel9Downloader.Entities;
@@ -24,6 +25,11 @@ namespace Channel9Downloader.ViewModels
         private readonly IDownloadManager _downloadManager;
 
         /// <summary>
+        /// The main thread dispatcher.
+        /// </summary>
+        private readonly Dispatcher _mainThreadDispatcher;
+
+        /// <summary>
         /// The application settings.
         /// </summary>
         private Settings _settings;
@@ -42,7 +48,7 @@ namespace Channel9Downloader.ViewModels
             _downloadManager = downloadManager;
             _downloadManager.DownloadAdded += DownloadManagerDownloadAdded;
 
-            _uiDispatcher = Dispatcher.CurrentDispatcher;
+            _mainThreadDispatcher = Dispatcher.CurrentDispatcher;
 
             AdornerContent = new LoadingWaitVM();
             Downloads = new ObservableCollection<DownloadItem>();
@@ -50,12 +56,25 @@ namespace Channel9Downloader.ViewModels
 
         #endregion Constructors
 
+        #region Delegates
+
+        /// <summary>
+        /// This delegate is used for adding items to the download collection.
+        /// </summary>
+        /// <param name="downloadItem">The download to be added.</param>
+        private delegate void CollectionInitializerDelegate(DownloadItem downloadItem);
+
+        #endregion Delegates
+
         #region Public Properties
 
         /// <summary>
         /// Gets a list of all downloads.
         /// </summary>
-        public ObservableCollection<DownloadItem> Downloads { get; private set; }
+        public ObservableCollection<DownloadItem> Downloads
+        {
+            get; private set;
+        }
 
         #endregion Public Properties
 
@@ -76,6 +95,16 @@ namespace Channel9Downloader.ViewModels
         #region Private Methods
 
         /// <summary>
+        /// Handles the DownloadAdded event.
+        /// </summary>
+        /// <param name="sender">Sender of the event.</param>
+        /// <param name="e">Event args of the event.</param>
+        private void DownloadManagerDownloadAdded(object sender, DownloadAddedEventArgs e)
+        {
+            _mainThreadDispatcher.Invoke(new CollectionInitializerDelegate(p => Downloads.Add(p)), e.DownloadItem);
+        }
+
+        /// <summary>
         /// Initializes categories in the background.
         /// </summary>
         private void InitializeDownloadManagerAsync()
@@ -85,27 +114,6 @@ namespace Channel9Downloader.ViewModels
             task.ContinueWith(p => IsAdornerVisible = false);
             task.Start();
         }
-
-        /// <summary>
-        /// The main thread dispatcher.
-        /// </summary>
-        private readonly Dispatcher _uiDispatcher;
-
-        /// <summary>
-        /// Handles the DownloadAdded event.
-        /// </summary>
-        /// <param name="sender">Sender of the event.</param>
-        /// <param name="e">Event args of the event.</param>
-        private void DownloadManagerDownloadAdded(object sender, DownloadAddedEventArgs e)
-        {
-            _uiDispatcher.Invoke(new CollectionInitializerDelegate(p => Downloads.Add(p)), e.DownloadItem);
-        }
-
-        /// <summary>
-        /// This delegate is used for adding items to the download collection.
-        /// </summary>
-        /// <param name="downloadItem">The download to be added.</param>
-        private delegate void CollectionInitializerDelegate(DownloadItem downloadItem);
 
         #endregion Private Methods
     }
