@@ -44,10 +44,10 @@ namespace Channel9Downloader.DataAccess
         private readonly IWebDownloader _webDownloader;
 
         /// <summary>
-        /// The cancellation token for stopping downloads.
+        /// Dictionary containing tokens for stopping downloads.
         /// </summary>
-        private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
-
+        private readonly Dictionary<DownloadItem, CancellationTokenSource> _cancellationTokenSources;
+ 
         /// <summary>
         /// The number of running downloads.
         /// </summary>
@@ -82,6 +82,7 @@ namespace Channel9Downloader.DataAccess
             _finishedDownloadsRepository = finishedDownloadsRepository;
 
             _downloadQueue = new LinkedList<DownloadItem>();
+            _cancellationTokenSources = new Dictionary<DownloadItem, CancellationTokenSource>();
         }
 
         #endregion Constructors
@@ -128,7 +129,7 @@ namespace Channel9Downloader.DataAccess
         /// Raises the <see cref="DownloadAdded"/> event.
         /// </summary>
         /// <param name="e">Event args of the event.</param>
-        public void RaiseDownloadAdded(DownloadAddedEventArgs e)
+        private void RaiseDownloadAdded(DownloadAddedEventArgs e)
         {
             var handler = DownloadAdded;
             if (handler != null)
@@ -141,7 +142,7 @@ namespace Channel9Downloader.DataAccess
         /// Raises the <see cref="DownloadingStarted"/> event.
         /// </summary>
         /// <param name="e">Event args of the event.</param>
-        public void RaiseDownloadingStarted(EventArgs e)
+        private void RaiseDownloadingStarted(EventArgs e)
         {
             var handler = DownloadingStarted;
             if (handler != null)
@@ -154,7 +155,7 @@ namespace Channel9Downloader.DataAccess
         /// Raises the <see cref="DownloadingStopped"/> event.
         /// </summary>
         /// <param name="e">Event args of the event.</param>
-        public void RaiseDownloadingStopped(EventArgs e)
+        private void RaiseDownloadingStopped(EventArgs e)
         {
             var handler = DownloadingStopped;
             if (handler != null)
@@ -179,10 +180,13 @@ namespace Channel9Downloader.DataAccess
 
                 var downloadItem = _downloadQueue.First.Value;
                 _downloadQueue.RemoveFirst();
+
+                var cancellationTokenSource = new CancellationTokenSource();
+                _cancellationTokenSources.Add(downloadItem, cancellationTokenSource);
                 var address = GetDownloadAddress(downloadItem);
                 var filename = CreateLocalFilename(address);
                 var task = _webDownloader.DownloadFileAsync(
-                    address, filename, downloadItem, _cancellationTokenSource.Token);
+                    address, filename, downloadItem, cancellationTokenSource.Token);
                 task.ContinueWith(
                     x =>
                         {
@@ -202,6 +206,8 @@ namespace Channel9Downloader.DataAccess
                                 _finishedDownloadsRepository.AddFinishedDownload(downloadItem.RssItem);
                                 StartDownloads();
                             }
+
+                            _cancellationTokenSources.Remove(downloadItem);
                         });
             }
         }
@@ -211,8 +217,12 @@ namespace Channel9Downloader.DataAccess
         /// </summary>
         public void StopDownloads()
         {
-            _cancellationTokenSource.Cancel();
-            _cancellationTokenSource = new CancellationTokenSource();
+            var tokenSources = _cancellationTokenSources.ToList();
+
+            foreach (var keyValuePair in tokenSources)
+            {
+                keyValuePair.Value.Cancel();
+            }
         }
 
         /// <summary>
