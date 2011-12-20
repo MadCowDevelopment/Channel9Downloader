@@ -1,8 +1,7 @@
-using System.Threading;
-using System.Threading.Tasks;
+using System;
+using System.ComponentModel;
+using System.Net;
 using System.Xml.Linq;
-
-using Channel9Downloader.Entities;
 
 namespace Channel9Downloader.DataAccess
 {
@@ -12,6 +11,21 @@ namespace Channel9Downloader.DataAccess
     public interface IWebDownloader
     {
         #region Methods
+
+        /// <summary>
+        /// Cancels a pending asynchronous operation.
+        /// </summary>
+        void CancelAsync();
+
+        /// <summary>
+        /// Occurs when an asynchronous file download operation completes.
+        /// </summary>
+        event EventHandler<AsyncCompletedEventArgs> DownloadFileCompleted;
+
+        /// <summary>
+        /// Occurs when an asynchronous download operation successfully transfers some or all of the data.
+        /// </summary>
+        event EventHandler<DownloadProgressChangedEventArgs> DownloadProgressChanged;
 
         /// <summary>
         /// Downloads the resource with the specified URI to a local file.
@@ -25,14 +39,7 @@ namespace Channel9Downloader.DataAccess
         /// </summary>
         /// <param name="address">The address of the resource to download.</param>
         /// <param name="filename">The name of the local file that is to receive the data.</param>
-        /// <param name="downloadItem">The download item.</param>
-        /// <param name="cancellationToken">The token used for cancelling the operation.</param>
-        /// <returns>Returns a Task.</returns>
-        Task<object> DownloadFileAsync(
-            string address,
-            string filename,
-            DownloadItem downloadItem,
-            CancellationToken cancellationToken);
+        void DownloadFileAsync(Uri address, string filename);
 
         /// <summary>
         /// Downloads the requested resource as a String. 

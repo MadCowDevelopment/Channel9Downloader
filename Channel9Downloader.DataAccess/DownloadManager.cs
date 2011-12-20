@@ -4,7 +4,9 @@ using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 
+using Channel9Downloader.Composition;
 using Channel9Downloader.DataAccess.Events;
 using Channel9Downloader.Entities;
 
@@ -34,14 +36,14 @@ namespace Channel9Downloader.DataAccess
         private readonly IFinishedDownloadsRepository _finishedDownloadsRepository;
 
         /// <summary>
+        /// The composer used for creating instances.
+        /// </summary>
+        private readonly IDependencyComposer _composer;
+
+        /// <summary>
         /// The repository used for retrieving RSS items.
         /// </summary>
         private readonly IRssRepository _rssRepository;
-
-        /// <summary>
-        /// The downloader used to download data from the web.
-        /// </summary>
-        private readonly IWebDownloader _webDownloader;
 
         /// <summary>
         /// Dictionary containing tokens for stopping downloads.
@@ -67,19 +69,19 @@ namespace Channel9Downloader.DataAccess
         /// </summary>
         /// <param name="categoryRepository">The repository used for retrieving categories.</param>
         /// <param name="rssRepository">The repository used for retrieving RSS items.</param>
-        /// <param name="webDownloader">The downloader used to download data from the web.</param>
         /// <param name="finishedDownloadsRepository">The repository used for retrieving finished RSS items.</param>
+        /// <param name="composer">The composer used for creating instances.</param>
         [ImportingConstructor]
         public DownloadManager(
             ICategoryRepository categoryRepository,
             IRssRepository rssRepository,
-            IWebDownloader webDownloader,
-            IFinishedDownloadsRepository finishedDownloadsRepository)
+            IFinishedDownloadsRepository finishedDownloadsRepository,
+            IDependencyComposer composer)
         {
             _categoryRepository = categoryRepository;
             _rssRepository = rssRepository;
-            _webDownloader = webDownloader;
             _finishedDownloadsRepository = finishedDownloadsRepository;
+            _composer = composer;
 
             _downloadQueue = new LinkedList<DownloadItem>();
             _cancellationTokenSources = new Dictionary<DownloadItem, CancellationTokenSource>();
@@ -185,8 +187,7 @@ namespace Channel9Downloader.DataAccess
                 _cancellationTokenSources.Add(downloadItem, cancellationTokenSource);
                 var address = GetDownloadAddress(downloadItem);
                 var filename = CreateLocalFilename(address);
-                var task = _webDownloader.DownloadFileAsync(
-                    address, filename, downloadItem, cancellationTokenSource.Token);
+                var task = DownloadFileAsync(address, filename, downloadItem, cancellationTokenSource.Token);
                 task.ContinueWith(
                     x =>
                         {
@@ -351,8 +352,67 @@ namespace Channel9Downloader.DataAccess
         {
             if (e.PropertyName == Settings.PROP_MAXIMUM_PARALLEL_DOWNLOADS)
             {
-                // TODO: Start / stop downloads according to max number.
+                StartDownloads();
             }
+        }
+
+        /// <summary>
+        /// Downloads a file asynchronously.
+        /// </summary>
+        /// <param name="address">The address of the resource to download.</param>
+        /// <param name="filename">The name of the local file that is to receive the data.</param>
+        /// <param name="downloadItem">The download item.</param>
+        /// <param name="token">The token for cancelling the operation.</param>
+        /// <returns>Returns a Task.</returns>
+        public Task<object> DownloadFileAsync(
+            string address,
+            string filename,
+            DownloadItem downloadItem,
+            CancellationToken token)
+        {
+            var tcs = new TaskCompletionSource<object>();
+            var webClient = _composer.GetExportedValue<IWebDownloader>();
+
+            token.Register(webClient.CancelAsync);
+
+            webClient.DownloadFileCompleted += (obj, args) =>
+            {
+                if (args.Cancelled)
+                {
+                    tcs.TrySetCanceled();
+                    downloadItem.DownloadState = DownloadState.Stopped;
+                    return;
+                }
+
+                if (args.Error != null)
+                {
+                    tcs.TrySetException(args.Error);
+                    downloadItem.DownloadState = DownloadState.Error;
+                    return;
+                }
+
+                tcs.TrySetResult(null);
+                downloadItem.DownloadState = DownloadState.Finished;
+            };
+
+            webClient.DownloadProgressChanged += (obj, args) =>
+            {
+                downloadItem.ProgressPercentage = args.ProgressPercentage;
+                downloadItem.BytesReceived = args.BytesReceived;
+                downloadItem.TotalBytesToReceive = args.TotalBytesToReceive;
+            };
+
+            try
+            {
+                webClient.DownloadFileAsync(new Uri(address), filename);
+                downloadItem.DownloadState = DownloadState.Downloading;
+            }
+            catch (UriFormatException ex)
+            {
+                tcs.TrySetException(ex);
+            }
+
+            return tcs.Task;
         }
 
         #endregion Private Methods

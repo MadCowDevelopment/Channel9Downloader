@@ -1,13 +1,10 @@
 ﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.IO;
 using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
-
-using Channel9Downloader.Entities;
 
 namespace Channel9Downloader.DataAccess
 {
@@ -18,6 +15,11 @@ namespace Channel9Downloader.DataAccess
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class WebDownloader : IWebDownloader
     {
+        /// <summary>
+        /// The underlying webclient.
+        /// </summary>
+        private readonly WebClient _webClient;
+
         #region Constructors
 
         /// <summary>
@@ -26,6 +28,9 @@ namespace Channel9Downloader.DataAccess
         public WebDownloader()
         {
             ServicePointManager.DefaultConnectionLimit = 16;
+            _webClient = new WebClient();
+            _webClient.DownloadFileCompleted += (sender, args) => RaiseDownloadFileCompleted(args);
+            _webClient.DownloadProgressChanged += (sender, args) => RaiseDownloadProgressChanged(args);
         }
 
         #endregion Constructors
@@ -39,8 +44,51 @@ namespace Channel9Downloader.DataAccess
         /// <param name="filename">The name of the local file that is to receive the data.</param>
         public void DownloadData(string address, string filename)
         {
-            var webClient = new WebClient();
-            webClient.DownloadFile(new Uri(address), filename);
+            _webClient.DownloadFile(new Uri(address), filename);
+        }
+
+        /// <summary>
+        /// Cancels a pending asynchronous operation.
+        /// </summary>
+        public void CancelAsync()
+        {
+            _webClient.CancelAsync();
+        }
+
+        /// <summary>
+        /// Occurs when an asynchronous file download operation completes.
+        /// </summary>
+        public event EventHandler<AsyncCompletedEventArgs> DownloadFileCompleted;
+
+        /// <summary>
+        /// Raises the <see cref="DownloadFileCompleted"/> event.
+        /// </summary>
+        /// <param name="e">Event args of the event.</param>
+        private void RaiseDownloadFileCompleted(AsyncCompletedEventArgs e)
+        {
+            var handler = DownloadFileCompleted;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        /// <summary>
+        /// Occurs when an asynchronous download operation successfully transfers some or all of the data.
+        /// </summary>
+        public event EventHandler<DownloadProgressChangedEventArgs> DownloadProgressChanged;
+
+        /// <summary>
+        /// Raises the <see cref="DownloadProgressChanged"/> event.
+        /// </summary>
+        /// <param name="e">Event args of the event.</param>
+        private void RaiseDownloadProgressChanged(DownloadProgressChangedEventArgs e)
+        {
+            var handler = DownloadProgressChanged;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
         }
 
         /// <summary>
@@ -48,58 +96,9 @@ namespace Channel9Downloader.DataAccess
         /// </summary>
         /// <param name="address">The address of the resource to download.</param>
         /// <param name="filename">The name of the local file that is to receive the data.</param>
-        /// <param name="downloadItem">The download item.</param>
-        /// <param name="token">The token for cancelling the operation.</param>
-        /// <returns>Returns a Task.</returns>
-        public Task<object> DownloadFileAsync(
-            string address,
-            string filename,
-            DownloadItem downloadItem,
-            CancellationToken token)
+        public void DownloadFileAsync(Uri address, string filename)
         {
-            var tcs = new TaskCompletionSource<object>();
-            var webClient = new WebClient();
-
-            token.Register(webClient.CancelAsync);
-
-            webClient.DownloadFileCompleted += (obj, args) =>
-                {
-                    if (args.Cancelled)
-                    {
-                        tcs.TrySetCanceled();
-                        downloadItem.DownloadState = DownloadState.Stopped;
-                        return;
-                    }
-
-                    if (args.Error != null)
-                    {
-                        tcs.TrySetException(args.Error);
-                        downloadItem.DownloadState = DownloadState.Error;
-                        return;
-                    }
-
-                    tcs.TrySetResult(null);
-                    downloadItem.DownloadState = DownloadState.Finished;
-                };
-
-            webClient.DownloadProgressChanged += (obj, args) =>
-                {
-                    downloadItem.ProgressPercentage = args.ProgressPercentage;
-                    downloadItem.BytesReceived = args.BytesReceived;
-                    downloadItem.TotalBytesToReceive = args.TotalBytesToReceive;
-                };
-
-            try
-            {
-                webClient.DownloadFileAsync(new Uri(address), filename);
-                downloadItem.DownloadState = DownloadState.Downloading;
-            }
-            catch (UriFormatException ex)
-            {
-                tcs.TrySetException(ex);
-            }
-
-            return tcs.Task;
+            _webClient.DownloadFileAsync(address, filename);
         }
 
         /// <summary>
@@ -110,8 +109,7 @@ namespace Channel9Downloader.DataAccess
         /// <returns>Returns the downloaded resource as a String.</returns>
         public string DownloadString(string address)
         {
-            var webClient = new WebClient();
-            var result = webClient.DownloadString(address);
+            var result = _webClient.DownloadString(address);
             return result;
         }
 
