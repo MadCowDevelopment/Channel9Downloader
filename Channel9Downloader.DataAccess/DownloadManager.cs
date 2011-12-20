@@ -97,6 +97,24 @@ namespace Channel9Downloader.DataAccess
         public event EventHandler<DownloadAddedEventArgs> DownloadAdded;
 
         /// <summary>
+        /// This event is raised when a download is removed.
+        /// </summary>
+        public event EventHandler<DownloadRemovedEventArgs> DownloadRemoved;
+
+        /// <summary>
+        /// Raises the <see cref="DownloadRemoved"/> event.
+        /// </summary>
+        /// <param name="e"></param>
+        private void RaiseDownloadRemoved(DownloadRemovedEventArgs e)
+        {
+            var handler = DownloadRemoved;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        /// <summary>
         /// This event is raised when downloading has started.
         /// </summary>
         public event EventHandler<EventArgs> DownloadingStarted;
@@ -234,7 +252,25 @@ namespace Channel9Downloader.DataAccess
             var enabledCategories = GetEnabledCategories();
             var availableItems = GetAvailableItems(enabledCategories);
             RemoveAlreadyFinishedDownloads(availableItems);
+            RemoveDownloadsFromQueueThatAreNoLongerEnabled(enabledCategories);
             EnqueueDownloads(availableItems);
+        }
+
+        private void RemoveDownloadsFromQueueThatAreNoLongerEnabled(IEnumerable<Category> enabledCategories)
+        {
+            for (int i = _downloadQueue.Count -1; i >= 0; i--)
+            {
+                var downloadItem = _downloadQueue.ElementAt(i);
+                var isInAnyCategory =
+                    enabledCategories.Any(p => p.RelativePath == downloadItem.Category.RelativePath);
+
+                if (!isInAnyCategory &&
+                    (downloadItem.DownloadState == DownloadState.Queued || downloadItem.DownloadState == DownloadState.Stopped))
+                {
+                    _downloadQueue.Remove(_downloadQueue.ElementAt(i));
+                    RaiseDownloadRemoved(new DownloadRemovedEventArgs(downloadItem));
+                }
+            }
         }
 
         #endregion Public Methods
@@ -336,7 +372,8 @@ namespace Channel9Downloader.DataAccess
             var finishedDownloads = _finishedDownloadsRepository.GetAllFinishedDownloads();
             for (int i = availableItems.Count - 1; i >= 0; i--)
             {
-                if (finishedDownloads.Any(p => p.Guid == availableItems[i].RssItem.Guid))
+                int i1 = i;
+                if (finishedDownloads.Any(p => p.Guid == availableItems[i1].RssItem.Guid))
                 {
                     availableItems.Remove(availableItems[i]);
                 }

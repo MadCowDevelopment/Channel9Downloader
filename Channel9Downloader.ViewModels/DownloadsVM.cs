@@ -75,6 +75,7 @@ namespace Channel9Downloader.ViewModels
         {
             _downloadManager = downloadManager;
             _downloadManager.DownloadAdded += DownloadManagerDownloadAdded;
+            _downloadManager.DownloadRemoved += DownloadManagerDownloadRemoved;
             _downloadManager.DownloadingStarted += DownloadManagerDownloadingStarted;
             _downloadManager.DownloadingStopped += DownloadManagerDownloadingStopped;
 
@@ -184,13 +185,23 @@ namespace Channel9Downloader.ViewModels
         #region Private Methods
 
         /// <summary>
-        /// Handles the DownloadAdded event.
+        /// Adds a download to the list of queued downloads.
         /// </summary>
         /// <param name="sender">Sender of the event.</param>
         /// <param name="e">Event args of the event.</param>
         private void DownloadManagerDownloadAdded(object sender, DownloadAddedEventArgs e)
         {
             _mainThreadDispatcher.Invoke(new CollectionInitializerDelegate(p => _downloads.Add(p)), e.DownloadItem);
+        }
+        
+        /// <summary>
+        /// Removes a download from the list of queued downloads.
+        /// </summary>
+        /// <param name="sender">Sender of the event.</param>
+        /// <param name="e">Event args of the event.</param>
+        private void DownloadManagerDownloadRemoved(object sender, DownloadRemovedEventArgs e)
+        {
+            _mainThreadDispatcher.Invoke(new CollectionInitializerDelegate(p => _downloads.Remove(p)), e.DownloadItem);
         }
 
         /// <summary>
