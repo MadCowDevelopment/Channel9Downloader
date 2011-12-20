@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{6CC64101-3534-4EF2-A59D-DB8559F4C613}</ProjectGuid>
+    <ProjectGuid>{7C91BAAA-0B75-4C45-AA79-291E75FD5D56}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Channel9Downloader.DataAccess</RootNamespace>
-    <AssemblyName>Channel9Downloader.DataAccess</AssemblyName>
+    <RootNamespace>Channel9Downloader.Database</RootNamespace>
+    <AssemblyName>Channel9Downloader.Database</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,14 +31,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="SgmlReaderDll">
-      <HintPath>..\Libs\SgmlReaderDll.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -46,40 +40,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\CommonAssemblyInfo.cs">
-      <Link>CommonAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="CategoriesDataAccess.cs" />
-    <Compile Include="CategoryRepository.cs" />
-    <Compile Include="DataContractDataAccess.cs" />
-    <Compile Include="DownloadManager.cs" />
-    <Compile Include="Events\DownloadAddedEventArgs.cs" />
-    <Compile Include="FinishedDownloadsDataAccess.cs" />
-    <Compile Include="FinishedDownloadsRepository.cs" />
-    <Compile Include="FolderUtils.cs" />
-    <Compile Include="ICategoriesDataAccess.cs" />
-    <Compile Include="ICategoryScraper.cs" />
-    <Compile Include="ICategoryRepository.cs" />
-    <Compile Include="IDownloadManager.cs" />
-    <Compile Include="IFinishedDownloadsDataAccess.cs" />
-    <Compile Include="IFinishedDownloadsRepository.cs" />
-    <Compile Include="IFolderUtils.cs" />
-    <Compile Include="IRssRepository.cs" />
-    <Compile Include="ISettingsDataAccess.cs" />
-    <Compile Include="ISettingsManager.cs" />
-    <Compile Include="IWebDownloader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="CategoryScraper.cs" />
-    <Compile Include="RssRepository.cs" />
-    <Compile Include="SettingsDataAccess.cs" />
-    <Compile Include="SettingsManager.cs" />
-    <Compile Include="WebDownloader.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Channel9Downloader.Entities\Channel9Downloader.Entities.csproj">
-      <Project>{B54175FB-049A-44AA-8261-533908DF1BE4}</Project>
-      <Name>Channel9Downloader.Entities</Name>
-    </ProjectReference>
+    <Content Include="Data.sdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

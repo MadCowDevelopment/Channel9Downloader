@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Channel9Downloader.Converte
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Channel9Downloader.Controls", "Channel9Downloader.Controls\Channel9Downloader.Controls.csproj", "{AF3FFBC9-2FC7-4F0F-914C-B6E6B199F8C2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Channel9Downloader.Database", "Channel9Downloader.Database\Channel9Downloader.Database.csproj", "{7C91BAAA-0B75-4C45-AA79-291E75FD5D56}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Channel9Downloader.vsmdi
@@ -129,6 +131,16 @@ Global
 		{AF3FFBC9-2FC7-4F0F-914C-B6E6B199F8C2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{AF3FFBC9-2FC7-4F0F-914C-B6E6B199F8C2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{AF3FFBC9-2FC7-4F0F-914C-B6E6B199F8C2}.Release|x86.ActiveCfg = Release|Any CPU
+		{7C91BAAA-0B75-4C45-AA79-291E75FD5D56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C91BAAA-0B75-4C45-AA79-291E75FD5D56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C91BAAA-0B75-4C45-AA79-291E75FD5D56}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{7C91BAAA-0B75-4C45-AA79-291E75FD5D56}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{7C91BAAA-0B75-4C45-AA79-291E75FD5D56}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7C91BAAA-0B75-4C45-AA79-291E75FD5D56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C91BAAA-0B75-4C45-AA79-291E75FD5D56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C91BAAA-0B75-4C45-AA79-291E75FD5D56}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{7C91BAAA-0B75-4C45-AA79-291E75FD5D56}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{7C91BAAA-0B75-4C45-AA79-291E75FD5D56}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

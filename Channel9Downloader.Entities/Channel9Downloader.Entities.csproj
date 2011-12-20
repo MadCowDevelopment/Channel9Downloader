@@ -49,6 +49,7 @@
     <Compile Include="Category.cs" />
     <Compile Include="DownloadItem.cs" />
     <Compile Include="DownloadState.cs" />
+    <Compile Include="FinishedDownloads.cs" />
     <Compile Include="IObservableModel.cs" />
     <Compile Include="MediaContent.cs" />
     <Compile Include="ObservableModel.cs" />
@@ -59,6 +60,7 @@
     <Compile Include="Settings.cs" />
     <Compile Include="Show.cs" />
     <Compile Include="Tag.cs" />
+    <Compile Include="Thumbnail.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

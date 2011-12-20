@@ -40,11 +40,11 @@
             </ListView.ItemContainerStyle>
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Title" DisplayMemberBinding="{Binding RssItem.Title}"/>
+                    <GridViewColumn Header="Title" DisplayMemberBinding="{Binding RssItem.Title}" Width="300"/>
                     <GridViewColumn Header="Progress">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <ProgressBar Value="{Binding ProgressPercentage}" Height="12" Width="250"/>
+                                <ProgressBar Value="{Binding ProgressPercentage}" Height="12" Width="150"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -78,7 +78,8 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Category" DisplayMemberBinding="{Binding Category.Title}"/>
+                    <GridViewColumn Header="State" Width="100" DisplayMemberBinding="{Binding DownloadState}"/>
+                    <GridViewColumn Header="Category" DisplayMemberBinding="{Binding Category.Title}"/>                    
                 </GridView>
             </ListView.View>
         </ListView>

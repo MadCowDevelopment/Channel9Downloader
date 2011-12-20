@@ -28,6 +28,11 @@ namespace Channel9Downloader.DataAccess
         private readonly Queue<DownloadItem> _downloadQueue;
 
         /// <summary>
+        /// The repository used for retrieving finished downloads.
+        /// </summary>
+        private readonly IFinishedDownloadsRepository _finishedDownloadsRepository;
+
+        /// <summary>
         /// The repository used for retrieving RSS items.
         /// </summary>
         private readonly IRssRepository _rssRepository;
@@ -62,15 +67,18 @@ namespace Channel9Downloader.DataAccess
         /// <param name="categoryRepository">The repository used for retrieving categories.</param>
         /// <param name="rssRepository">The repository used for retrieving RSS items.</param>
         /// <param name="webDownloader">The downloader used to download data from the web.</param>
+        /// <param name="finishedDownloadsRepository">The repository used for retrieving finished RSS items.</param>
         [ImportingConstructor]
         public DownloadManager(
             ICategoryRepository categoryRepository,
             IRssRepository rssRepository,
-            IWebDownloader webDownloader)
+            IWebDownloader webDownloader,
+            IFinishedDownloadsRepository finishedDownloadsRepository)
         {
             _categoryRepository = categoryRepository;
             _rssRepository = rssRepository;
             _webDownloader = webDownloader;
+            _finishedDownloadsRepository = finishedDownloadsRepository;
 
             _downloadQueue = new Queue<DownloadItem>();
         }
@@ -126,9 +134,14 @@ namespace Channel9Downloader.DataAccess
                 }
             }
 
+            var finishedDownloads = _finishedDownloadsRepository.GetAllFinishedDownloads();
+
             for (int i = availableItems.Count - 1; i >= 0; i--)
             {
-                // TODO: remove all items that have already been downloaded.
+                if (finishedDownloads.Any(p => p.Guid == availableItems[i].RssItem.Guid))
+                {
+                    availableItems.Remove(availableItems[i]);
+                }
             }
 
             // Add all downloads that are not already on the list.
@@ -221,6 +234,7 @@ namespace Channel9Downloader.DataAccess
                     x =>
                         {
                             _numberOfRunningDownloads--;
+                            _finishedDownloadsRepository.AddFinishedDownload(downloadItem.RssItem);
                             StartDownloads();
                         });
             }

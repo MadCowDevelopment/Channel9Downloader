@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows.Data;
 
 using Channel9Downloader.Entities;
 using Channel9Downloader.ViewModels.Framework;
@@ -15,7 +16,7 @@ namespace Channel9Downloader.ViewModels
         /// <summary>
         /// Gets the downloads.
         /// </summary>
-        ObservableCollection<DownloadItem> Downloads
+        ListCollectionView Downloads
         {
             get;
         }

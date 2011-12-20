@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace Channel9Downloader.Entities
 {
     /// <summary>
     /// This class holds information about an RSS item.
     /// </summary>
+    [DataContract]
     public class RssItem
     {
         #region Constructors
@@ -16,6 +18,7 @@ namespace Channel9Downloader.Entities
         public RssItem()
         {
             MediaGroup = new List<MediaContent>();
+            Thumbnails = new List<Thumbnail>();
         }
 
         #endregion Constructors
@@ -25,6 +28,7 @@ namespace Channel9Downloader.Entities
         /// <summary>
         /// Gets or sets the description.
         /// </summary>
+        [DataMember]
         public string Description
         {
             get; set;
@@ -33,6 +37,7 @@ namespace Channel9Downloader.Entities
         /// <summary>
         /// Gets or sets the Guid.
         /// </summary>
+        [DataMember]
         public string Guid
         {
             get; set;
@@ -41,6 +46,7 @@ namespace Channel9Downloader.Entities
         /// <summary>
         /// Gets or sets a list of media content.
         /// </summary>
+        [DataMember]
         public List<MediaContent> MediaGroup
         {
             get; set;
@@ -49,6 +55,7 @@ namespace Channel9Downloader.Entities
         /// <summary>
         /// Gets or sets the publishing date.
         /// </summary>
+        [DataMember]
         public DateTime PubDate
         {
             get; set;
@@ -57,7 +64,17 @@ namespace Channel9Downloader.Entities
         /// <summary>
         /// Gets or sets a summary.
         /// </summary>
+        [DataMember]
         public string Summary
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Gets or sets a list of thumbnails.
+        /// </summary>
+        [DataMember]
+        public List<Thumbnail> Thumbnails
         {
             get; set;
         }
@@ -65,6 +82,7 @@ namespace Channel9Downloader.Entities
         /// <summary>
         /// Gets or sets the title.
         /// </summary>
+        [DataMember]
         public string Title
         {
             get; set;

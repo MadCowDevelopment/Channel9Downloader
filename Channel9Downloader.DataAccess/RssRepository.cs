@@ -64,17 +64,27 @@ namespace Channel9Downloader.DataAccess
                                 {
                                     Description = item.Element("title").Value,
                                     Guid = item.Element("guid").Value,
-                                    MediaGroup = (from content in item.Element(_media + "group").Elements(_media + "content")
-                                                 select new MediaContent
-                                                     {
-                                                         FileSize = int.Parse(content.Attribute("fileSize").Value),
-                                                         Medium = content.Attribute("medium").Value,
-                                                         Type = content.Attribute("type").Value,
-                                                         Url = content.Attribute("url").Value
-                                                     }).ToList(),
+                                    MediaGroup =
+                                        (from content in item.Element(_media + "group").Elements(_media + "content")
+                                         select
+                                             new MediaContent
+                                                 {
+                                                     FileSize = int.Parse(content.Attribute("fileSize").Value),
+                                                     Medium = content.Attribute("medium").Value,
+                                                     Type = content.Attribute("type").Value,
+                                                     Url = content.Attribute("url").Value
+                                                 }).ToList(),
                                     PubDate = DateTime.Parse(item.Element("pubDate").Value),
                                     Summary = item.Element(_itunes + "summary").Value,
-                                    Title = item.Element("title").Value
+                                    Title = item.Element("title").Value,
+                                    Thumbnails = (from thumbnail in item.Elements(_media + "thumbnail")
+                                                  select
+                                                      new Thumbnail
+                                                          {
+                                                              Height = int.Parse(thumbnail.Attribute("height").Value),
+                                                              Url = thumbnail.Attribute("url").Value,
+                                                              Width = int.Parse(thumbnail.Attribute("width").Value)
+                                                          }).ToList()
                                 };
 
             return items.Where(p => p.MediaGroup.Any(m => m.Medium == "video")).ToList();

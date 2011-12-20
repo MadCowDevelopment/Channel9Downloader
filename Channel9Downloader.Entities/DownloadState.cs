@@ -8,19 +8,24 @@
     public enum DownloadState
     {
         /// <summary>
-        /// The download is queued.
-        /// </summary>
-        Queued,
-
-        /// <summary>
         /// The download is downloading.
         /// </summary>
         Downloading,
 
         /// <summary>
+        /// The download is queued.
+        /// </summary>
+        Queued,
+
+        /// <summary>
         /// The download has finished.
         /// </summary>
-        Finished
+        Finished,
+
+        /// <summary>
+        /// The download is ignored.
+        /// </summary>
+        Ignored
     }
 
     #endregion Enumerations

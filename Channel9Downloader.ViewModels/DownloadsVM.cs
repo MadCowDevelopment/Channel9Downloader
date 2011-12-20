@@ -1,6 +1,9 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.Threading.Tasks;
+using System.Windows.Data;
 using System.Windows.Threading;
 
 using Channel9Downloader.DataAccess;
@@ -23,6 +26,11 @@ namespace Channel9Downloader.ViewModels
         /// The download manager that loads new videos in the background.
         /// </summary>
         private readonly IDownloadManager _downloadManager;
+
+        /// <summary>
+        /// The list of all downloads.
+        /// </summary>
+        private readonly ObservableCollection<DownloadItem> _downloads;
 
         /// <summary>
         /// The main thread dispatcher.
@@ -51,7 +59,8 @@ namespace Channel9Downloader.ViewModels
             _mainThreadDispatcher = Dispatcher.CurrentDispatcher;
 
             AdornerContent = new LoadingWaitVM();
-            Downloads = new ObservableCollection<DownloadItem>();
+            _downloads = new ObservableCollection<DownloadItem>();
+            Downloads = (ListCollectionView)CollectionViewSource.GetDefaultView(_downloads);
         }
 
         #endregion Constructors
@@ -71,9 +80,10 @@ namespace Channel9Downloader.ViewModels
         /// <summary>
         /// Gets a list of all downloads.
         /// </summary>
-        public ObservableCollection<DownloadItem> Downloads
+        public ListCollectionView Downloads
         {
-            get; private set;
+            get;
+            private set;
         }
 
         #endregion Public Properties
@@ -101,7 +111,7 @@ namespace Channel9Downloader.ViewModels
         /// <param name="e">Event args of the event.</param>
         private void DownloadManagerDownloadAdded(object sender, DownloadAddedEventArgs e)
         {
-            _mainThreadDispatcher.Invoke(new CollectionInitializerDelegate(p => Downloads.Add(p)), e.DownloadItem);
+            _mainThreadDispatcher.Invoke(new CollectionInitializerDelegate(p => _downloads.Add(p)), e.DownloadItem);
         }
 
         /// <summary>

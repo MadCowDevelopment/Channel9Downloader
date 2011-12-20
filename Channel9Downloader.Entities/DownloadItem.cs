@@ -10,6 +10,11 @@ namespace Channel9Downloader.Entities
         #region Fields
 
         /// <summary>
+        /// Property name of <see cref="DownloadState"/> property.
+        /// </summary>
+        public const string PROP_DOWNLOAD_STATE = "DownloadState";
+
+        /// <summary>
         /// Backing field for <see cref="BytesPerSecond"/> property.
         /// </summary>
         private double _bytesPerSecond;
@@ -23,7 +28,7 @@ namespace Channel9Downloader.Entities
         /// The time when the download has started.
         /// </summary>
         private DateTime _downloadStartTime;
-        
+
         /// <summary>
         /// Backing field for <see cref="DownloadState"/> property.
         /// </summary>
@@ -50,6 +55,18 @@ namespace Channel9Downloader.Entities
         private long _totalBytesToReceive;
 
         #endregion Fields
+
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DownloadItem"/> class.
+        /// </summary>
+        public DownloadItem()
+        {
+            DownloadState = DownloadState.Queued;
+        }
+
+        #endregion Constructors
 
         #region Public Properties
 
@@ -128,7 +145,7 @@ namespace Channel9Downloader.Entities
                     CalculateEta();
                 }
 
-                RaisePropertyChanged();
+                RaisePropertyChanged(PROP_DOWNLOAD_STATE);
             }
         }
 
