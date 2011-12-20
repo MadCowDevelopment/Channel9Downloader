@@ -2,6 +2,7 @@
 using System.ComponentModel.Composition;
 using System.IO;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
@@ -48,28 +49,37 @@ namespace Channel9Downloader.DataAccess
         /// <param name="address">The address of the resource to download.</param>
         /// <param name="filename">The name of the local file that is to receive the data.</param>
         /// <param name="downloadItem">The download item.</param>
+        /// <param name="token">The token for cancelling the operation.</param>
         /// <returns>Returns a Task.</returns>
-        public Task<object> DownloadFileAsync(string address, string filename, DownloadItem downloadItem)
+        public Task<object> DownloadFileAsync(
+            string address,
+            string filename,
+            DownloadItem downloadItem,
+            CancellationToken token)
         {
             var tcs = new TaskCompletionSource<object>();
             var webClient = new WebClient();
+
+            token.Register(webClient.CancelAsync);
+
             webClient.DownloadFileCompleted += (obj, args) =>
                 {
-                    downloadItem.DownloadState = DownloadState.Finished;
-
                     if (args.Cancelled)
                     {
                         tcs.TrySetCanceled();
+                        downloadItem.DownloadState = DownloadState.Stopped;
                         return;
                     }
 
                     if (args.Error != null)
                     {
                         tcs.TrySetException(args.Error);
+                        downloadItem.DownloadState = DownloadState.Error;
                         return;
                     }
 
                     tcs.TrySetResult(null);
+                    downloadItem.DownloadState = DownloadState.Finished;
                 };
 
             webClient.DownloadProgressChanged += (obj, args) =>

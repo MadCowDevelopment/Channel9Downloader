@@ -139,11 +139,9 @@ namespace Channel9Downloader.Entities
                     _downloadStartTime = DateTime.Now;
                     _lastUpdate = DateTime.Now;
                 }
-                else if (_downloadState == DownloadState.Finished)
-                {
-                    CalculateBytesPerSecond();
-                    CalculateEta();
-                }
+
+                CalculateBytesPerSecond();
+                CalculateEta();
 
                 RaisePropertyChanged(PROP_DOWNLOAD_STATE);
             }
@@ -223,7 +221,7 @@ namespace Channel9Downloader.Entities
         /// </summary>
         private void CalculateBytesPerSecond()
         {
-            if (DownloadState != DownloadState.Downloading  ||
+            if (DownloadState != DownloadState.Downloading ||
                 _downloadStartTime == default(DateTime) ||
                 TotalBytesToReceive == 0)
             {
@@ -234,7 +232,8 @@ namespace Channel9Downloader.Entities
                 var duration = DateTime.Now - _downloadStartTime;
 
                 var bytesPerSecond = BytesReceived / duration.TotalSeconds;
-                BytesPerSecond = bytesPerSecond;
+
+                BytesPerSecond = double.IsInfinity(bytesPerSecond) ? 0 : bytesPerSecond;
             }
         }
 
@@ -244,7 +243,8 @@ namespace Channel9Downloader.Entities
         private void CalculateEta()
         {
             if (DownloadState != DownloadState.Downloading ||
-                ProgressPercentage >= 100)
+                ProgressPercentage >= 100 ||
+                BytesPerSecond == 0.0)
             {
                 RemainingTime = TimeSpan.FromSeconds(0);
             }

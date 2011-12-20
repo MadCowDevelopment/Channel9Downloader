@@ -108,6 +108,7 @@ namespace Channel9Downloader.DataAccess
             lock (_categoryLock)
             {
                 RetrieveCategories();
+                SaveCategories();
             }
         }
 
@@ -131,13 +132,10 @@ namespace Channel9Downloader.DataAccess
         /// </summary>
         private void RetrieveCategories()
         {
-            var filename = CreateFilenameForCategory();
             var tags = _categoryScraper.GetAllCategories<Tag>();
             var shows = _categoryScraper.GetAllCategories<Show>();
             var series = _categoryScraper.GetAllCategories<Series>();
             _categories = new Categories(tags, shows, series);
-
-            _categoriesDataAccess.SaveCategories(_categories, filename);
         }
 
         #endregion Private Methods

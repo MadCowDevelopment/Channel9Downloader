@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Data;
+using System.Windows.Input;
 
 using Channel9Downloader.Entities;
 using Channel9Downloader.ViewModels.Framework;
@@ -17,6 +18,38 @@ namespace Channel9Downloader.ViewModels
         /// Gets the downloads.
         /// </summary>
         ListCollectionView Downloads
+        {
+            get;
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether it is downloading.
+        /// </summary>
+        bool IsDownloading
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Gets a command to start downloads.
+        /// </summary>
+        ICommand StartDownloadsCommand
+        {
+            get;
+        }
+
+        /// <summary>
+        /// Gets a command to stop downloads.
+        /// </summary>
+        ICommand StopDownloadsCommand
+        {
+            get;
+        }
+
+        /// <summary>
+        /// Gets a command to update the available downloads.
+        /// </summary>
+        ICommand UpdateDownloadsCommand
         {
             get;
         }

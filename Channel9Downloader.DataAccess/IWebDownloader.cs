@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
@@ -25,8 +26,13 @@ namespace Channel9Downloader.DataAccess
         /// <param name="address">The address of the resource to download.</param>
         /// <param name="filename">The name of the local file that is to receive the data.</param>
         /// <param name="downloadItem">The download item.</param>
+        /// <param name="cancellationToken">The token used for cancelling the operation.</param>
         /// <returns>Returns a Task.</returns>
-        Task<object> DownloadFileAsync(string address, string filename, DownloadItem downloadItem);
+        Task<object> DownloadFileAsync(
+            string address,
+            string filename,
+            DownloadItem downloadItem,
+            CancellationToken cancellationToken);
 
         /// <summary>
         /// Downloads the requested resource as a String. 

@@ -1,9 +1,9 @@
-﻿using System.Collections;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Threading;
 
 using Channel9Downloader.DataAccess;
@@ -38,9 +38,29 @@ namespace Channel9Downloader.ViewModels
         private readonly Dispatcher _mainThreadDispatcher;
 
         /// <summary>
+        /// Backing field for <see cref="IsDownloading"/> class.
+        /// </summary>
+        private bool _isDownloading;
+
+        /// <summary>
         /// The application settings.
         /// </summary>
         private Settings _settings;
+
+        /// <summary>
+        /// Backing field for <see cref="StartDownloadsCommand"/> property.
+        /// </summary>
+        private ICommand _startDownloadsCommand;
+
+        /// <summary>
+        /// Backing field for <see cref="StopDownloadsCommand"/> property.
+        /// </summary>
+        private ICommand _stopDownloadsCommand;
+
+        /// <summary>
+        /// Backing field for <see cref="UpdateDownloadsCommand"/> property.
+        /// </summary>
+        private ICommand _updateDownloadsCommand;
 
         #endregion Fields
 
@@ -55,6 +75,8 @@ namespace Channel9Downloader.ViewModels
         {
             _downloadManager = downloadManager;
             _downloadManager.DownloadAdded += DownloadManagerDownloadAdded;
+            _downloadManager.DownloadingStarted += DownloadManagerDownloadingStarted;
+            _downloadManager.DownloadingStopped += DownloadManagerDownloadingStopped;
 
             _mainThreadDispatcher = Dispatcher.CurrentDispatcher;
 
@@ -86,6 +108,63 @@ namespace Channel9Downloader.ViewModels
             private set;
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether it is downloading.
+        /// </summary>
+        public bool IsDownloading
+        {
+            get
+            {
+                return _isDownloading;
+            }
+
+            set
+            {
+                _isDownloading = value;
+                RaisePropertyChanged(() => IsDownloading);
+            }
+        }
+
+        /// <summary>
+        /// Gets a command to start downloads.
+        /// </summary>
+        public ICommand StartDownloadsCommand
+        {
+            get
+            {
+                return _startDownloadsCommand
+                       ??
+                       (_startDownloadsCommand =
+                        new RelayCommand(p => OnStartDownloads(), p => !IsAdornerVisible && !IsDownloading));
+            }
+        }
+
+        /// <summary>
+        /// Gets a command to stop downloads.
+        /// </summary>
+        public ICommand StopDownloadsCommand
+        {
+            get
+            {
+                return _stopDownloadsCommand
+                       ??
+                       (_stopDownloadsCommand =
+                        new RelayCommand(p => OnStopDownloads(), p => !IsAdornerVisible && IsDownloading));
+            }
+        }
+
+        /// <summary>
+        /// Gets a command that updates the available downloads.
+        /// </summary>
+        public ICommand UpdateDownloadsCommand
+        {
+            get
+            {
+                return _updateDownloadsCommand
+                       ?? (_updateDownloadsCommand = new RelayCommand(p => OnUpdateDownloads(), p => !IsAdornerVisible));
+            }
+        }
+
         #endregion Public Properties
 
         #region Public Methods
@@ -115,13 +194,70 @@ namespace Channel9Downloader.ViewModels
         }
 
         /// <summary>
+        /// Sets the download status to true when downloads have started.
+        /// </summary>
+        /// <param name="sender">Sender of the event.</param>
+        /// <param name="e">Event args of the event.</param>
+        private void DownloadManagerDownloadingStarted(object sender, System.EventArgs e)
+        {
+            IsDownloading = true;
+        }
+
+        /// <summary>
+        /// Sets the download status to false when downloads have stopped.
+        /// </summary>
+        /// <param name="sender">Sender of the event.</param>
+        /// <param name="e">Event args of the event.</param>
+        private void DownloadManagerDownloadingStopped(object sender, System.EventArgs e)
+        {
+            IsDownloading = false;
+        }
+
+        /// <summary>
         /// Initializes categories in the background.
         /// </summary>
         private void InitializeDownloadManagerAsync()
         {
+            var continuationTaskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
             IsAdornerVisible = true;
             var task = new Task(() => _downloadManager.Initialize(_settings));
-            task.ContinueWith(p => IsAdornerVisible = false);
+            task.ContinueWith(p =>
+            {
+                IsAdornerVisible = false;
+                CommandManager.InvalidateRequerySuggested();
+            }, continuationTaskScheduler);
+            task.Start();
+        }
+
+        /// <summary>
+        /// Starts the downloads.
+        /// </summary>
+        private void OnStartDownloads()
+        {
+            _downloadManager.StartDownloads();
+        }
+
+        /// <summary>
+        /// Stops the downloads.
+        /// </summary>
+        private void OnStopDownloads()
+        {
+            _downloadManager.StopDownloads();
+        }
+
+        /// <summary>
+        /// Updates the downloads in the background.
+        /// </summary>
+        private void OnUpdateDownloads()
+        {
+            var continuationTaskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
+            IsAdornerVisible = true;
+            var task = new Task(() => _downloadManager.UpdateAvailableDownloads());
+            task.ContinueWith(p =>
+                {
+                    IsAdornerVisible = false;
+                    CommandManager.InvalidateRequerySuggested();
+                }, continuationTaskScheduler);
             task.Start();
         }
 

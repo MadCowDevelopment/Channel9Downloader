@@ -25,6 +25,11 @@ namespace Channel9Downloader.Entities
         /// </summary>
         private int _maximumParallelDownloads;
 
+        /// <summary>
+        /// Backing field for <see cref="StartDownloadingWhenApplicationStarts"/> property.
+        /// </summary>
+        private bool _startDownloadingWhenApplicationStarts;
+
         #endregion Fields
 
         #region Constructors
@@ -56,7 +61,7 @@ namespace Channel9Downloader.Entities
             set
             {
                 _downloadFolder = value;
-                RaisePropertyChanged();
+                RaisePropertyChanged(() => DownloadFolder);
             }
         }
 
@@ -75,6 +80,24 @@ namespace Channel9Downloader.Entities
             {
                 _maximumParallelDownloads = value;
                 RaisePropertyChanged(PROP_MAXIMUM_PARALLEL_DOWNLOADS);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to start downloading when the application starts.
+        /// </summary>
+        [DataMember]
+        public bool StartDownloadingWhenApplicationStarts
+        {
+            get
+            {
+                return _startDownloadingWhenApplicationStarts;
+            }
+
+            set
+            {
+                _startDownloadingWhenApplicationStarts = value;
+                RaisePropertyChanged(() => StartDownloadingWhenApplicationStarts);
             }
         }
 

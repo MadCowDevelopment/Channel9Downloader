@@ -25,7 +25,17 @@
         /// <summary>
         /// The download is ignored.
         /// </summary>
-        Ignored
+        Ignored,
+
+        /// <summary>
+        /// The download has been stopped.
+        /// </summary>
+        Stopped,
+
+        /// <summary>
+        /// The download encountered an error.
+        /// </summary>
+        Error
     }
 
     #endregion Enumerations

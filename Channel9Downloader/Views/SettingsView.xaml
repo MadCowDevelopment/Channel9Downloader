@@ -33,6 +33,9 @@
                         Minimum="1" Maximum="16"                        
                         Margin="3" Width="50" Value="{Binding Settings.MaximumParallelDownloads}" />
                 </StackPanel>
+                <CheckBox Margin="3"
+                    IsChecked="{Binding Settings.StartDownloadingWhenApplicationStarts}" 
+                    Content="Start downloading when the application starts"/>
             </StackPanel>            
         </GroupBox>
         

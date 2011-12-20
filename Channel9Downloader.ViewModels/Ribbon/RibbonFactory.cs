@@ -23,6 +23,15 @@ namespace Channel9Downloader.ViewModels.Ribbon
         }
 
         /// <summary>
+        /// Gets or sets the downloads viewmodel.
+        /// </summary>
+        [Import]
+        public IDownloadsVM DownloadsVM
+        {
+            get; set;
+        }
+
+        /// <summary>
         /// Gets or sets the main window viewmodel.
         /// </summary>
         [Import]
@@ -129,6 +138,42 @@ namespace Channel9Downloader.ViewModels.Ribbon
         {
             var downloads = new RibbonTabVM();
             downloads.Header = RibbonTabName.DOWNLOADS;
+
+            // Set up group 'Control'
+            var groupControl = new RibbonGroupVM();
+            groupControl.Header = "Control";
+
+            var startButton = new RibbonButtonVM();
+            startButton.Command = DownloadsVM.StartDownloadsCommand;
+            startButton.Label = "Start";
+            startButton.LargeImageSource = @"..\Images\Ribbon\StartLarge.png";
+            startButton.ToolTipDescription = "Starts downloading videos.";
+            startButton.ToolTipTitle = "Start downloads";
+            groupControl.Items.Add(startButton);
+
+            var stopButton = new RibbonButtonVM();
+            stopButton.Command = DownloadsVM.StopDownloadsCommand;
+            stopButton.Label = "Stop";
+            stopButton.LargeImageSource = @"..\Images\Ribbon\StopLarge.png";
+            stopButton.ToolTipDescription = "Stops downloading videos.";
+            stopButton.ToolTipTitle = "Stop downloads";
+            groupControl.Items.Add(stopButton);
+
+            downloads.Groups.Add(groupControl);
+
+            // Set up group 'Update'
+            var groupUpdate = new RibbonGroupVM();
+            groupUpdate.Header = "Update";
+
+            var buttonUpdate = new RibbonButtonVM();
+            buttonUpdate.Command = DownloadsVM.UpdateDownloadsCommand;
+            buttonUpdate.Label = "Update";
+            buttonUpdate.LargeImageSource = @"..\Images\Ribbon\RssUpdateLarge.png";
+            buttonUpdate.ToolTipDescription = "Update available movies through RSS.";
+            buttonUpdate.ToolTipTitle = "Update RSS";
+            groupUpdate.Items.Add(buttonUpdate);
+
+            downloads.Groups.Add(groupUpdate);
 
             return downloads;
         }
