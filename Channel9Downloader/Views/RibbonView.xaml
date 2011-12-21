@@ -30,7 +30,6 @@
                     Header="E_xit"
                     Command="{Binding RibbonFactory.MainWindowVM.CloseCommand}"
                     ImageSource="..\Images\Ribbon\ExitLarge.png"/>
-
                 <ribbon:RibbonApplicationMenu.AuxiliaryPaneContent>
                     <ContentControl Content="{Binding AuxiliaryPaneContent}"/>
                 </ribbon:RibbonApplicationMenu.AuxiliaryPaneContent>

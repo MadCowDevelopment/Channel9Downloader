@@ -127,6 +127,15 @@ namespace Channel9Downloader.ViewModels.Ribbon
 
             categories.Groups.Add(groupSelection);
 
+            // Set up group 'Filter'
+            var groupFilter = new RibbonGroupVM();
+            groupFilter.Header = "Filter";
+
+            groupFilter.Items.Add(CategoriesVM.FilterRibbonTextBox);
+            groupFilter.Items.Add(CategoriesVM.CaseSensitiveRibbonCheckBox);
+
+            categories.Groups.Add(groupFilter);
+
             return categories;
         }
 

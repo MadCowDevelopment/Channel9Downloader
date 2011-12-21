@@ -51,6 +51,7 @@
     </Compile>
     <Compile Include="Categories\CategoriesVM.cs" />
     <Compile Include="Categories\CategorySelectionVM.cs" />
+    <Compile Include="Categories\ICategorySelectionVM.cs" />
     <Compile Include="Categories\ISeriesSelectionVM.cs" />
     <Compile Include="Categories\IShowSelectionVM.cs" />
     <Compile Include="Categories\ITagSelectionVM.cs" />
@@ -93,19 +94,25 @@
     <Compile Include="ISettingsVM.cs" />
     <Compile Include="LoadingWaitVM.cs" />
     <Compile Include="Ribbon\IRibbonButtonVM.cs" />
+    <Compile Include="Ribbon\IRibbonComboBoxVM.cs" />
     <Compile Include="Ribbon\IRibbonFactory.cs" />
     <Compile Include="Ribbon\IRibbonGroupVM.cs" />
     <Compile Include="Ribbon\IRibbonItemVM.cs" />
+    <Compile Include="Ribbon\IRibbonCheckBoxVM.cs" />
     <Compile Include="Ribbon\IRibbonTabVM.cs" />
+    <Compile Include="Ribbon\IRibbonTextBoxVM.cs" />
     <Compile Include="Ribbon\IRibbonVM.cs" />
     <Compile Include="MainWindowVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Ribbon\RibbonButtonVM.cs" />
+    <Compile Include="Ribbon\RibbonComboBoxVM.cs" />
     <Compile Include="Ribbon\RibbonFactory.cs" />
     <Compile Include="Ribbon\RibbonGroupVM.cs" />
     <Compile Include="Ribbon\RibbonItemVM.cs" />
+    <Compile Include="Ribbon\RibbonCheckBoxVM.cs" />
     <Compile Include="Ribbon\RibbonTabName.cs" />
     <Compile Include="Ribbon\RibbonTabVM.cs" />
+    <Compile Include="Ribbon\RibbonTextBoxVM.cs" />
     <Compile Include="Ribbon\RibbonVM.cs" />
     <Compile Include="Configuration\SettingsVM.cs" />
   </ItemGroup>

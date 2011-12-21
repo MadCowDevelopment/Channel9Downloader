@@ -3,6 +3,7 @@ using System.Windows.Input;
 
 using Channel9Downloader.ViewModels.Events;
 using Channel9Downloader.ViewModels.Framework;
+using Channel9Downloader.ViewModels.Ribbon;
 
 namespace Channel9Downloader.ViewModels.Categories
 {
@@ -60,6 +61,16 @@ namespace Channel9Downloader.ViewModels.Categories
         {
             get;
         }
+
+        /// <summary>
+        /// Gets the filter ribbon text box.
+        /// </summary>
+        IRibbonTextBoxVM FilterRibbonTextBox { get; }
+
+        /// <summary>
+        /// Gets the case sensitive text box.
+        /// </summary>
+        IRibbonCheckBoxVM CaseSensitiveRibbonCheckBox { get; }
 
         #endregion Properties
 

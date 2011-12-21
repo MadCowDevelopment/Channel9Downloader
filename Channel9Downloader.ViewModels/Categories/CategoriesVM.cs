@@ -1,10 +1,13 @@
-﻿using System.ComponentModel.Composition;
+﻿using System.ComponentModel;
+using System.ComponentModel.Composition;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
 using Channel9Downloader.Composition;
 using Channel9Downloader.DataAccess;
+using Channel9Downloader.Entities;
 using Channel9Downloader.ViewModels.Framework;
+using Channel9Downloader.ViewModels.Ribbon;
 
 namespace Channel9Downloader.ViewModels.Categories
 {
@@ -82,15 +85,50 @@ namespace Channel9Downloader.ViewModels.Categories
         /// <param name="dependencyComposer">The dependency composer used for creating instances.</param>
         /// <param name="loadingWaitVM">The loading wait viewmodel.</param>
         /// <param name="categoryRepository">The repository used for retrieving categories.</param>
+        /// <param name="filterRibbonTextBoxVM">A ribbon text box used for filtering.</param>
+        /// <param name="caseSensitiveRibbonCheckBoxVM">The ribbon check box used for setting case sensitive filter.</param>
         [ImportingConstructor]
         public CategoriesVM(
             IDependencyComposer dependencyComposer,
             ILoadingWaitVM loadingWaitVM,
-            ICategoryRepository categoryRepository)
+            ICategoryRepository categoryRepository,
+            IRibbonTextBoxVM filterRibbonTextBoxVM,
+            IRibbonCheckBoxVM caseSensitiveRibbonCheckBoxVM)
         {
             _dependencyComposer = dependencyComposer;
             _categoryRepository = categoryRepository;
             AdornerContent = loadingWaitVM;
+
+            FilterRibbonTextBox = filterRibbonTextBoxVM;
+            FilterRibbonTextBox.TextBoxWidth = 100;
+            FilterRibbonTextBox.PropertyChanged += FilterRibbonTextBox_PropertyChanged;
+
+            CaseSensitiveRibbonCheckBox = caseSensitiveRibbonCheckBoxVM;
+            CaseSensitiveRibbonCheckBox.Label = "case sensitive";
+            CaseSensitiveRibbonCheckBox.PropertyChanged += CaseSensitiveRibbonCheckBox_PropertyChanged;
+        }
+
+        private void FilterRibbonTextBox_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == RibbonTextBoxVM.PROP_TEXT)
+            {
+                RefreshAllLists();
+            }
+        }
+
+        private void CaseSensitiveRibbonCheckBox_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(FilterRibbonTextBox.Text) && e.PropertyName == RibbonCheckBoxVM.PROP_IS_CHECKED)
+            {
+                RefreshAllLists();
+            }
+        }
+
+        private void RefreshAllLists()
+        {
+            _seriesSelectionVM.Refresh();
+            _showSelectionVM.Refresh();
+            _tagSelectionVM.Refresh();
         }
 
         #endregion Constructors
@@ -179,6 +217,16 @@ namespace Channel9Downloader.ViewModels.Categories
             }
         }
 
+        /// <summary>
+        /// Gets the filter ribbon text box.
+        /// </summary>
+        public IRibbonTextBoxVM FilterRibbonTextBox { get; private set; }
+
+        /// <summary>
+        /// Gets the case sensitive checkbox.
+        /// </summary>
+        public IRibbonCheckBoxVM CaseSensitiveRibbonCheckBox { get; private set; }
+
         #endregion Public Properties
 
         #region Public Methods
@@ -189,6 +237,61 @@ namespace Channel9Downloader.ViewModels.Categories
         public void Initialize()
         {
             InitializeCategoriesAsync(TaskScheduler.FromCurrentSynchronizationContext());
+        }
+
+        public bool TextFilter(object obj)
+        {
+            if (string.IsNullOrEmpty(FilterRibbonTextBox.Text))
+            {
+                return true;
+            }
+
+            var category = obj as Category;
+
+            if (category == null)
+            {
+                return true;
+            }
+
+            var filterText = ToLowerIfCaseSensitiveIsActive(FilterRibbonTextBox.Text);
+
+            if (category.Title != null)
+            {
+                var title = ToLowerIfCaseSensitiveIsActive(category.Title);
+                if (title.Contains(filterText))
+                {
+                    return true;
+                }
+            }
+
+            if (category.Description != null)
+            {
+                var title = ToLowerIfCaseSensitiveIsActive(category.Title);
+                if (title.Contains(filterText))
+                {
+                    return true;
+                }
+            }
+
+            if (category.RelativePath != null)
+            {
+                var title = ToLowerIfCaseSensitiveIsActive(category.Title);
+                if (title.Contains(filterText))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private string ToLowerIfCaseSensitiveIsActive(string text)
+        {
+            var result = CaseSensitiveRibbonCheckBox.IsChecked
+                                 ? text
+                                 : text.ToLower();
+
+            return result;
         }
 
         #endregion Public Methods
@@ -212,13 +315,13 @@ namespace Channel9Downloader.ViewModels.Categories
             task.ContinueWith(x =>
                 {
                     _seriesSelectionVM = _dependencyComposer.GetExportedValue<ISeriesSelectionVM>();
-                    _seriesSelectionVM.Initialize(categories.Series);
+                    _seriesSelectionVM.Initialize(categories.Series, TextFilter);
 
                     _showSelectionVM = _dependencyComposer.GetExportedValue<IShowSelectionVM>();
-                    _showSelectionVM.Initialize(categories.Shows);
+                    _showSelectionVM.Initialize(categories.Shows, TextFilter);
 
                     _tagSelectionVM = _dependencyComposer.GetExportedValue<ITagSelectionVM>();
-                    _tagSelectionVM.Initialize(categories.Tags);
+                    _tagSelectionVM.Initialize(categories.Tags, TextFilter);
 
                     CurrentContent = _tagSelectionVM;
 

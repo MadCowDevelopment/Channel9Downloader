@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Data;
@@ -8,7 +9,7 @@ using Channel9Downloader.ViewModels.Framework;
 
 namespace Channel9Downloader.ViewModels.Categories
 {
-    public class CategorySelectionVM<T> : BaseViewModel where T : Category
+    public class CategorySelectionVM<T> : BaseViewModel, ICategorySelectionVM<T> where T : Category
     {
         private CollectionView _categoryCollectionView;
 
@@ -42,7 +43,7 @@ namespace Channel9Downloader.ViewModels.Categories
         /// </summary>
         /// <param name="categories">The categories which are used to initialize this viewmodel.
         /// </param>
-        public void Initialize(List<T> categories)
+        public void Initialize(List<T> categories, Predicate<object> filter)
         {
             if (_categories != null)
             {
@@ -63,7 +64,18 @@ namespace Channel9Downloader.ViewModels.Categories
                 new PropertyGroupDescription("IsEnabled", new IsEnabledToDisplayTextConverter()));
             CategoriesCollectionView.SortDescriptions.Add(new SortDescription("IsEnabled", ListSortDirection.Descending));
             CategoriesCollectionView.SortDescriptions.Add(new SortDescription("Title", ListSortDirection.Ascending));
+            CategoriesCollectionView.Filter = filter;
             OnInitialized();
+        }
+
+        public void Refresh()
+        {
+            if (CategoriesCollectionView == null)
+            {
+                return;
+            }
+
+            CategoriesCollectionView.Refresh();
         }
 
         protected virtual void OnInitialized()

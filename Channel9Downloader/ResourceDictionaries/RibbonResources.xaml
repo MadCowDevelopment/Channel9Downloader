@@ -17,12 +17,37 @@
     <DataTemplate DataType="{x:Type Ribbon:RibbonButtonVM}">
         <StackPanel>
             <ribbon:RibbonButton 
-                    Label="{Binding Label}"
-                    LargeImageSource="{Binding LargeImageSource}" 
-                    ToolTipDescription="{Binding ToolTipDescription}"
-                    ToolTipTitle="{Binding ToolTipTitle}"
-                    Command="{Binding Command}"/>
+                Label="{Binding Label}"
+                LargeImageSource="{Binding LargeImageSource}" 
+                ToolTipDescription="{Binding ToolTipDescription}"
+                ToolTipTitle="{Binding ToolTipTitle}"
+                Command="{Binding Command}"/>
         </StackPanel>
     </DataTemplate> 
+    
+    <DataTemplate DataType="{x:Type Ribbon:RibbonComboBoxVM}">
+        <StackPanel>
+            <ribbon:RibbonComboBox
+                IsEditable="{Binding IsEditable}"
+                ItemsSource="{Binding ItemsSource}"
+                Text="{Binding Text}"/>
+        </StackPanel>
+    </DataTemplate>
+    
+    <DataTemplate DataType="{x:Type Ribbon:RibbonTextBoxVM}">
+        <StackPanel>
+            <ribbon:RibbonTextBox
+                TextBoxWidth="{Binding TextBoxWidth}"
+                Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
+    </DataTemplate>
+    
+    <DataTemplate DataType="{x:Type Ribbon:RibbonCheckBoxVM}">
+        <StackPanel>
+            <ribbon:RibbonCheckBox                
+                Label="{Binding Label}"
+                IsChecked="{Binding IsChecked}"/>
+        </StackPanel>
+    </DataTemplate>
 
 </ResourceDictionary>
