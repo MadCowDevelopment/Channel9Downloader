@@ -166,6 +166,41 @@ namespace Channel9Downloader.ViewModels
             }
         }
 
+        private ICommand _cleanDownloadsCommand;
+
+        /// <summary>
+        /// Gets a command to clean downloads.
+        /// </summary>
+        public ICommand CleanDownloadsCommand
+        {
+            get
+            {
+                return _cleanDownloadsCommand
+                       ?? (_cleanDownloadsCommand = new RelayCommand(p => OnCleanDownloads(), p => !IsAdornerVisible));
+            }
+        }
+
+        /// <summary>
+        /// Removes downloads that are finished or skipped.
+        /// </summary>
+        private void OnCleanDownloads()
+        {
+            if (_downloads == null)
+            {
+                return;
+            }
+
+            for (int i = _downloads.Count - 1; i >= 0; i--)
+            {
+                var downloadItem = _downloads[i];
+                if (downloadItem.DownloadState == DownloadState.Finished ||
+                    downloadItem.DownloadState == DownloadState.Skipped)
+                {
+                    _downloads.Remove(downloadItem);
+                }
+            }
+        }
+
         #endregion Public Properties
 
         #region Public Methods
@@ -193,7 +228,7 @@ namespace Channel9Downloader.ViewModels
         {
             _mainThreadDispatcher.Invoke(new CollectionInitializerDelegate(p => _downloads.Add(p)), e.DownloadItem);
         }
-        
+
         /// <summary>
         /// Removes a download from the list of queued downloads.
         /// </summary>

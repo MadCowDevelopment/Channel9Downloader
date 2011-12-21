@@ -168,6 +168,14 @@ namespace Channel9Downloader.ViewModels.Ribbon
             stopButton.ToolTipTitle = "Stop downloads";
             groupControl.Items.Add(stopButton);
 
+            var cleanButton = new RibbonButtonVM();
+            cleanButton.Command = DownloadsVM.CleanDownloadsCommand;
+            cleanButton.Label = "Clean";
+            cleanButton.LargeImageSource = @"..\Images\Ribbon\CleanLarge.png";
+            cleanButton.ToolTipDescription = "Remove finished and skipped downloads.";
+            cleanButton.ToolTipTitle = "Clean downloads";
+            groupControl.Items.Add(cleanButton);
+
             downloads.Groups.Add(groupControl);
 
             // Set up group 'Update'

@@ -23,9 +23,9 @@
         Finished,
 
         /// <summary>
-        /// The download is ignored.
+        /// The download is skipped.
         /// </summary>
-        Ignored,
+        Skipped,
 
         /// <summary>
         /// The download has been stopped.
