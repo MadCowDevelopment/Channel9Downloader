@@ -13,6 +13,8 @@ using Channel9Downloader.ViewModels.Framework;
 
 namespace Channel9Downloader.ViewModels
 {
+    using System.ComponentModel;
+
     /// <summary>
     /// This class manages the downloads view.
     /// </summary>
@@ -84,6 +86,8 @@ namespace Channel9Downloader.ViewModels
             AdornerContent = new LoadingWaitVM();
             _downloads = new ObservableCollection<DownloadItem>();
             Downloads = (ListCollectionView)CollectionViewSource.GetDefaultView(_downloads);
+            Downloads.SortDescriptions.Add(
+                new SortDescription(DownloadItem.PROP_DOWNLOAD_STATE, ListSortDirection.Ascending));
         }
 
         #endregion Constructors
@@ -166,6 +170,9 @@ namespace Channel9Downloader.ViewModels
             }
         }
 
+        /// <summary>
+        /// Backing field for <see cref="CleanDownloadsCommand"/> property.
+        /// </summary>
         private ICommand _cleanDownloadsCommand;
 
         /// <summary>
@@ -197,6 +204,7 @@ namespace Channel9Downloader.ViewModels
                     downloadItem.DownloadState == DownloadState.Skipped)
                 {
                     _downloads.Remove(downloadItem);
+                    downloadItem.PropertyChanged -= this.DownloadItemPropertyChanged;
                 }
             }
         }
@@ -226,7 +234,29 @@ namespace Channel9Downloader.ViewModels
         /// <param name="e">Event args of the event.</param>
         private void DownloadManagerDownloadAdded(object sender, DownloadAddedEventArgs e)
         {
-            _mainThreadDispatcher.Invoke(new CollectionInitializerDelegate(p => _downloads.Add(p)), e.DownloadItem);
+            e.DownloadItem.PropertyChanged += this.DownloadItemPropertyChanged;
+            this.AddDownloadItemOnMainThread(e.DownloadItem);
+        }
+
+        /// <summary>
+        /// Removes and adds an item if the download state has changed.
+        /// This is so that the sorting will be applied.
+        /// </summary>
+        /// <param name="sender">Sender of the event.</param>
+        /// <param name="e">Event args of the event.</param>
+        private void DownloadItemPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            var downloadItem = sender as DownloadItem;
+            if (downloadItem == null)
+            {
+                return;
+            }
+
+            if (e.PropertyName == DownloadItem.PROP_DOWNLOAD_STATE)
+            {
+                RemoveDownloadItemOnMainThread(downloadItem);
+                AddDownloadItemOnMainThread(downloadItem);
+            }
         }
 
         /// <summary>
@@ -236,7 +266,18 @@ namespace Channel9Downloader.ViewModels
         /// <param name="e">Event args of the event.</param>
         private void DownloadManagerDownloadRemoved(object sender, DownloadRemovedEventArgs e)
         {
-            _mainThreadDispatcher.Invoke(new CollectionInitializerDelegate(p => _downloads.Remove(p)), e.DownloadItem);
+            e.DownloadItem.PropertyChanged -= this.DownloadItemPropertyChanged;
+            this.RemoveDownloadItemOnMainThread(e.DownloadItem);
+        }
+
+        private void RemoveDownloadItemOnMainThread(DownloadItem downloadItem)
+        {
+            _mainThreadDispatcher.Invoke(new CollectionInitializerDelegate(p => _downloads.Remove(p)), downloadItem);
+        }
+        
+        private void AddDownloadItemOnMainThread(DownloadItem downloadItem)
+        {
+            _mainThreadDispatcher.Invoke(new CollectionInitializerDelegate(p => _downloads.Add(p)), downloadItem);            
         }
 
         /// <summary>

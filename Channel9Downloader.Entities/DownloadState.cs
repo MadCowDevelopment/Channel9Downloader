@@ -13,6 +13,11 @@
         Downloading,
 
         /// <summary>
+        /// The download has been stopped.
+        /// </summary>
+        Stopped,
+
+        /// <summary>
         /// The download is queued.
         /// </summary>
         Queued,
@@ -23,19 +28,14 @@
         Finished,
 
         /// <summary>
-        /// The download is skipped.
-        /// </summary>
-        Skipped,
-
-        /// <summary>
-        /// The download has been stopped.
-        /// </summary>
-        Stopped,
-
-        /// <summary>
         /// The download encountered an error.
         /// </summary>
-        Error
+        Error,
+
+        /// <summary>
+        /// The download is skipped.
+        /// </summary>
+        Skipped
     }
 
     #endregion Enumerations
