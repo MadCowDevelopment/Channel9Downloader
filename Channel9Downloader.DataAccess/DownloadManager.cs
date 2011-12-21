@@ -49,7 +49,7 @@ namespace Channel9Downloader.DataAccess
         /// Dictionary containing tokens for stopping downloads.
         /// </summary>
         private readonly Dictionary<DownloadItem, CancellationTokenSource> _cancellationTokenSources;
- 
+
         /// <summary>
         /// The number of running downloads.
         /// </summary>
@@ -104,7 +104,7 @@ namespace Channel9Downloader.DataAccess
         /// <summary>
         /// Raises the <see cref="DownloadRemoved"/> event.
         /// </summary>
-        /// <param name="e"></param>
+        /// <param name="e">Event args of the event.</param>
         private void RaiseDownloadRemoved(DownloadRemovedEventArgs e)
         {
             var handler = DownloadRemoved;
@@ -208,26 +208,26 @@ namespace Channel9Downloader.DataAccess
                 var task = DownloadFileAsync(address, filename, downloadItem, cancellationTokenSource.Token);
                 task.ContinueWith(
                     x =>
+                    {
+                        _numberOfRunningDownloads--;
+
+                        if (_numberOfRunningDownloads == 0)
                         {
-                            _numberOfRunningDownloads--;
+                            RaiseDownloadingStopped(new EventArgs());
+                        }
 
-                            if (_numberOfRunningDownloads == 0)
-                            {
-                                RaiseDownloadingStopped(new EventArgs());
-                            }
+                        if (x.IsCanceled)
+                        {
+                            _downloadQueue.AddFirst(downloadItem);
+                        }
+                        else
+                        {
+                            _finishedDownloadsRepository.AddFinishedDownload(downloadItem.RssItem);
+                            StartDownloads();
+                        }
 
-                            if (x.IsCanceled)
-                            {
-                                _downloadQueue.AddFirst(downloadItem);
-                            }
-                            else
-                            {
-                                _finishedDownloadsRepository.AddFinishedDownload(downloadItem.RssItem);
-                                StartDownloads();
-                            }
-
-                            _cancellationTokenSources.Remove(downloadItem);
-                        });
+                        _cancellationTokenSources.Remove(downloadItem);
+                    });
             }
         }
 
@@ -256,9 +256,13 @@ namespace Channel9Downloader.DataAccess
             EnqueueDownloads(availableItems);
         }
 
+        /// <summary>
+        /// Removes all downloads from the queue whose category is no longer enabled.
+        /// </summary>
+        /// <param name="enabledCategories">List of enabled categories.</param>
         private void RemoveDownloadsFromQueueThatAreNoLongerEnabled(IEnumerable<Category> enabledCategories)
         {
-            for (int i = _downloadQueue.Count -1; i >= 0; i--)
+            for (int i = _downloadQueue.Count - 1; i >= 0; i--)
             {
                 var downloadItem = _downloadQueue.ElementAt(i);
                 var isInAnyCategory =

@@ -9,10 +9,20 @@ using Channel9Downloader.ViewModels.Framework;
 
 namespace Channel9Downloader.ViewModels.Categories
 {
-    public class CategorySelectionVM<T> : BaseViewModel, ICategorySelectionVM<T> where T : Category
+    /// <summary>
+    /// This class handles the selection views for the different categories.
+    /// </summary>
+    /// <typeparam name="T">The type of category.</typeparam>
+    public abstract class CategorySelectionVM<T> : BaseViewModel, ICategorySelectionVM<T> where T : Category
     {
+        /// <summary>
+        /// Backing field for <see cref="CategoriesCollectionView"/> property.
+        /// </summary>
         private CollectionView _categoryCollectionView;
 
+        /// <summary>
+        /// The collection of categories.
+        /// </summary>
         private ObservableCollection<T> _categories;
 
         #region Public Properties
@@ -27,7 +37,7 @@ namespace Channel9Downloader.ViewModels.Categories
                 return _categoryCollectionView;
             }
 
-            set
+            private set
             {
                 _categoryCollectionView = value;
                 RaisePropertyChanged(() => CategoriesCollectionView);
@@ -43,6 +53,7 @@ namespace Channel9Downloader.ViewModels.Categories
         /// </summary>
         /// <param name="categories">The categories which are used to initialize this viewmodel.
         /// </param>
+        /// <param name="filter">The filter that will be applied.</param>
         public void Initialize(List<T> categories, Predicate<object> filter)
         {
             if (_categories != null)
@@ -67,7 +78,10 @@ namespace Channel9Downloader.ViewModels.Categories
             CategoriesCollectionView.Filter = filter;
             OnInitialized();
         }
-
+        
+        /// <summary>
+        /// Refreshes the collection view.
+        /// </summary>
         public void Refresh()
         {
             if (CategoriesCollectionView == null)
@@ -78,10 +92,18 @@ namespace Channel9Downloader.ViewModels.Categories
             CategoriesCollectionView.Refresh();
         }
 
+        /// <summary>
+        /// Can be overwritten by subclasses and is called after the collections are initialized.
+        /// </summary>
         protected virtual void OnInitialized()
         {
         }
 
+        /// <summary>
+        /// Event handler for the property changed event of tags.
+        /// </summary>
+        /// <param name="sender">Sender of the event.</param>
+        /// <param name="e">Event args of the event.</param>
         private void TagPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             var category = sender as T;

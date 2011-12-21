@@ -4,8 +4,17 @@ using System.Windows.Data;
 
 namespace Channel9Downloader.TemplateSelectors
 {
+    /// <summary>
+    /// Template selector for category headers.
+    /// </summary>
     public class CategoryHeaderTemplateSelector : DataTemplateSelector
     {
+        /// <summary>
+        /// Selects the correct template for category selection group headers.
+        /// </summary>
+        /// <param name="item">The item for which a template should be applied.</param>
+        /// <param name="container">The container of the item.</param>
+        /// <returns>Returns the correct data template.</returns>
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
             var element = container as FrameworkElement;

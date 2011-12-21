@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.Composition;
+﻿using System.ComponentModel.Composition;
 using System.Windows.Data;
 
 using Channel9Downloader.Converters;
@@ -13,6 +12,9 @@ namespace Channel9Downloader.ViewModels.Categories
     [Export(typeof(ITagSelectionVM))]
     public class TagSelectionVM : CategorySelectionVM<Tag>, ITagSelectionVM
     {
+        /// <summary>
+        /// Adds another group description for the title so that alphabetical groups are shown.
+        /// </summary>
         protected override void OnInitialized()
         {
             CategoriesCollectionView.GroupDescriptions.Add(

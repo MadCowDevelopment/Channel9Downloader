@@ -2,12 +2,24 @@
 
 namespace Channel9Downloader.ViewModels.Ribbon
 {
+    /// <summary>
+    /// This class represents a ribbon combobox.
+    /// </summary>
     public class RibbonComboBoxVM : RibbonItemVM, IRibbonComboBoxVM
     {
+        /// <summary>
+        /// Gets or sets a value indicating whether the combobox is editable.
+        /// </summary>
         public bool IsEditable { get; set; }
 
+        /// <summary>
+        /// Gets or sets the text.
+        /// </summary>
         public string Text { get; set; }
 
+        /// <summary>
+        /// Gets or sets the items source.
+        /// </summary>
         public ObservableCollection<object> ItemsSource
         {
             get;

@@ -75,9 +75,13 @@ namespace Channel9Downloader.Controls
         /// <param name="verticalAdornerPlacement">Vertical placement of the adorner.</param>
         /// <param name="offsetX">X offset of the adorner.</param>
         /// <param name="offsetY">Y offset of the adorner.</param>
-        public FrameworkElementAdorner(FrameworkElement adornerChildElement, FrameworkElement adornedElement,
-            AdornerPlacement horizontalAdornerPlacement, AdornerPlacement verticalAdornerPlacement,
-            double offsetX, double offsetY)
+        public FrameworkElementAdorner(
+            FrameworkElement adornerChildElement, 
+            FrameworkElement adornedElement,
+            AdornerPlacement horizontalAdornerPlacement, 
+            AdornerPlacement verticalAdornerPlacement,
+            double offsetX, 
+            double offsetY)
             : base(adornedElement)
         {
             _child = adornerChildElement;

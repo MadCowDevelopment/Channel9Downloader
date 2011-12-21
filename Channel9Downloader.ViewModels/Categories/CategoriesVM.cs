@@ -101,14 +101,19 @@ namespace Channel9Downloader.ViewModels.Categories
 
             FilterRibbonTextBox = filterRibbonTextBoxVM;
             FilterRibbonTextBox.TextBoxWidth = 100;
-            FilterRibbonTextBox.PropertyChanged += FilterRibbonTextBox_PropertyChanged;
+            FilterRibbonTextBox.PropertyChanged += this.FilterRibbonTextBoxPropertyChanged;
 
             CaseSensitiveRibbonCheckBox = caseSensitiveRibbonCheckBoxVM;
             CaseSensitiveRibbonCheckBox.Label = "case sensitive";
-            CaseSensitiveRibbonCheckBox.PropertyChanged += CaseSensitiveRibbonCheckBox_PropertyChanged;
+            CaseSensitiveRibbonCheckBox.PropertyChanged += this.CaseSensitiveRibbonCheckBoxPropertyChanged;
         }
 
-        private void FilterRibbonTextBox_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        /// <summary>
+        /// Handles the property changed event of the filter ribbon text box.
+        /// </summary>
+        /// <param name="sender">Sender of the event.</param>
+        /// <param name="e">Event args of the event.</param>
+        private void FilterRibbonTextBoxPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == RibbonTextBoxVM.PROP_TEXT)
             {
@@ -116,7 +121,12 @@ namespace Channel9Downloader.ViewModels.Categories
             }
         }
 
-        private void CaseSensitiveRibbonCheckBox_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        /// <summary>
+        /// Handles the property changed event of the case sensitive check box.
+        /// </summary>
+        /// <param name="sender">Sender of the event.</param>
+        /// <param name="e">Event args of the event.</param>
+        private void CaseSensitiveRibbonCheckBoxPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (!string.IsNullOrEmpty(FilterRibbonTextBox.Text) && e.PropertyName == RibbonCheckBoxVM.PROP_IS_CHECKED)
             {
@@ -124,6 +134,9 @@ namespace Channel9Downloader.ViewModels.Categories
             }
         }
 
+        /// <summary>
+        /// Refreshes all category viewmodels.
+        /// </summary>
         private void RefreshAllLists()
         {
             _seriesSelectionVM.Refresh();

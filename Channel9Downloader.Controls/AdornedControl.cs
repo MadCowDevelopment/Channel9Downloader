@@ -17,39 +17,48 @@ namespace Channel9Downloader.Controls
         /// <summary>
         /// Register <see cref="AdornerContent"/> dependency property.
         /// </summary>
-        public static readonly DependencyProperty AdornerContentProperty = 
-            DependencyProperty.Register("AdornerContent", typeof(object), typeof(AdornedControl),
-                new FrameworkPropertyMetadata(AdornerContentPropertyChanged));
+        public static readonly DependencyProperty AdornerContentProperty = DependencyProperty.Register(
+            "AdornerContent",
+            typeof(object),
+            typeof(AdornedControl),
+            new FrameworkPropertyMetadata(AdornerContentPropertyChanged));
 
         /// <summary>
         /// Register <see cref="AdornerOffsetX"/> dependency property.
         /// </summary>
-        public static readonly DependencyProperty AdornerOffsetXProperty = 
-            DependencyProperty.Register("AdornerOffsetX", typeof(double), typeof(AdornedControl));
+        public static readonly DependencyProperty AdornerOffsetXProperty = DependencyProperty.Register(
+            "AdornerOffsetX", typeof(double), typeof(AdornedControl));
 
         /// <summary>
         /// Register <see cref="AdornerOffsetY"/> dependency property.
         /// </summary>
-        public static readonly DependencyProperty AdornerOffsetYProperty = 
-            DependencyProperty.Register("AdornerOffsetY", typeof(double), typeof(AdornedControl));
+        public static readonly DependencyProperty AdornerOffsetYProperty = DependencyProperty.Register(
+            "AdornerOffsetY", typeof(double), typeof(AdornedControl));
 
         /// <summary>
         /// Command to hide the Adorner.
         /// </summary>
-        public static readonly RoutedCommand HideAdornerCommand = new RoutedCommand("HideAdorner", typeof(AdornedControl));
+        public static readonly RoutedCommand HideAdornerCommand = new RoutedCommand(
+            "HideAdorner", typeof(AdornedControl));
 
         /// <summary>
         /// Register <see cref="HorizontalAdornerPlacement"/> dependency property.
         /// </summary>
-        public static readonly DependencyProperty HorizontalAdornerPlacementProperty = 
-            DependencyProperty.Register("HorizontalAdornerPlacement", typeof(AdornerPlacement), typeof(AdornedControl),
+        public static readonly DependencyProperty HorizontalAdornerPlacementProperty =
+            DependencyProperty.Register(
+                "HorizontalAdornerPlacement",
+                typeof(AdornerPlacement),
+                typeof(AdornedControl),
                 new FrameworkPropertyMetadata(AdornerPlacement.Inside));
 
         /// <summary>
         /// Register <see cref="IsAdornerVisible"/> dependency property.
         /// </summary>
-        public static readonly DependencyProperty IsAdornerVisibleProperty = 
-            DependencyProperty.Register("IsAdornerVisible", typeof(bool), typeof(AdornedControl),
+        public static readonly DependencyProperty IsAdornerVisibleProperty =
+            DependencyProperty.Register(
+                "IsAdornerVisible",
+                typeof(bool),
+                typeof(AdornedControl),
                 new FrameworkPropertyMetadata(IsAdornerVisiblePropertyChanged));
 
         /// <summary>
@@ -60,8 +69,11 @@ namespace Channel9Downloader.Controls
         /// <summary>
         /// Register <see cref="VerticalAdornerPlacement"/> dependency property.
         /// </summary>
-        public static readonly DependencyProperty VerticalAdornerPlacementProperty = 
-            DependencyProperty.Register("VerticalAdornerPlacement", typeof(AdornerPlacement), typeof(AdornedControl),
+        public static readonly DependencyProperty VerticalAdornerPlacementProperty =
+            DependencyProperty.Register(
+                "VerticalAdornerPlacement",
+                typeof(AdornerPlacement),
+                typeof(AdornedControl),
                 new FrameworkPropertyMetadata(AdornerPlacement.Inside));
 
         /// <summary>
