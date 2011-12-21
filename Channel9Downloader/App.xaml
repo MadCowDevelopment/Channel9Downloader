@@ -8,6 +8,8 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="ResourceDictionaries\ViewModelDataTemplates.xaml"/>
+                <ResourceDictionary Source="ResourceDictionaries\HeaderTemplates.xaml"/>
+                <ResourceDictionary Source="ResourceDictionaries\TemplateSelectors.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

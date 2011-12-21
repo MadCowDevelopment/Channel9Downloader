@@ -9,7 +9,7 @@ namespace Channel9Downloader.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var isEnabled = (bool) value;
-            return isEnabled ? "Active" : "Inactive";
+            return isEnabled ? "Enabled" : "Disabled";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

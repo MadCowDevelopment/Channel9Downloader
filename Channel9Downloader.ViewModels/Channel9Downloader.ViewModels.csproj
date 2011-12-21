@@ -50,6 +50,7 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Categories\CategoriesVM.cs" />
+    <Compile Include="Categories\CategorySelectionVM.cs" />
     <Compile Include="Categories\ISeriesSelectionVM.cs" />
     <Compile Include="Categories\IShowSelectionVM.cs" />
     <Compile Include="Categories\ITagSelectionVM.cs" />

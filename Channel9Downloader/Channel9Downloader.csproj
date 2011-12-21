@@ -63,7 +63,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="CategoryHeaderTemplateSelector.cs" />
+    <Compile Include="TemplateSelectors\CategoryHeaderTemplateSelector.cs" />
+    <Compile Include="Views\CategoriesSelectionView.xaml.cs">
+      <DependentUpon>CategoriesSelectionView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\CategoriesView.xaml.cs">
       <DependentUpon>CategoriesView.xaml</DependentUpon>
     </Compile>
@@ -88,7 +91,19 @@
     <Compile Include="Views\TagSelectionView.xaml.cs">
       <DependentUpon>TagSelectionView.xaml</DependentUpon>
     </Compile>
+    <Page Include="ResourceDictionaries\HeaderTemplates.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ResourceDictionaries\RibbonResources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResourceDictionaries\TemplateSelectors.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CategoriesSelectionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -221,6 +236,12 @@
   <ItemGroup>
     <Resource Include="Images\Ribbon\StartLarge.png" />
     <Resource Include="Images\Ribbon\StopLarge.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Categories\Enabled.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Categories\Disabled.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -117,7 +117,7 @@ namespace Channel9Downloader.DataAccess
         /// <param name="baseUrl">The base URL used for retrieving shows or series.</param>
         /// <param name="pageNumber">The number of the page to retrieve.</param>
         /// <returns>Returns a list of recurring categories from a specific page.</returns>
-        private List<RecurringCategory> GetShowsOrSeriesFromPage(string baseUrl, int pageNumber)
+        private List<Category> GetShowsOrSeriesFromPage(string baseUrl, int pageNumber)
         {
             var url = string.Format(baseUrl, pageNumber);
             var document = GetDocument(url);
@@ -133,7 +133,7 @@ namespace Channel9Downloader.DataAccess
                     let description =
                         entry.Elements("div").Where(p => p.Attribute("class").Value == "description").FirstOrDefault().Value.Trim()
                     select
-                        new RecurringCategory { Description = description, RelativePath = relativePath, Title = title })
+                        new Category { Description = description, RelativePath = relativePath, Title = title })
                 .ToList();
         }
 
@@ -185,12 +185,12 @@ namespace Channel9Downloader.DataAccess
         /// </summary>
         /// <param name="baseUrl">The base URL used for retrieving shows or series.</param>
         /// <returns>Returns a list of recurring categories.</returns>
-        private IEnumerable<RecurringCategory> RetrieveShowsOrSeries(string baseUrl)
+        private IEnumerable<Category> RetrieveShowsOrSeries(string baseUrl)
         {
-            var result = new List<RecurringCategory>();
+            var result = new List<Category>();
 
             int i = 1;
-            List<RecurringCategory> shows;
+            List<Category> shows;
             while ((shows = GetShowsOrSeriesFromPage(baseUrl, i++)) != null && shows.Count > 0)
             {
                 result.AddRange(shows);

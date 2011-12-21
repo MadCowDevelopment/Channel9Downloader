@@ -17,7 +17,7 @@
         Name="LoadingAdorner" IsAdornerVisible="{Binding IsAdornerVisible}"
         AdornerContent="{Binding AdornerContent}">
 
-        <ListView x:Name ="ShowList" Margin="10"
+        <ListView x:Name ="ShowList"
                   ItemsSource="{Binding Downloads}"
                   AlternationCount="2">
             <ListView.GroupStyle>

@@ -16,7 +16,7 @@ namespace Channel9Downloader.ViewModels.Categories
         /// <summary>
         /// Gets a collection of series.
         /// </summary>
-        CollectionView SeriesCollectionView
+        CollectionView CategoriesCollectionView
         {
             get;
         }

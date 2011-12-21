@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Data;
 
-namespace Channel9Downloader
+namespace Channel9Downloader.TemplateSelectors
 {
     public class CategoryHeaderTemplateSelector : DataTemplateSelector
     {
@@ -14,9 +14,14 @@ namespace Channel9Downloader
             {
                 var collectionViewGroup = item as CollectionViewGroup;
 
-                if (collectionViewGroup.Name.Equals("Active") || collectionViewGroup.Name.Equals("Inactive"))
+                if (collectionViewGroup.Name.Equals("Enabled"))
                 {
-                    return element.FindResource("IsEnabledGroupTemplate") as DataTemplate;
+                    return element.FindResource("EnabledGroupTemplate") as DataTemplate;
+                }
+
+                if (collectionViewGroup.Name.Equals("Disabled"))
+                {
+                    return element.FindResource("DisabledGroupTemplate") as DataTemplate;
                 }
                 
                 return element.FindResource("AlphaticalGroupTemplate") as DataTemplate;

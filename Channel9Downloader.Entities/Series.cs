@@ -6,20 +6,20 @@ namespace Channel9Downloader.Entities
     /// This class holds information about a series.
     /// </summary>
     [DataContract]
-    public class Series : RecurringCategory
+    public class Series : Category
     {
         #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Series"/> class.
-        /// Copy constructor for <see cref="RecurringCategory"/>.
+        /// Copy constructor for <see cref="Category"/>.
         /// </summary>
-        /// <param name="recurringCategory">The recurring category whose values should be copied.</param>
-        public Series(RecurringCategory recurringCategory)
+        /// <param name="category">The recurring category whose values should be copied.</param>
+        public Series(Category category)
         {
-            Description = recurringCategory.Description;
-            RelativePath = recurringCategory.RelativePath;
-            Title = recurringCategory.Title;
+            Description = category.Description;
+            RelativePath = category.RelativePath;
+            Title = category.Title;
         }
 
         #endregion Constructors

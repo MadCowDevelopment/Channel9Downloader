@@ -14,9 +14,9 @@ namespace Channel9Downloader.ViewModels.Categories
         #region Properties
 
         /// <summary>
-        /// Gets a collection view of tags that the view can bind to.
+        /// Gets a collection view of categories that the view can bind to.
         /// </summary>
-        CollectionView TagsCollectionView
+        CollectionView CategoriesCollectionView
         {
             get;
         }
