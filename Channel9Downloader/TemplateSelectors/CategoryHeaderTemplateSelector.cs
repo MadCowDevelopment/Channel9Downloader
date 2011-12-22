@@ -9,6 +9,8 @@ namespace Channel9Downloader.TemplateSelectors
     /// </summary>
     public class CategoryHeaderTemplateSelector : DataTemplateSelector
     {
+        #region Public Methods
+
         /// <summary>
         /// Selects the correct template for category selection group headers.
         /// </summary>
@@ -32,11 +34,13 @@ namespace Channel9Downloader.TemplateSelectors
                 {
                     return element.FindResource("DisabledGroupTemplate") as DataTemplate;
                 }
-                
+
                 return element.FindResource("AlphaticalGroupTemplate") as DataTemplate;
             }
 
             return null;
         }
+
+        #endregion Public Methods
     }
 }

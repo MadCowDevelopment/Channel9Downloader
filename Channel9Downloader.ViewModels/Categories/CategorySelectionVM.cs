@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Data;
+
 using Channel9Downloader.Converters;
 using Channel9Downloader.Entities;
 using Channel9Downloader.ViewModels.Framework;
@@ -13,17 +14,22 @@ namespace Channel9Downloader.ViewModels.Categories
     /// This class handles the selection views for the different categories.
     /// </summary>
     /// <typeparam name="T">The type of category.</typeparam>
-    public abstract class CategorySelectionVM<T> : BaseViewModel, ICategorySelectionVM<T> where T : Category
+    public abstract class CategorySelectionVM<T> : BaseViewModel, ICategorySelectionVM<T>
+        where T : Category
     {
-        /// <summary>
-        /// Backing field for <see cref="CategoriesCollectionView"/> property.
-        /// </summary>
-        private CollectionView _categoryCollectionView;
+        #region Fields
 
         /// <summary>
         /// The collection of categories.
         /// </summary>
         private ObservableCollection<T> _categories;
+
+        /// <summary>
+        /// Backing field for <see cref="CategoriesCollectionView"/> property.
+        /// </summary>
+        private CollectionView _categoryCollectionView;
+
+        #endregion Fields
 
         #region Public Properties
 
@@ -78,7 +84,7 @@ namespace Channel9Downloader.ViewModels.Categories
             CategoriesCollectionView.Filter = filter;
             OnInitialized();
         }
-        
+
         /// <summary>
         /// Refreshes the collection view.
         /// </summary>
@@ -92,12 +98,20 @@ namespace Channel9Downloader.ViewModels.Categories
             CategoriesCollectionView.Refresh();
         }
 
+        #endregion Public Methods
+
+        #region Protected Methods
+
         /// <summary>
         /// Can be overwritten by subclasses and is called after the collections are initialized.
         /// </summary>
         protected virtual void OnInitialized()
         {
         }
+
+        #endregion Protected Methods
+
+        #region Private Methods
 
         /// <summary>
         /// Event handler for the property changed event of tags.
@@ -115,6 +129,6 @@ namespace Channel9Downloader.ViewModels.Categories
             }
         }
 
-        #endregion Public Methods
+        #endregion Private Methods
     }
 }

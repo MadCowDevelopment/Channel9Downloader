@@ -8,10 +8,30 @@ namespace Channel9Downloader.Entities
     [DataContract]
     public class Category : ObservableModel
     {
-        private bool _isEnabled;
+        #region Fields
+
+        /// <summary>
+        /// Name of <see cref="IsEnabled"/> property.
+        /// </summary>
         public const string PROP_IS_ENABLED = "IsEnabled";
 
+        /// <summary>
+        /// Backing field for <see cref="IsEnabled"/> property.
+        /// </summary>
+        private bool _isEnabled;
+
+        #endregion Fields
+
         #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the categories description.
+        /// </summary>
+        [DataMember]
+        public string Description
+        {
+            get; set;
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether this category is enabled.
@@ -45,15 +65,6 @@ namespace Channel9Downloader.Entities
         /// </summary>
         [DataMember]
         public string Title
-        {
-            get; set;
-        }
-
-        /// <summary>
-        /// Gets or sets the categories description.
-        /// </summary>
-        [DataMember]
-        public string Description
         {
             get; set;
         }

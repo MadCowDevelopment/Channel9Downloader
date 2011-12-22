@@ -5,14 +5,24 @@ namespace Channel9Downloader.ViewModels.Ribbon
     /// </summary>
     public interface IRibbonTextBoxVM : IRibbonItemVM
     {
-        /// <summary>
-        /// Gets or sets the textbox width.
-        /// </summary>
-        int TextBoxWidth { get; set; }
+        #region Properties
 
         /// <summary>
         /// Gets or sets the text.
         /// </summary>
-        string Text { get; set; }
+        string Text
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Gets or sets the textbox width.
+        /// </summary>
+        int TextBoxWidth
+        {
+            get; set;
+        }
+
+        #endregion Properties
     }
 }

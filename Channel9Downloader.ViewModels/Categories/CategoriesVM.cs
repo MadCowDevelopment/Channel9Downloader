@@ -101,52 +101,24 @@ namespace Channel9Downloader.ViewModels.Categories
 
             FilterRibbonTextBox = filterRibbonTextBoxVM;
             FilterRibbonTextBox.TextBoxWidth = 100;
-            FilterRibbonTextBox.PropertyChanged += this.FilterRibbonTextBoxPropertyChanged;
+            FilterRibbonTextBox.PropertyChanged += FilterRibbonTextBoxPropertyChanged;
 
             CaseSensitiveRibbonCheckBox = caseSensitiveRibbonCheckBoxVM;
             CaseSensitiveRibbonCheckBox.Label = "case sensitive";
-            CaseSensitiveRibbonCheckBox.PropertyChanged += this.CaseSensitiveRibbonCheckBoxPropertyChanged;
-        }
-
-        /// <summary>
-        /// Handles the property changed event of the filter ribbon text box.
-        /// </summary>
-        /// <param name="sender">Sender of the event.</param>
-        /// <param name="e">Event args of the event.</param>
-        private void FilterRibbonTextBoxPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == RibbonTextBoxVM.PROP_TEXT)
-            {
-                RefreshAllLists();
-            }
-        }
-
-        /// <summary>
-        /// Handles the property changed event of the case sensitive check box.
-        /// </summary>
-        /// <param name="sender">Sender of the event.</param>
-        /// <param name="e">Event args of the event.</param>
-        private void CaseSensitiveRibbonCheckBoxPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (!string.IsNullOrEmpty(FilterRibbonTextBox.Text) && e.PropertyName == RibbonCheckBoxVM.PROP_IS_CHECKED)
-            {
-                RefreshAllLists();
-            }
-        }
-
-        /// <summary>
-        /// Refreshes all category viewmodels.
-        /// </summary>
-        private void RefreshAllLists()
-        {
-            _seriesSelectionVM.Refresh();
-            _showSelectionVM.Refresh();
-            _tagSelectionVM.Refresh();
+            CaseSensitiveRibbonCheckBox.PropertyChanged += CaseSensitiveRibbonCheckBoxPropertyChanged;
         }
 
         #endregion Constructors
 
         #region Public Properties
+
+        /// <summary>
+        /// Gets the case sensitive checkbox.
+        /// </summary>
+        public IRibbonCheckBoxVM CaseSensitiveRibbonCheckBox
+        {
+            get; private set;
+        }
 
         /// <summary>
         /// Gets or sets the current content that should be shown in the view.
@@ -163,6 +135,14 @@ namespace Channel9Downloader.ViewModels.Categories
                 _currentContent = value;
                 RaisePropertyChanged(() => CurrentContent);
             }
+        }
+
+        /// <summary>
+        /// Gets the filter ribbon text box.
+        /// </summary>
+        public IRibbonTextBoxVM FilterRibbonTextBox
+        {
+            get; private set;
         }
 
         /// <summary>
@@ -230,16 +210,6 @@ namespace Channel9Downloader.ViewModels.Categories
             }
         }
 
-        /// <summary>
-        /// Gets the filter ribbon text box.
-        /// </summary>
-        public IRibbonTextBoxVM FilterRibbonTextBox { get; private set; }
-
-        /// <summary>
-        /// Gets the case sensitive checkbox.
-        /// </summary>
-        public IRibbonCheckBoxVM CaseSensitiveRibbonCheckBox { get; private set; }
-
         #endregion Public Properties
 
         #region Public Methods
@@ -252,6 +222,11 @@ namespace Channel9Downloader.ViewModels.Categories
             InitializeCategoriesAsync(TaskScheduler.FromCurrentSynchronizationContext());
         }
 
+        /// <summary>
+        /// Filters the categories using the entered text in the filter text box.
+        /// </summary>
+        /// <param name="obj">The object to filter.</param>
+        /// <returns>Returns true if the object matches the filter criteria, false otherwise.</returns>
         public bool TextFilter(object obj)
         {
             if (string.IsNullOrEmpty(FilterRibbonTextBox.Text))
@@ -298,18 +273,35 @@ namespace Channel9Downloader.ViewModels.Categories
             return false;
         }
 
-        private string ToLowerIfCaseSensitiveIsActive(string text)
-        {
-            var result = CaseSensitiveRibbonCheckBox.IsChecked
-                                 ? text
-                                 : text.ToLower();
-
-            return result;
-        }
-
         #endregion Public Methods
 
         #region Private Methods
+
+        /// <summary>
+        /// Handles the property changed event of the case sensitive check box.
+        /// </summary>
+        /// <param name="sender">Sender of the event.</param>
+        /// <param name="e">Event args of the event.</param>
+        private void CaseSensitiveRibbonCheckBoxPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(FilterRibbonTextBox.Text) && e.PropertyName == RibbonCheckBoxVM.PROP_IS_CHECKED)
+            {
+                RefreshAllLists();
+            }
+        }
+
+        /// <summary>
+        /// Handles the property changed event of the filter ribbon text box.
+        /// </summary>
+        /// <param name="sender">Sender of the event.</param>
+        /// <param name="e">Event args of the event.</param>
+        private void FilterRibbonTextBoxPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == RibbonTextBoxVM.PROP_TEXT)
+            {
+                RefreshAllLists();
+            }
+        }
 
         /// <summary>
         /// Initializes categories in the background.
@@ -383,6 +375,30 @@ namespace Channel9Downloader.ViewModels.Categories
         private void OnUpdateCategories()
         {
             UpdateCategoriesAsync(TaskScheduler.FromCurrentSynchronizationContext());
+        }
+
+        /// <summary>
+        /// Refreshes all category viewmodels.
+        /// </summary>
+        private void RefreshAllLists()
+        {
+            _seriesSelectionVM.Refresh();
+            _showSelectionVM.Refresh();
+            _tagSelectionVM.Refresh();
+        }
+
+        /// <summary>
+        /// Converts a string to lower case if the case sensitive check box is checked.
+        /// </summary>
+        /// <param name="text">The text to convert.</param>
+        /// <returns>Returns a lower case string if case sensitive is active, the original string otherwise.</returns>
+        private string ToLowerIfCaseSensitiveIsActive(string text)
+        {
+            var result = CaseSensitiveRibbonCheckBox.IsChecked
+                                 ? text
+                                 : text.ToLower();
+
+            return result;
         }
 
         /// <summary>

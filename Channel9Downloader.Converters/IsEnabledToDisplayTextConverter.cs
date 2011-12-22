@@ -9,6 +9,8 @@ namespace Channel9Downloader.Converters
     /// </summary>
     public class IsEnabledToDisplayTextConverter : IValueConverter
     {
+        #region Public Methods
+
         /// <summary>
         /// Converts a boolean value to a more readable string representation.
         /// </summary>
@@ -41,5 +43,7 @@ namespace Channel9Downloader.Converters
         {
             throw new NotImplementedException();
         }
+
+        #endregion Public Methods
     }
 }

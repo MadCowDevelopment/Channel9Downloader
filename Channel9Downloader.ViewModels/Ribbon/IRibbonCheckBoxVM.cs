@@ -5,14 +5,24 @@ namespace Channel9Downloader.ViewModels.Ribbon
     /// </summary>
     public interface IRibbonCheckBoxVM : IRibbonItemVM
     {
-        /// <summary>
-        /// Gets or sets the label.
-        /// </summary>
-        string Label { get; set; }
+        #region Properties
 
         /// <summary>
         /// Gets or sets a value indicating whether the check box is checked.
         /// </summary>
-        bool IsChecked { get; set; }
+        bool IsChecked
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Gets or sets the label.
+        /// </summary>
+        string Label
+        {
+            get; set;
+        }
+
+        #endregion Properties
     }
 }

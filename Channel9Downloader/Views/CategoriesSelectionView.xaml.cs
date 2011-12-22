@@ -5,6 +5,8 @@
     /// </summary>
     public partial class CategoriesSelectionView
     {
+        #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="CategoriesSelectionView"/> class.
         /// </summary>
@@ -12,5 +14,7 @@
         {
             InitializeComponent();
         }
+
+        #endregion Constructors
     }
 }

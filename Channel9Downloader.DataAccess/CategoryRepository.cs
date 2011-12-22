@@ -2,6 +2,7 @@
 using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
+
 using Channel9Downloader.Entities;
 
 namespace Channel9Downloader.DataAccess
@@ -115,6 +116,28 @@ namespace Channel9Downloader.DataAccess
 
         #endregion Public Methods
 
+        #region Private Static Methods
+
+        /// <summary>
+        /// Sets the categories enabled depending on whether they have been enabled before.
+        /// </summary>
+        /// <param name="categories">The new categories.</param>
+        /// <param name="existingCategories">The old categories.</param>
+        private static void SetIsEnabled(IEnumerable<Category> categories, IEnumerable<Category> existingCategories)
+        {
+            foreach (var category in categories)
+            {
+                var category1 = category;
+                var existingCategory = existingCategories.FirstOrDefault(p => p.RelativePath == category1.RelativePath);
+                if (existingCategory != null)
+                {
+                    category.IsEnabled = existingCategory.IsEnabled;
+                }
+            }
+        }
+
+        #endregion Private Static Methods
+
         #region Private Methods
 
         /// <summary>
@@ -145,24 +168,6 @@ namespace Channel9Downloader.DataAccess
             }
 
             _categories = new Categories(tags, shows, series);
-        }
-
-        /// <summary>
-        /// Sets the categories enabled depending on whether they have been enabled before.
-        /// </summary>
-        /// <param name="categories">The new categories.</param>
-        /// <param name="existingCategories">The old categories.</param>
-        private static void SetIsEnabled(IEnumerable<Category> categories, IEnumerable<Category> existingCategories)
-        {
-            foreach (var category in categories)
-            {
-                var category1 = category;
-                var existingCategory = existingCategories.FirstOrDefault(p => p.RelativePath == category1.RelativePath);
-                if (existingCategory != null)
-                {
-                    category.IsEnabled = existingCategory.IsEnabled;
-                }
-            }
         }
 
         #endregion Private Methods

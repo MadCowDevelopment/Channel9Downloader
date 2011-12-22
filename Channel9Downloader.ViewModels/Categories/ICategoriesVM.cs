@@ -15,11 +15,27 @@ namespace Channel9Downloader.ViewModels.Categories
         #region Properties
 
         /// <summary>
+        /// Gets the case sensitive text box.
+        /// </summary>
+        IRibbonCheckBoxVM CaseSensitiveRibbonCheckBox
+        {
+            get;
+        }
+
+        /// <summary>
         /// Gets or sets the current content that should be shown in the view.
         /// </summary>
         IBaseViewModel CurrentContent
         {
             get; set;
+        }
+
+        /// <summary>
+        /// Gets the filter ribbon text box.
+        /// </summary>
+        IRibbonTextBoxVM FilterRibbonTextBox
+        {
+            get;
         }
 
         /// <summary>
@@ -61,16 +77,6 @@ namespace Channel9Downloader.ViewModels.Categories
         {
             get;
         }
-
-        /// <summary>
-        /// Gets the filter ribbon text box.
-        /// </summary>
-        IRibbonTextBoxVM FilterRibbonTextBox { get; }
-
-        /// <summary>
-        /// Gets the case sensitive text box.
-        /// </summary>
-        IRibbonCheckBoxVM CaseSensitiveRibbonCheckBox { get; }
 
         #endregion Properties
 

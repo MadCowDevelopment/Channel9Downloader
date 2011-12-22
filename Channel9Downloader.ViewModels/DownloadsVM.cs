@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.ComponentModel.Composition;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -13,8 +13,6 @@ using Channel9Downloader.ViewModels.Framework;
 
 namespace Channel9Downloader.ViewModels
 {
-    using System.ComponentModel;
-
     /// <summary>
     /// This class manages the downloads view.
     /// </summary>
@@ -38,6 +36,11 @@ namespace Channel9Downloader.ViewModels
         /// The main thread dispatcher.
         /// </summary>
         private readonly Dispatcher _mainThreadDispatcher;
+
+        /// <summary>
+        /// Backing field for <see cref="CleanDownloadsCommand"/> property.
+        /// </summary>
+        private ICommand _cleanDownloadsCommand;
 
         /// <summary>
         /// Backing field for <see cref="IsDownloading"/> class.
@@ -105,6 +108,18 @@ namespace Channel9Downloader.ViewModels
         #region Public Properties
 
         /// <summary>
+        /// Gets a command to clean downloads.
+        /// </summary>
+        public ICommand CleanDownloadsCommand
+        {
+            get
+            {
+                return _cleanDownloadsCommand
+                       ?? (_cleanDownloadsCommand = new RelayCommand(p => OnCleanDownloads(), p => !IsAdornerVisible));
+            }
+        }
+
+        /// <summary>
         /// Gets a list of all downloads.
         /// </summary>
         public ListCollectionView Downloads
@@ -170,45 +185,6 @@ namespace Channel9Downloader.ViewModels
             }
         }
 
-        /// <summary>
-        /// Backing field for <see cref="CleanDownloadsCommand"/> property.
-        /// </summary>
-        private ICommand _cleanDownloadsCommand;
-
-        /// <summary>
-        /// Gets a command to clean downloads.
-        /// </summary>
-        public ICommand CleanDownloadsCommand
-        {
-            get
-            {
-                return _cleanDownloadsCommand
-                       ?? (_cleanDownloadsCommand = new RelayCommand(p => OnCleanDownloads(), p => !IsAdornerVisible));
-            }
-        }
-
-        /// <summary>
-        /// Removes downloads that are finished or skipped.
-        /// </summary>
-        private void OnCleanDownloads()
-        {
-            if (_downloads == null)
-            {
-                return;
-            }
-
-            for (int i = _downloads.Count - 1; i >= 0; i--)
-            {
-                var downloadItem = _downloads[i];
-                if (downloadItem.DownloadState == DownloadState.Finished ||
-                    downloadItem.DownloadState == DownloadState.Skipped)
-                {
-                    _downloads.Remove(downloadItem);
-                    downloadItem.PropertyChanged -= this.DownloadItemPropertyChanged;
-                }
-            }
-        }
-
         #endregion Public Properties
 
         #region Public Methods
@@ -228,14 +204,12 @@ namespace Channel9Downloader.ViewModels
         #region Private Methods
 
         /// <summary>
-        /// Adds a download to the list of queued downloads.
+        /// Adds a <see cref="DownloadItem"/> on the main thread.
         /// </summary>
-        /// <param name="sender">Sender of the event.</param>
-        /// <param name="e">Event args of the event.</param>
-        private void DownloadManagerDownloadAdded(object sender, DownloadAddedEventArgs e)
+        /// <param name="downloadItem">The download to add.</param>
+        private void AddDownloadItemOnMainThread(DownloadItem downloadItem)
         {
-            e.DownloadItem.PropertyChanged += this.DownloadItemPropertyChanged;
-            this.AddDownloadItemOnMainThread(e.DownloadItem);
+            _mainThreadDispatcher.Invoke(new CollectionInitializerDelegate(p => _downloads.Add(p)), downloadItem);
         }
 
         /// <summary>
@@ -260,24 +234,14 @@ namespace Channel9Downloader.ViewModels
         }
 
         /// <summary>
-        /// Removes a download from the list of queued downloads.
+        /// Adds a download to the list of queued downloads.
         /// </summary>
         /// <param name="sender">Sender of the event.</param>
         /// <param name="e">Event args of the event.</param>
-        private void DownloadManagerDownloadRemoved(object sender, DownloadRemovedEventArgs e)
+        private void DownloadManagerDownloadAdded(object sender, DownloadAddedEventArgs e)
         {
-            e.DownloadItem.PropertyChanged -= this.DownloadItemPropertyChanged;
-            this.RemoveDownloadItemOnMainThread(e.DownloadItem);
-        }
-
-        private void RemoveDownloadItemOnMainThread(DownloadItem downloadItem)
-        {
-            _mainThreadDispatcher.Invoke(new CollectionInitializerDelegate(p => _downloads.Remove(p)), downloadItem);
-        }
-        
-        private void AddDownloadItemOnMainThread(DownloadItem downloadItem)
-        {
-            _mainThreadDispatcher.Invoke(new CollectionInitializerDelegate(p => _downloads.Add(p)), downloadItem);            
+            e.DownloadItem.PropertyChanged += DownloadItemPropertyChanged;
+            AddDownloadItemOnMainThread(e.DownloadItem);
         }
 
         /// <summary>
@@ -301,6 +265,17 @@ namespace Channel9Downloader.ViewModels
         }
 
         /// <summary>
+        /// Removes a download from the list of queued downloads.
+        /// </summary>
+        /// <param name="sender">Sender of the event.</param>
+        /// <param name="e">Event args of the event.</param>
+        private void DownloadManagerDownloadRemoved(object sender, DownloadRemovedEventArgs e)
+        {
+            e.DownloadItem.PropertyChanged -= DownloadItemPropertyChanged;
+            RemoveDownloadItemOnMainThread(e.DownloadItem);
+        }
+
+        /// <summary>
         /// Initializes categories in the background.
         /// </summary>
         private void InitializeDownloadManagerAsync()
@@ -314,6 +289,28 @@ namespace Channel9Downloader.ViewModels
                 CommandManager.InvalidateRequerySuggested();
             }, continuationTaskScheduler);
             task.Start();
+        }
+
+        /// <summary>
+        /// Removes downloads that are finished or skipped.
+        /// </summary>
+        private void OnCleanDownloads()
+        {
+            if (_downloads == null)
+            {
+                return;
+            }
+
+            for (int i = _downloads.Count - 1; i >= 0; i--)
+            {
+                var downloadItem = _downloads[i];
+                if (downloadItem.DownloadState == DownloadState.Finished ||
+                    downloadItem.DownloadState == DownloadState.Skipped)
+                {
+                    _downloads.Remove(downloadItem);
+                    downloadItem.PropertyChanged -= DownloadItemPropertyChanged;
+                }
+            }
         }
 
         /// <summary>
@@ -346,6 +343,15 @@ namespace Channel9Downloader.ViewModels
                     CommandManager.InvalidateRequerySuggested();
                 }, continuationTaskScheduler);
             task.Start();
+        }
+
+        /// <summary>
+        /// Removes a <see cref="DownloadItem"/> on the main thread.
+        /// </summary>
+        /// <param name="downloadItem">The download to remove.</param>
+        private void RemoveDownloadItemOnMainThread(DownloadItem downloadItem)
+        {
+            _mainThreadDispatcher.Invoke(new CollectionInitializerDelegate(p => _downloads.Remove(p)), downloadItem);
         }
 
         #endregion Private Methods

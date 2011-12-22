@@ -15,6 +15,14 @@ namespace Channel9Downloader.ViewModels
         #region Properties
 
         /// <summary>
+        /// Gets a command to clean up downloads.
+        /// </summary>
+        ICommand CleanDownloadsCommand
+        {
+            get;
+        }
+
+        /// <summary>
         /// Gets the downloads.
         /// </summary>
         ListCollectionView Downloads
@@ -53,11 +61,6 @@ namespace Channel9Downloader.ViewModels
         {
             get;
         }
-
-        /// <summary>
-        /// Gets a command to clean up downloads.
-        /// </summary>
-        ICommand CleanDownloadsCommand { get; }
 
         #endregion Properties
 

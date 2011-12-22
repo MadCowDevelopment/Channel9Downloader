@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+
 using Channel9Downloader.DataAccess;
 using Channel9Downloader.Entities;
 
@@ -107,17 +108,7 @@ namespace Channel9Downloader.Test.Integration
 
         #endregion Public Methods
 
-        #region Private Methods
-
-        /// <summary>
-        /// Creates a category browser.
-        /// </summary>
-        /// <returns>Returns a category browser.</returns>
-        private static CategoryScraper CreateChannel9CategoryBrowser()
-        {
-            var webDownloader = new WebDownloader();
-            return new CategoryScraper(webDownloader);
-        }
+        #region Private Static Methods
 
         /// <summary>
         /// Checks whether all elements have distinct relative paths.
@@ -145,6 +136,16 @@ namespace Channel9Downloader.Test.Integration
             return true;
         }
 
-        #endregion Private Methods
+        /// <summary>
+        /// Creates a category browser.
+        /// </summary>
+        /// <returns>Returns a category browser.</returns>
+        private static CategoryScraper CreateChannel9CategoryBrowser()
+        {
+            var webDownloader = new WebDownloader();
+            return new CategoryScraper(webDownloader);
+        }
+
+        #endregion Private Static Methods
     }
 }

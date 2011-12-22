@@ -12,6 +12,8 @@ namespace Channel9Downloader.ViewModels.Categories
     [Export(typeof(ITagSelectionVM))]
     public class TagSelectionVM : CategorySelectionVM<Tag>, ITagSelectionVM
     {
+        #region Protected Methods
+
         /// <summary>
         /// Adds another group description for the title so that alphabetical groups are shown.
         /// </summary>
@@ -20,5 +22,7 @@ namespace Channel9Downloader.ViewModels.Categories
             CategoriesCollectionView.GroupDescriptions.Add(
                 new PropertyGroupDescription("Title", new TagTitleToCharacterConverter()));
         }
+
+        #endregion Protected Methods
     }
 }

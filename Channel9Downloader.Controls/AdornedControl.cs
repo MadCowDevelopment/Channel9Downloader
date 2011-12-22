@@ -44,7 +44,7 @@ namespace Channel9Downloader.Controls
         /// <summary>
         /// Register <see cref="HorizontalAdornerPlacement"/> dependency property.
         /// </summary>
-        public static readonly DependencyProperty HorizontalAdornerPlacementProperty =
+        public static readonly DependencyProperty HorizontalAdornerPlacementProperty = 
             DependencyProperty.Register(
                 "HorizontalAdornerPlacement",
                 typeof(AdornerPlacement),
@@ -54,7 +54,7 @@ namespace Channel9Downloader.Controls
         /// <summary>
         /// Register <see cref="IsAdornerVisible"/> dependency property.
         /// </summary>
-        public static readonly DependencyProperty IsAdornerVisibleProperty =
+        public static readonly DependencyProperty IsAdornerVisibleProperty = 
             DependencyProperty.Register(
                 "IsAdornerVisible",
                 typeof(bool),
@@ -69,7 +69,7 @@ namespace Channel9Downloader.Controls
         /// <summary>
         /// Register <see cref="VerticalAdornerPlacement"/> dependency property.
         /// </summary>
-        public static readonly DependencyProperty VerticalAdornerPlacementProperty =
+        public static readonly DependencyProperty VerticalAdornerPlacementProperty = 
             DependencyProperty.Register(
                 "VerticalAdornerPlacement",
                 typeof(AdornerPlacement),

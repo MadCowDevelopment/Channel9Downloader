@@ -7,19 +7,32 @@ namespace Channel9Downloader.ViewModels.Ribbon
     /// </summary>
     public interface IRibbonComboBoxVM : IRibbonItemVM
     {
+        #region Properties
+
         /// <summary>
         /// Gets or sets a value indicating whether the combo box is editable.
         /// </summary>
-        bool IsEditable { get; set; }
-
-        /// <summary>
-        /// Gets or sets the text.
-        /// </summary>
-        string Text { get; set; }
+        bool IsEditable
+        {
+            get; set;
+        }
 
         /// <summary>
         /// Gets or sets the items source.
         /// </summary>
-        ObservableCollection<object> ItemsSource { get; set; }
+        ObservableCollection<object> ItemsSource
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Gets or sets the text.
+        /// </summary>
+        string Text
+        {
+            get; set;
+        }
+
+        #endregion Properties
     }
 }

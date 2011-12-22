@@ -18,11 +18,6 @@ namespace Channel9Downloader.DataAccess
         event EventHandler<DownloadAddedEventArgs> DownloadAdded;
 
         /// <summary>
-        /// This event is raised when a download is removed from the download queue.
-        /// </summary>
-        event EventHandler<DownloadRemovedEventArgs> DownloadRemoved;
-
-        /// <summary>
         /// This event is raised when downloading has started.
         /// </summary>
         event EventHandler<EventArgs> DownloadingStarted;
@@ -31,6 +26,11 @@ namespace Channel9Downloader.DataAccess
         /// This event is raised when downloading has stopped.
         /// </summary>
         event EventHandler<EventArgs> DownloadingStopped;
+
+        /// <summary>
+        /// This event is raised when a download is removed from the download queue.
+        /// </summary>
+        event EventHandler<DownloadRemovedEventArgs> DownloadRemoved;
 
         #endregion Events
 

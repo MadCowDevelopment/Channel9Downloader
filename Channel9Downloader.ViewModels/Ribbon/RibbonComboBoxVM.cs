@@ -7,15 +7,15 @@ namespace Channel9Downloader.ViewModels.Ribbon
     /// </summary>
     public class RibbonComboBoxVM : RibbonItemVM, IRibbonComboBoxVM
     {
+        #region Public Properties
+
         /// <summary>
         /// Gets or sets a value indicating whether the combobox is editable.
         /// </summary>
-        public bool IsEditable { get; set; }
-
-        /// <summary>
-        /// Gets or sets the text.
-        /// </summary>
-        public string Text { get; set; }
+        public bool IsEditable
+        {
+            get; set;
+        }
 
         /// <summary>
         /// Gets or sets the items source.
@@ -25,5 +25,15 @@ namespace Channel9Downloader.ViewModels.Ribbon
             get;
             set;
         }
+
+        /// <summary>
+        /// Gets or sets the text.
+        /// </summary>
+        public string Text
+        {
+            get; set;
+        }
+
+        #endregion Public Properties
     }
 }

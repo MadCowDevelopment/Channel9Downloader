@@ -9,15 +9,26 @@ namespace Channel9Downloader.ViewModels.Ribbon
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class RibbonTextBoxVM : RibbonItemVM, IRibbonTextBoxVM
     {
+        #region Fields
+
+        /// <summary>
+        /// Name of the <see cref="Text"/> property.
+        /// </summary>
+        public const string PROP_TEXT = "Text";
+
         /// <summary>
         /// Backing field for <see cref="Text"/> property.
         /// </summary>
         private string _text;
 
         /// <summary>
-        /// Name of the <see cref="Text"/> property.
+        /// Backing field for <see cref="TextBoxWidth"/> property.
         /// </summary>
-        public const string PROP_TEXT = "Text";
+        private int _textBoxWidth;
+
+        #endregion Fields
+
+        #region Public Properties
 
         /// <summary>
         /// Gets or sets the text.
@@ -37,11 +48,6 @@ namespace Channel9Downloader.ViewModels.Ribbon
         }
 
         /// <summary>
-        /// Backing field for <see cref="TextBoxWidth"/> property.
-        /// </summary>
-        private int _textBoxWidth;
-
-        /// <summary>
         /// Gets or sets the textbox width.
         /// </summary>
         public int TextBoxWidth
@@ -57,5 +63,7 @@ namespace Channel9Downloader.ViewModels.Ribbon
                 RaisePropertyChanged(() => TextBoxWidth);
             }
         }
+
+        #endregion Public Properties
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+
 using Channel9Downloader.Entities;
 
 namespace Channel9Downloader.DataAccess.Events
@@ -8,6 +9,8 @@ namespace Channel9Downloader.DataAccess.Events
     /// </summary>
     public class DownloadRemovedEventArgs : EventArgs
     {
+        #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DownloadRemovedEventArgs"/> class.
         /// </summary>
@@ -17,9 +20,18 @@ namespace Channel9Downloader.DataAccess.Events
             DownloadItem = downloadItem;
         }
 
+        #endregion Constructors
+
+        #region Public Properties
+
         /// <summary>
         /// Gets or sets the download that has been removed.
         /// </summary>
-        public DownloadItem DownloadItem { get; set; }
+        public DownloadItem DownloadItem
+        {
+            get; set;
+        }
+
+        #endregion Public Properties
     }
 }
