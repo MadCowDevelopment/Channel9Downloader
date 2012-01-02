@@ -317,22 +317,24 @@ namespace Channel9Downloader.ViewModels.Categories
                     categories = _categoryRepository.GetCategories();
                 });
 
-            task.ContinueWith(x =>
-                {
-                    _seriesSelectionVM = _dependencyComposer.GetExportedValue<ISeriesSelectionVM>();
-                    _seriesSelectionVM.Initialize(categories.Series, TextFilter);
+            task.ContinueWith(
+                x =>
+                    {
+                        _seriesSelectionVM = _dependencyComposer.GetExportedValue<ISeriesSelectionVM>();
+                        _seriesSelectionVM.Initialize(categories.Series, TextFilter);
 
-                    _showSelectionVM = _dependencyComposer.GetExportedValue<IShowSelectionVM>();
-                    _showSelectionVM.Initialize(categories.Shows, TextFilter);
+                        _showSelectionVM = _dependencyComposer.GetExportedValue<IShowSelectionVM>();
+                        _showSelectionVM.Initialize(categories.Shows, TextFilter);
 
-                    _tagSelectionVM = _dependencyComposer.GetExportedValue<ITagSelectionVM>();
-                    _tagSelectionVM.Initialize(categories.Tags, TextFilter);
+                        _tagSelectionVM = _dependencyComposer.GetExportedValue<ITagSelectionVM>();
+                        _tagSelectionVM.Initialize(categories.Tags, TextFilter);
 
-                    CurrentContent = _tagSelectionVM;
+                        CurrentContent = _tagSelectionVM;
 
-                    IsAdornerVisible = false;
-                    CommandManager.InvalidateRequerySuggested();
-                }, continuationTaskScheduler);
+                        IsAdornerVisible = false;
+                        CommandManager.InvalidateRequerySuggested();
+                    },
+                continuationTaskScheduler);
 
             task.Start();
         }

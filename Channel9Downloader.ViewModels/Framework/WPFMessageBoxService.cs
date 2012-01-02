@@ -199,8 +199,7 @@ namespace Channel9Downloader.ViewModels.Framework
             CustomDialogIcons icon,
             CustomDialogButtons button)
         {
-            MessageBoxResult result = MessageBox.Show(message, "Please confirm...",
-                                                      GetButton(button), GetImage(icon));
+            MessageBoxResult result = MessageBox.Show(message, "Please confirm...", GetButton(button), GetImage(icon));
             return GetResult(result);
         }
 

@@ -283,11 +283,13 @@ namespace Channel9Downloader.ViewModels
             var continuationTaskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
             IsAdornerVisible = true;
             var task = new Task(() => _downloadManager.Initialize(_settings));
-            task.ContinueWith(p =>
-            {
-                IsAdornerVisible = false;
-                CommandManager.InvalidateRequerySuggested();
-            }, continuationTaskScheduler);
+            task.ContinueWith(
+                p =>
+                    {
+                        IsAdornerVisible = false;
+                        CommandManager.InvalidateRequerySuggested();
+                    },
+                continuationTaskScheduler);
             task.Start();
         }
 
@@ -337,11 +339,13 @@ namespace Channel9Downloader.ViewModels
             var continuationTaskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
             IsAdornerVisible = true;
             var task = new Task(() => _downloadManager.UpdateAvailableDownloads());
-            task.ContinueWith(p =>
-                {
-                    IsAdornerVisible = false;
-                    CommandManager.InvalidateRequerySuggested();
-                }, continuationTaskScheduler);
+            task.ContinueWith(
+                p =>
+                    {
+                        IsAdornerVisible = false;
+                        CommandManager.InvalidateRequerySuggested();
+                    },
+                continuationTaskScheduler);
             task.Start();
         }
 
