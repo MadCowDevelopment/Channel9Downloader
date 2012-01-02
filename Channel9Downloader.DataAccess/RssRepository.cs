@@ -57,23 +57,43 @@ namespace Channel9Downloader.DataAccess
         public List<RssItem> GetRssItems(Category category)
         {
             var doc = DownloadFeedData(category);
+            var items = ParseRssItems(doc);
+            return items;
+        }
 
+        /// <summary>
+        /// Gets all RSS items.
+        /// </summary>
+        /// <returns>Returns a list of all RSS items.</returns>
+        public List<RssItem> GetRssItems()
+        {
+            var doc = DownloadFeedData();
+            var items = ParseRssItems(doc);
+            return items;
+        }
+
+        /// <summary>
+        /// Parses RSS feed data.
+        /// </summary>
+        /// <param name="doc">The document to parse.</param>
+        /// <returns>Returns a list of <see cref="RssItem"/>.</returns>
+        private List<RssItem> ParseRssItems(XDocument doc)
+        {
             var items = from item in doc.Element("rss").Element("channel").Elements("item")
                         select
                             new RssItem
                                 {
                                     Description = item.Element("title").Value,
                                     Guid = item.Element("guid").Value,
-                                    MediaGroup =
-                                        (from content in item.Element(_media + "group").Elements(_media + "content")
-                                         select
-                                             new MediaContent
-                                                 {
-                                                     FileSize = int.Parse(content.Attribute("fileSize").Value),
-                                                     Medium = content.Attribute("medium").Value,
-                                                     Type = content.Attribute("type").Value,
-                                                     Url = content.Attribute("url").Value
-                                                 }).ToList(),
+                                    MediaGroup = (from content in item.Element(_media + "group").Elements(_media + "content")
+                                                  select
+                                                      new MediaContent
+                                                          {
+                                                              FileSize = int.Parse(content.Attribute("fileSize").Value),
+                                                              Medium = content.Attribute("medium").Value,
+                                                              Type = content.Attribute("type").Value,
+                                                              Url = content.Attribute("url").Value
+                                                          }).ToList(),
                                     PubDate = DateTime.Parse(item.Element("pubDate").Value),
                                     Summary = item.Element(_itunes + "summary").Value,
                                     Title = item.Element("title").Value,
@@ -95,14 +115,32 @@ namespace Channel9Downloader.DataAccess
         #region Private Methods
 
         /// <summary>
-        /// Downloads the RSS feed data.
+        /// Downloads RSS feed data for the specified category.
         /// </summary>
         /// <param name="category">Category of the feed.</param>
         /// <returns>Returns the feed data.</returns>
         private XDocument DownloadFeedData(Category category)
         {
-            var url = string.Format("http://channel9.msdn.com{0}/RSS", category.RelativePath);
-            var rssFeedData = _webDownloader.DownloadString(url);
+            return DownloadFeedData(string.Format("http://channel9.msdn.com{0}/RSS", category.RelativePath));
+        }
+
+        /// <summary>
+        /// Downloads RSS feed data.
+        /// </summary>
+        /// <returns>Returns the feed data.</returns>
+        private XDocument DownloadFeedData()
+        {
+            return DownloadFeedData(string.Format("http://channel9.msdn.com/Feeds/RSS"));
+        }
+
+        /// <summary>
+        /// Downloads RSS feed data from the specified address.
+        /// </summary>
+        /// <param name="address">The address of the RSS feed.</param>
+        /// <returns>Returns the feed data.</returns>
+        private XDocument DownloadFeedData(string address)
+        {
+            var rssFeedData = _webDownloader.DownloadString(address);
             var doc = XDocument.Parse(rssFeedData);
             return doc;
         }
