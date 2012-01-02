@@ -46,10 +46,17 @@
     </Compile>
     <Compile Include="BytesPerSecondToDisplayValueConverter.cs" />
     <Compile Include="BytesToDisplayValueConverter.cs" />
+    <Compile Include="DownloadPriorityToBoolConverter.cs" />
     <Compile Include="IsEnabledToDisplayTextConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemainingTimeToDisplayValueConverter.cs" />
     <Compile Include="TagTitleToCharacterConverter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Channel9Downloader.Entities\Channel9Downloader.Entities.csproj">
+      <Project>{B54175FB-049A-44AA-8261-533908DF1BE4}</Project>
+      <Name>Channel9Downloader.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

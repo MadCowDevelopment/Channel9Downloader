@@ -15,7 +15,7 @@ namespace Channel9Downloader.DataAccess.Events
         /// Initializes a new instance of the <see cref="DownloadRemovedEventArgs"/> class.
         /// </summary>
         /// <param name="downloadItem">The download that has been removed.</param>
-        public DownloadRemovedEventArgs(DownloadItem downloadItem)
+        public DownloadRemovedEventArgs(IDownloadItem downloadItem)
         {
             DownloadItem = downloadItem;
         }
@@ -27,7 +27,7 @@ namespace Channel9Downloader.DataAccess.Events
         /// <summary>
         /// Gets or sets the download that has been removed.
         /// </summary>
-        public DownloadItem DownloadItem
+        public IDownloadItem DownloadItem
         {
             get; set;
         }

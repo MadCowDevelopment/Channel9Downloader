@@ -23,7 +23,7 @@ namespace Channel9Downloader.DataAccess
         /// <summary>
         /// Dictionary containing tokens for stopping downloads.
         /// </summary>
-        private readonly Dictionary<DownloadItem, CancellationTokenSource> _cancellationTokenSources;
+        private readonly Dictionary<IDownloadItem, CancellationTokenSource> _cancellationTokenSources;
 
         /// <summary>
         /// The repository used for retrieving categories.
@@ -38,7 +38,7 @@ namespace Channel9Downloader.DataAccess
         /// <summary>
         /// Gets the download queue (all downloads that have not started yet).
         /// </summary>
-        private readonly LinkedList<DownloadItem> _downloadQueue;
+        private readonly LinkedList<IDownloadItem> _downloadQueue;
 
         /// <summary>
         /// The repository used for retrieving finished downloads.
@@ -83,8 +83,8 @@ namespace Channel9Downloader.DataAccess
             _finishedDownloadsRepository = finishedDownloadsRepository;
             _composer = composer;
 
-            _downloadQueue = new LinkedList<DownloadItem>();
-            _cancellationTokenSources = new Dictionary<DownloadItem, CancellationTokenSource>();
+            _downloadQueue = new LinkedList<IDownloadItem>();
+            _cancellationTokenSources = new Dictionary<IDownloadItem, CancellationTokenSource>();
         }
 
         #endregion Constructors
@@ -126,7 +126,7 @@ namespace Channel9Downloader.DataAccess
         public Task<object> DownloadFileAsync(
             string address,
             string filename,
-            DownloadItem downloadItem,
+            IDownloadItem downloadItem,
             CancellationToken token)
         {
             var tcs = new TaskCompletionSource<object>();
@@ -205,8 +205,8 @@ namespace Channel9Downloader.DataAccess
                     RaiseDownloadingStarted(new EventArgs());
                 }
 
-                var downloadItem = _downloadQueue.First.Value;
-                _downloadQueue.RemoveFirst();
+                var downloadItem = GetNextDownload();
+                _downloadQueue.Remove(downloadItem);
 
                 var cancellationTokenSource = new CancellationTokenSource();
                 _cancellationTokenSources.Add(downloadItem, cancellationTokenSource);
@@ -256,7 +256,7 @@ namespace Channel9Downloader.DataAccess
         /// </summary>
         public void UpdateAvailableDownloads()
         {
-            var enabledCategories = GetEnabledCategories();
+            var enabledCategories = GetEnabledCategories().ToList();
             var availableItems = GetAvailableItems(enabledCategories);
             RemoveAlreadyFinishedDownloads(availableItems);
             RemoveDownloadsFromQueueThatAreNoLongerEnabled(enabledCategories);
@@ -283,7 +283,7 @@ namespace Channel9Downloader.DataAccess
         /// Enqueues all downloads that are not already queued.
         /// </summary>
         /// <param name="availableItems">List of available items.</param>
-        private void EnqueueDownloads(IEnumerable<DownloadItem> availableItems)
+        private void EnqueueDownloads(IEnumerable<IDownloadItem> availableItems)
         {
             foreach (var availableItem in
                 availableItems.Where(
@@ -295,19 +295,48 @@ namespace Channel9Downloader.DataAccess
         }
 
         /// <summary>
+        /// Gets the next download item. First it will look for items with high priority, then normal priority
+        /// and at last low priority.
+        /// </summary>
+        /// <returns>Returns the next download item.</returns>
+        private IDownloadItem GetNextDownload()
+        {
+            foreach (var downloadItem in _downloadQueue)
+            {
+                if (downloadItem.Priority == DownloadPriority.High)
+                {
+                    return downloadItem;
+                }
+            }
+
+            foreach (var downloadItem in _downloadQueue)
+            {
+                if (downloadItem.Priority == DownloadPriority.Normal)
+                {
+                    return downloadItem;
+                }
+            }
+
+            return _downloadQueue.First.Value;
+        }
+
+        /// <summary>
         /// Gets all items that are available in the RSS repository.
         /// </summary>
         /// <param name="enabledCategories">List of all categories that are enabled.</param>
         /// <returns>Returns a list of all items that are available.</returns>
-        private List<DownloadItem> GetAvailableItems(IEnumerable<Category> enabledCategories)
+        private List<IDownloadItem> GetAvailableItems(IEnumerable<Category> enabledCategories)
         {
-            var availableItems = new List<DownloadItem>();
+            var availableItems = new List<IDownloadItem>();
             foreach (var enabledCategory in enabledCategories)
             {
                 var items = _rssRepository.GetRssItems(enabledCategory);
                 foreach (var rssItem in items)
                 {
-                    availableItems.Add(new DownloadItem { Category = enabledCategory, RssItem = rssItem });
+                    var downloadItem = _composer.GetExportedValue<IDownloadItem>();
+                    downloadItem.Category = enabledCategory;
+                    downloadItem.RssItem = rssItem;
+                    availableItems.Add(downloadItem);
                 }
             }
 
@@ -319,7 +348,7 @@ namespace Channel9Downloader.DataAccess
         /// </summary>
         /// <param name="downloadItem">The download item.</param>
         /// <returns>Returns the URI of the download item.</returns>
-        private string GetDownloadAddress(DownloadItem downloadItem)
+        private string GetDownloadAddress(IDownloadItem downloadItem)
         {
             // TODO: chose the correct file depending on user preference
             // TODO: at the moment the smalles file is chosen (this obviously sucks)
@@ -409,7 +438,7 @@ namespace Channel9Downloader.DataAccess
         /// Removes already finished downloads from the list of available items.
         /// </summary>
         /// <param name="availableItems">List of all available items.</param>
-        private void RemoveAlreadyFinishedDownloads(IList<DownloadItem> availableItems)
+        private void RemoveAlreadyFinishedDownloads(IList<IDownloadItem> availableItems)
         {
             var finishedDownloads = _finishedDownloadsRepository.GetAllFinishedDownloads();
             for (int i = availableItems.Count - 1; i >= 0; i--)

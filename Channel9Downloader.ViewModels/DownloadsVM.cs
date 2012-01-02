@@ -30,7 +30,7 @@ namespace Channel9Downloader.ViewModels
         /// <summary>
         /// The list of all downloads.
         /// </summary>
-        private readonly ObservableCollection<DownloadItem> _downloads;
+        private readonly ObservableCollection<IDownloadItem> _downloads;
 
         /// <summary>
         /// The main thread dispatcher.
@@ -87,7 +87,7 @@ namespace Channel9Downloader.ViewModels
             _mainThreadDispatcher = Dispatcher.CurrentDispatcher;
 
             AdornerContent = new LoadingWaitVM();
-            _downloads = new ObservableCollection<DownloadItem>();
+            _downloads = new ObservableCollection<IDownloadItem>();
             Downloads = (ListCollectionView)CollectionViewSource.GetDefaultView(_downloads);
             Downloads.SortDescriptions.Add(
                 new SortDescription(DownloadItem.PROP_DOWNLOAD_STATE, ListSortDirection.Ascending));
@@ -101,7 +101,7 @@ namespace Channel9Downloader.ViewModels
         /// This delegate is used for adding items to the download collection.
         /// </summary>
         /// <param name="downloadItem">The download to be added.</param>
-        private delegate void CollectionInitializerDelegate(DownloadItem downloadItem);
+        private delegate void CollectionInitializerDelegate(IDownloadItem downloadItem);
 
         #endregion Delegates
 
@@ -207,7 +207,7 @@ namespace Channel9Downloader.ViewModels
         /// Adds a <see cref="DownloadItem"/> on the main thread.
         /// </summary>
         /// <param name="downloadItem">The download to add.</param>
-        private void AddDownloadItemOnMainThread(DownloadItem downloadItem)
+        private void AddDownloadItemOnMainThread(IDownloadItem downloadItem)
         {
             _mainThreadDispatcher.Invoke(new CollectionInitializerDelegate(p => _downloads.Add(p)), downloadItem);
         }
@@ -220,7 +220,7 @@ namespace Channel9Downloader.ViewModels
         /// <param name="e">Event args of the event.</param>
         private void DownloadItemPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            var downloadItem = sender as DownloadItem;
+            var downloadItem = sender as IDownloadItem;
             if (downloadItem == null)
             {
                 return;
@@ -353,7 +353,7 @@ namespace Channel9Downloader.ViewModels
         /// Removes a <see cref="DownloadItem"/> on the main thread.
         /// </summary>
         /// <param name="downloadItem">The download to remove.</param>
-        private void RemoveDownloadItemOnMainThread(DownloadItem downloadItem)
+        private void RemoveDownloadItemOnMainThread(IDownloadItem downloadItem)
         {
             _mainThreadDispatcher.Invoke(new CollectionInitializerDelegate(p => _downloads.Remove(p)), downloadItem);
         }

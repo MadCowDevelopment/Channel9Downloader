@@ -5,13 +5,14 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:controls="clr-namespace:Channel9Downloader.Controls;assembly=Channel9Downloader.Controls" 
-    xmlns:Converters="clr-namespace:Channel9Downloader.Converters;assembly=Channel9Downloader.Converters" 
-    mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300">
+    xmlns:Converters="clr-namespace:Channel9Downloader.Converters;assembly=Channel9Downloader.Converters"
+    xmlns:Entities="clr-namespace:Channel9Downloader.Entities;assembly=Channel9Downloader.Entities" mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300">
 
     <UserControl.Resources>
         <Converters:BytesToDisplayValueConverter x:Key="BytesToDisplayValueConverter"/>
         <Converters:BytesPerSecondToDisplayValueConverter x:Key="BytesPerSecondToDisplayValueConverter"/>
         <Converters:RemainingTimeToDisplayValueConverter x:Key="RemainingTimeToDisplayValueConverter"/>
+        <Converters:DownloadPriorityToBoolConverter x:Key="DownloadPriorityToBoolConverter" />
     </UserControl.Resources>
     <controls:AdornedControl 
         Name="LoadingAdorner" IsAdornerVisible="{Binding IsAdornerVisible}"
@@ -31,6 +32,32 @@
             </ListView.GroupStyle>
             <ListView.ItemContainerStyle>
                 <Style TargetType="{x:Type ListViewItem}">
+                    <Setter Property="ContextMenu">
+                        <Setter.Value>
+                            <ContextMenu>
+                                <MenuItem Header="Priority">
+                                    <MenuItem 
+                                        Header="High"
+                                        IsCheckable="True"
+                                        IsChecked="{Binding Priority, 
+                                        Converter={StaticResource DownloadPriorityToBoolConverter},
+                                        ConverterParameter={x:Static Entities:DownloadPriority.High}}"/>
+                                    <MenuItem 
+                                        Header="Normal"
+                                        IsCheckable="True"
+                                        IsChecked="{Binding Priority, 
+                                        Converter={StaticResource DownloadPriorityToBoolConverter},
+                                        ConverterParameter={x:Static Entities:DownloadPriority.Normal}}"/>
+                                    <MenuItem 
+                                        Header="Low"
+                                        IsCheckable="True"
+                                        IsChecked="{Binding Priority, 
+                                        Converter={StaticResource DownloadPriorityToBoolConverter},
+                                        ConverterParameter={x:Static Entities:DownloadPriority.Low}}"/>
+                                </MenuItem>
+                            </ContextMenu>
+                        </Setter.Value>
+                    </Setter>
                     <Style.Triggers>
                         <Trigger Property="ItemsControl.AlternationIndex" Value="1">
                             <Setter Property="Background" Value="#F0F0F0"></Setter>
@@ -79,12 +106,13 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Header="State" Width="100" DisplayMemberBinding="{Binding DownloadState}"/>
-                    <GridViewColumn Header="Category" DisplayMemberBinding="{Binding Category.Title}"/>                    
+                    <GridViewColumn Header="Priority" DisplayMemberBinding="{Binding Priority}"/>
+                    <GridViewColumn Header="Category" DisplayMemberBinding="{Binding Category.Title}"/>
                 </GridView>
             </ListView.View>
         </ListView>
 
     </controls:AdornedControl>
-    
+
 
 </UserControl>

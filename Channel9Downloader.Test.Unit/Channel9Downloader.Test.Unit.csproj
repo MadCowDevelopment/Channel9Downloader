@@ -34,10 +34,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Moq">
+      <HintPath>..\Libs\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDependentAssemblyPaths Condition=" '$(VS100COMNTOOLS)' != '' " Include="$(VS100COMNTOOLS)..\IDE\PrivateAssemblies">
@@ -45,10 +50,33 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converters\DownloadPriorityToBoolConverterTest.cs" />
+    <Compile Include="Entities\DownloadItemTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DataAccess\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Channel9Downloader.Common\Channel9Downloader.Common.csproj">
+      <Project>{D70BE04B-219D-4A50-8B81-59CEB7110C27}</Project>
+      <Name>Channel9Downloader.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Channel9Downloader.Converters\Channel9Downloader.Converters.csproj">
+      <Project>{6ADFC673-BDC2-4168-AB60-48E9BF1A6434}</Project>
+      <Name>Channel9Downloader.Converters</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Channel9Downloader.Entities\Channel9Downloader.Entities.csproj">
+      <Project>{B54175FB-049A-44AA-8261-533908DF1BE4}</Project>
+      <Name>Channel9Downloader.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Channel9Downloader.Test.Utils\Channel9Downloader.Test.Utils.csproj">
+      <Project>{49666197-16C7-44B8-969F-7D3662966541}</Project>
+      <Name>Channel9Downloader.Test.Utils</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Converters\TestData\DownloadPriorityToBoolConverter.xlsx" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

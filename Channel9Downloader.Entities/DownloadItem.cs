@@ -1,11 +1,16 @@
 ﻿using System;
+using System.ComponentModel.Composition;
+
+using Channel9Downloader.Common;
 
 namespace Channel9Downloader.Entities
 {
     /// <summary>
     /// This class holds information about a download item.
     /// </summary>
-    public class DownloadItem : ObservableModel
+    [Export(typeof(IDownloadItem))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
+    public class DownloadItem : ObservableModel, IDownloadItem
     {
         #region Fields
 
@@ -13,6 +18,16 @@ namespace Channel9Downloader.Entities
         /// Property name of <see cref="DownloadState"/> property.
         /// </summary>
         public const string PROP_DOWNLOAD_STATE = "DownloadState";
+
+        /// <summary>
+        /// Property name of <see cref="Priority"/> property.
+        /// </summary>
+        public const string PROP_PRIORITY = "Priority";
+
+        /// <summary>
+        /// The DateTime accessor.
+        /// </summary>
+        private readonly IDate _date;
 
         /// <summary>
         /// Backing field for <see cref="BytesPerSecond"/> property.
@@ -54,6 +69,11 @@ namespace Channel9Downloader.Entities
         /// </summary>
         private long _totalBytesToReceive;
 
+        /// <summary>
+        /// Backing field for <see cref="Priority"/> property.
+        /// </summary>
+        private DownloadPriority _priority;
+
         #endregion Fields
 
         #region Constructors
@@ -61,9 +81,14 @@ namespace Channel9Downloader.Entities
         /// <summary>
         /// Initializes a new instance of the <see cref="DownloadItem"/> class.
         /// </summary>
-        public DownloadItem()
+        /// <param name="date">The date and time accessor.</param>
+        [ImportingConstructor]
+        public DownloadItem(IDate date)
         {
+            _date = date;
+
             DownloadState = DownloadState.Queued;
+            Priority = DownloadPriority.Normal;
         }
 
         #endregion Constructors
@@ -102,11 +127,11 @@ namespace Channel9Downloader.Entities
                 _bytesReceived = value;
                 RaisePropertyChanged(() => BytesReceived);
 
-                if (DateTime.Now - _lastUpdate > TimeSpan.FromSeconds(1))
+                if (_date.Now - _lastUpdate > TimeSpan.FromSeconds(1))
                 {
                     CalculateBytesPerSecond();
                     CalculateEta();
-                    _lastUpdate = DateTime.Now;
+                    _lastUpdate = _date.Now;
                 }
             }
         }
@@ -136,8 +161,8 @@ namespace Channel9Downloader.Entities
 
                 if (_downloadState == DownloadState.Downloading)
                 {
-                    _downloadStartTime = DateTime.Now;
-                    _lastUpdate = DateTime.Now;
+                    _downloadStartTime = _date.Now;
+                    _lastUpdate = _date.Now;
                 }
 
                 CalculateBytesPerSecond();
@@ -212,6 +237,28 @@ namespace Channel9Downloader.Entities
             }
         }
 
+        /// <summary>
+        /// Gets or sets the download priority.
+        /// </summary>
+        public DownloadPriority Priority
+        {
+            get
+            {
+                return _priority;
+            }
+
+            set
+            {
+                if (value == _priority)
+                {
+                    return;
+                }
+
+                _priority = value;
+                RaisePropertyChanged(() => Priority);
+            }
+        }
+
         #endregion Public Properties
 
         #region Private Methods
@@ -229,7 +276,7 @@ namespace Channel9Downloader.Entities
             }
             else
             {
-                var duration = DateTime.Now - _downloadStartTime;
+                var duration = _date.Now - _downloadStartTime;
 
                 var bytesPerSecond = BytesReceived / duration.TotalSeconds;
 

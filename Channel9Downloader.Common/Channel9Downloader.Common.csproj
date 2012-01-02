@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{B54175FB-049A-44AA-8261-533908DF1BE4}</ProjectGuid>
+    <ProjectGuid>{D70BE04B-219D-4A50-8B81-59CEB7110C27}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Channel9Downloader.Entities</RootNamespace>
-    <AssemblyName>Channel9Downloader.Entities</AssemblyName>
+    <RootNamespace>Channel9Downloader.Common</RootNamespace>
+    <AssemblyName>Channel9Downloader.Common</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -34,7 +34,6 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -42,32 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\CommonAssemblyInfo.cs">
-      <Link>CommonAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="Categories.cs" />
-    <Compile Include="Category.cs" />
-    <Compile Include="DownloadItem.cs" />
-    <Compile Include="DownloadPriority.cs" />
-    <Compile Include="DownloadState.cs" />
-    <Compile Include="FinishedDownloads.cs" />
-    <Compile Include="IDownloadItem.cs" />
-    <Compile Include="IObservableModel.cs" />
-    <Compile Include="MediaContent.cs" />
-    <Compile Include="ObservableModel.cs" />
+    <Compile Include="Date.cs" />
+    <Compile Include="IDate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RssItem.cs" />
-    <Compile Include="Series.cs" />
-    <Compile Include="Settings.cs" />
-    <Compile Include="Show.cs" />
-    <Compile Include="Tag.cs" />
-    <Compile Include="Thumbnail.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Channel9Downloader.Common\Channel9Downloader.Common.csproj">
-      <Project>{D70BE04B-219D-4A50-8B81-59CEB7110C27}</Project>
-      <Name>Channel9Downloader.Common</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -26,6 +26,11 @@
             <CodeCoverage xmlns="">
               <Regular>
                 <CodeCoverageItem binaryFile="Channel9Downloader.DataAccess\bin\Debug\Channel9Downloader.DataAccess.dll" pdbFile="Channel9Downloader.DataAccess\bin\Debug\Channel9Downloader.DataAccess.pdb" instrumentInPlace="true" />
+                <CodeCoverageItem binaryFile="Channel9Downloader.Composition\bin\Debug\Channel9Downloader.Composition.dll" pdbFile="Channel9Downloader.Composition\bin\Debug\Channel9Downloader.Composition.pdb" instrumentInPlace="true" />
+                <CodeCoverageItem binaryFile="Channel9Downloader.Converters\bin\Debug\Channel9Downloader.Converters.dll" pdbFile="Channel9Downloader.Converters\bin\Debug\Channel9Downloader.Converters.pdb" instrumentInPlace="true" />
+                <CodeCoverageItem binaryFile="Channel9Downloader.Database\bin\Debug\Channel9Downloader.Database.dll" pdbFile="Channel9Downloader.Database\bin\Debug\Channel9Downloader.Database.pdb" instrumentInPlace="true" />
+                <CodeCoverageItem binaryFile="Channel9Downloader.Entities\bin\Debug\Channel9Downloader.Entities.dll" pdbFile="Channel9Downloader.Entities\bin\Debug\Channel9Downloader.Entities.pdb" instrumentInPlace="true" />
+                <CodeCoverageItem binaryFile="Channel9Downloader.ViewModels\bin\Debug\Channel9Downloader.ViewModels.dll" pdbFile="Channel9Downloader.ViewModels\bin\Debug\Channel9Downloader.ViewModels.pdb" instrumentInPlace="true" />
               </Regular>
             </CodeCoverage>
           </Configuration>

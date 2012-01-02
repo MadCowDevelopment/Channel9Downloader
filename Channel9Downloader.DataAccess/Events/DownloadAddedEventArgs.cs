@@ -15,7 +15,7 @@ namespace Channel9Downloader.DataAccess.Events
         /// Initializes a new instance of the <see cref="DownloadAddedEventArgs"/> class.
         /// </summary>
         /// <param name="downloadItem">The added download.</param>
-        public DownloadAddedEventArgs(DownloadItem downloadItem)
+        public DownloadAddedEventArgs(IDownloadItem downloadItem)
         {
             DownloadItem = downloadItem;
         }
@@ -27,7 +27,7 @@ namespace Channel9Downloader.DataAccess.Events
         /// <summary>
         /// Gets the download that has been added.
         /// </summary>
-        public DownloadItem DownloadItem
+        public IDownloadItem DownloadItem
         {
             get; private set;
         }
