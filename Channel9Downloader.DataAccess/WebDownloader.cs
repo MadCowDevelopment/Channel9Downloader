@@ -53,6 +53,21 @@ namespace Channel9Downloader.DataAccess
 
         #endregion Events
 
+        #region Properties
+
+        /// <summary>
+        /// Gets a value indicating whether a web request is in progress.
+        /// </summary>
+        public bool IsBusy
+        {
+            get
+            {
+                return _webClient.IsBusy;
+            }
+        }
+
+        #endregion
+
         #region Public Methods
 
         /// <summary>

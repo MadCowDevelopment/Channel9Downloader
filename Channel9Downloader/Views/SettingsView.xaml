@@ -3,17 +3,21 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:extToolkit="clr-namespace:Microsoft.Windows.Controls;assembly=WPFToolkit.Extended" 
+             xmlns:extToolkit="clr-namespace:Microsoft.Windows.Controls;assembly=WPFToolkit.Extended"
+             xmlns:Converters="clr-namespace:Channel9Downloader.Converters;assembly=Channel9Downloader.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              Height="250" Width="350">
-    <Grid>
+  <UserControl.Resources>
+    <Converters:TimeSpanToHoursConverter x:Key="TimeSpanToHoursConverter" />
+  </UserControl.Resources>
+  <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        
+
         <!-- Download settings -->
         <GroupBox Grid.Row="0" Margin="3" Header="Downloads">
             <StackPanel>
@@ -33,12 +37,31 @@
                         Minimum="1" Maximum="16"                        
                         Margin="3" Width="50" Value="{Binding Settings.MaximumParallelDownloads}" />
                 </StackPanel>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <CheckBox Grid.Row="0" Margin="3"
+                        IsChecked="{Binding Settings.UpdateVideosPeriodically}" 
+                        Content="Update videos periodically"/>
+                    <StackPanel Grid.Row="1" Margin="12" Orientation="Horizontal" 
+                                IsEnabled="{Binding Settings.UpdateVideosPeriodically}">
+                        <TextBlock Margin="3" Text="Update interval: "/>
+                        <extToolkit:IntegerUpDown 
+                            Minimum="1" Maximum="168"                        
+                            Margin="3" Width="50" 
+                            Value="{Binding Settings.CheckForNewVideosInterval, 
+                            Converter={StaticResource TimeSpanToHoursConverter}}" />
+                        <TextBlock Margin="3" Text="hours"/>
+                    </StackPanel>
+                </Grid>
                 <CheckBox Margin="3"
                     IsChecked="{Binding Settings.StartDownloadingWhenApplicationStarts}" 
                     Content="Start downloading when the application starts"/>
-            </StackPanel>            
+            </StackPanel>
         </GroupBox>
-        
+
         <!-- Apply/Cancel buttons -->
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
@@ -47,6 +70,6 @@
             </Grid.ColumnDefinitions>
             <Button Margin="3" Grid.Column="1" Content="Ok" Command="{Binding CloseCommand}"/>
         </Grid>
-        
+
     </Grid>
 </UserControl>

@@ -34,6 +34,15 @@ namespace Channel9Downloader.DataAccess
 
         #endregion Events
 
+        #region Properties
+
+        /// <summary>
+        /// Gets a value indicating whether the download manager is currently updating the list of available downloads.
+        /// </summary>
+        bool IsUpdating { get; }
+
+        #endregion
+
         #region Methods
 
         /// <summary>

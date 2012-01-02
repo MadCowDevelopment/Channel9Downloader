@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 
 namespace Channel9Downloader.Entities
 {
@@ -9,6 +10,16 @@ namespace Channel9Downloader.Entities
     public class Settings : ObservableModel
     {
         #region Fields
+
+        /// <summary>
+        /// Property name for <see cref="UpdateVideosPeriodically"/> property.
+        /// </summary>
+        public const string PROP_UPDATE_VIDEOS_PERIODICALLY = "UpdateVideosPeriodically";
+
+        /// <summary>
+        /// Property name for <see cref="CheckForNewVideosInterval"/> property.
+        /// </summary>
+        public const string PROP_CHECK_FOR_NEW_VIDEOS_INTERVAL = "CheckForNewVideosInterval";
 
         /// <summary>
         /// Property name for <see cref="MaximumParallelDownloads"/> property.
@@ -30,6 +41,16 @@ namespace Channel9Downloader.Entities
         /// </summary>
         private bool _startDownloadingWhenApplicationStarts;
 
+        /// <summary>
+        /// Backing field for <see cref="CheckForNewVideosInterval"/> property.
+        /// </summary>
+        private TimeSpan _checkForNewVideosInterval;
+
+        /// <summary>
+        /// Backing field for <see cref="UpdateVideosPeriodically"/> property.
+        /// </summary>
+        private bool _updateVideosPeriodically;
+
         #endregion Fields
 
         #region Constructors
@@ -41,6 +62,7 @@ namespace Channel9Downloader.Entities
         {
             DownloadFolder = string.Empty;
             MaximumParallelDownloads = 2;
+            CheckForNewVideosInterval = TimeSpan.FromHours(1);
         }
 
         #endregion Constructors
@@ -98,6 +120,42 @@ namespace Channel9Downloader.Entities
             {
                 _startDownloadingWhenApplicationStarts = value;
                 RaisePropertyChanged(() => StartDownloadingWhenApplicationStarts);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the interval for how often new videos are loaded.
+        /// </summary>
+        [DataMember]
+        public TimeSpan CheckForNewVideosInterval
+        {
+            get
+            {
+                return _checkForNewVideosInterval;
+            }
+
+            set
+            {
+                _checkForNewVideosInterval = value;
+                RaisePropertyChanged(() => CheckForNewVideosInterval);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether videos will be updated periodically.
+        /// </summary>
+        [DataMember]
+        public bool UpdateVideosPeriodically
+        {
+            get
+            {
+                return _updateVideosPeriodically;
+            }
+
+            set
+            {
+                _updateVideosPeriodically = value;
+                RaisePropertyChanged(() => UpdateVideosPeriodically);
             }
         }
 

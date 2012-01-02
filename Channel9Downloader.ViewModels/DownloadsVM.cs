@@ -33,9 +33,19 @@ namespace Channel9Downloader.ViewModels
         private readonly ObservableCollection<IDownloadItem> _downloads;
 
         /// <summary>
+        /// The task scheduler of the main thread.
+        /// </summary>
+        private readonly TaskScheduler _mainThreadTaskScheduler;
+
+        /// <summary>
         /// The main thread dispatcher.
         /// </summary>
         private readonly Dispatcher _mainThreadDispatcher;
+
+        /// <summary>
+        /// The timer used for updating the downloads.
+        /// </summary>
+        private DispatcherTimer _updateTimer;
 
         /// <summary>
         /// Backing field for <see cref="CleanDownloadsCommand"/> property.
@@ -85,6 +95,7 @@ namespace Channel9Downloader.ViewModels
             _downloadManager.DownloadingStopped += DownloadManagerDownloadingStopped;
 
             _mainThreadDispatcher = Dispatcher.CurrentDispatcher;
+            _mainThreadTaskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
 
             AdornerContent = new LoadingWaitVM();
             _downloads = new ObservableCollection<IDownloadItem>();
@@ -196,7 +207,72 @@ namespace Channel9Downloader.ViewModels
         public void Initialize(Settings settings)
         {
             _settings = settings;
+            _settings.PropertyChanged += SettingsPropertyChanged;
             InitializeDownloadManagerAsync();
+
+            if (_settings.UpdateVideosPeriodically)
+            {
+                StartUpdateTimer();
+            }
+        }
+
+        /// <summary>
+        /// Handles the property changed event of settings.
+        /// </summary>
+        /// <param name="sender">Sender of the event.</param>
+        /// <param name="e">Event args of the event.</param>
+        private void SettingsPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == Settings.PROP_UPDATE_VIDEOS_PERIODICALLY)
+            {
+                if (_settings.UpdateVideosPeriodically)
+                {
+                    StartUpdateTimer();
+                }
+                else
+                {
+                    StopUpdateTimer();
+                }
+            }
+            else if (e.PropertyName == Settings.PROP_CHECK_FOR_NEW_VIDEOS_INTERVAL)
+            {
+                if (_updateTimer != null)
+                {
+                    _updateTimer.Interval = _settings.CheckForNewVideosInterval;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Starts the update timer.
+        /// </summary>
+        private void StartUpdateTimer()
+        {
+            if (_updateTimer != null)
+            {
+                return;
+            }
+
+            _updateTimer = new DispatcherTimer(
+                _settings.CheckForNewVideosInterval,
+                DispatcherPriority.Background,
+                (sender, args) => UpdateDownloadsAsync(),
+                _mainThreadDispatcher);
+            _updateTimer.Start();
+        }
+
+        /// <summary>
+        /// Stops the update timer.
+        /// </summary>
+        private void StopUpdateTimer()
+        {
+            if (_updateTimer == null)
+            {
+                return;
+            }
+
+            _updateTimer.Stop();
+            _updateTimer = null;
         }
 
         #endregion Public Methods
@@ -336,7 +412,19 @@ namespace Channel9Downloader.ViewModels
         /// </summary>
         private void OnUpdateDownloads()
         {
-            var continuationTaskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
+            UpdateDownloadsAsync();
+        }
+
+        /// <summary>
+        /// Updates the downloads.
+        /// </summary>
+        private void UpdateDownloadsAsync()
+        {
+            if (_downloadManager.IsUpdating)
+            {
+                return;
+            }
+
             IsAdornerVisible = true;
             var task = new Task(() => _downloadManager.UpdateAvailableDownloads());
             task.ContinueWith(
@@ -345,7 +433,7 @@ namespace Channel9Downloader.ViewModels
                         IsAdornerVisible = false;
                         CommandManager.InvalidateRequerySuggested();
                     },
-                continuationTaskScheduler);
+                _mainThreadTaskScheduler);
             task.Start();
         }
 

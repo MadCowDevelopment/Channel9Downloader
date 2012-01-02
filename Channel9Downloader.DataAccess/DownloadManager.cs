@@ -113,6 +113,15 @@ namespace Channel9Downloader.DataAccess
 
         #endregion Events
 
+        #region Properties
+
+        /// <summary>
+        /// Gets a value indicating whether the download manager is currently updating;
+        /// </summary>
+        public bool IsUpdating { get; private set; } 
+
+        #endregion
+
         #region Public Methods
 
         /// <summary>
@@ -256,11 +265,20 @@ namespace Channel9Downloader.DataAccess
         /// </summary>
         public void UpdateAvailableDownloads()
         {
+            if (IsUpdating)
+            {
+                return;
+            }
+
+            IsUpdating = true;
+
             var enabledCategories = GetEnabledCategories().ToList();
             var availableItems = GetAvailableItems(enabledCategories);
             RemoveAlreadyFinishedDownloads(availableItems);
             RemoveDownloadsFromQueueThatAreNoLongerEnabled(enabledCategories);
             EnqueueDownloads(availableItems);
+
+            IsUpdating = false;
         }
 
         #endregion Public Methods
