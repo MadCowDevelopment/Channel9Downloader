@@ -87,7 +87,7 @@ namespace Channel9Downloader.DataAccess
                                                           }).ToList()
                                 };
 
-            return items.Where(p => p.MediaGroup.Any(m => m.Medium == "video")).ToList();
+            return items.Where(p => p.MediaGroup.Any(m => m.Medium == "video" && m.Type == "video/x-ms-wmv")).ToList();
         }
 
         #endregion Public Methods

@@ -118,7 +118,7 @@ namespace Channel9Downloader.DataAccess
         /// <summary>
         /// Gets a value indicating whether the download manager is currently updating;
         /// </summary>
-        public bool IsUpdating { get; private set; } 
+        public bool IsUpdating { get; private set; }
 
         #endregion
 
@@ -349,7 +349,7 @@ namespace Channel9Downloader.DataAccess
             foreach (var enabledCategory in enabledCategories)
             {
                 var items = _rssRepository.GetRssItems(enabledCategory);
-                foreach (var rssItem in items)
+                foreach (var rssItem in items.Where(p => p.MediaGroup.Count > 0))
                 {
                     var downloadItem = _composer.GetExportedValue<IDownloadItem>();
                     downloadItem.Category = enabledCategory;
@@ -368,12 +368,10 @@ namespace Channel9Downloader.DataAccess
         /// <returns>Returns the URI of the download item.</returns>
         private string GetDownloadAddress(IDownloadItem downloadItem)
         {
-            // TODO: chose the correct file depending on user preference
-            // TODO: at the moment the smalles file is chosen (this obviously sucks)
-            var media = new MediaContent { FileSize = int.MaxValue };
-            foreach (var mediaContent in downloadItem.RssItem.MediaGroup.Where(p => p.Medium == "video"))
+            var media = new MediaContent { FileSize = 0 };
+            foreach (var mediaContent in downloadItem.RssItem.MediaGroup)
             {
-                if (mediaContent.FileSize < media.FileSize)
+                if (mediaContent.FileSize > media.FileSize)
                 {
                     media = mediaContent;
                 }

@@ -18,14 +18,16 @@ namespace Channel9Downloader.DataAccess
         /// <returns>Returns the user's application data path.</returns>
         public string GetUserDataPath()
         {
-            var dir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            dir = Path.Combine(dir, "MadCowDevelopment", "Channel9Downloader");
-            if (!Directory.Exists(dir))
-            {
-                Directory.CreateDirectory(dir);
-            }
+            return @".\";
 
-            return dir;
+            // var dir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            // dir = Path.Combine(dir, "MadCowDevelopment", "Channel9Downloader");
+            // if (!Directory.Exists(dir))
+            // {
+            //     Directory.CreateDirectory(dir);
+            // }
+
+            // return dir;
         }
 
         #endregion Public Methods
