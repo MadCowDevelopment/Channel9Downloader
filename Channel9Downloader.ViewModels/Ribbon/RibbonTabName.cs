@@ -13,6 +13,11 @@
         public const string CATEGORIES = "Categories";
 
         /// <summary>
+        /// This name is for the dashboard tab.
+        /// </summary>
+        public const string DASHBOARD = "Dashboard";
+
+        /// <summary>
         /// This name is for the downloads tab.
         /// </summary>
         public const string DOWNLOADS = "Downloads";

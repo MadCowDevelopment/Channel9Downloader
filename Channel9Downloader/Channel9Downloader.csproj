@@ -73,6 +73,9 @@
     <Compile Include="Views\ContentAreaView.xaml.cs">
       <DependentUpon>ContentAreaView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\DashboardView.xaml.cs">
+      <DependentUpon>DashboardView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\DownloadsView.xaml.cs">
       <DependentUpon>DownloadsView.xaml</DependentUpon>
     </Compile>
@@ -108,6 +111,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\CategoriesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DashboardView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -245,6 +252,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Ribbon\CleanLarge.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Dashboard\9Guy.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

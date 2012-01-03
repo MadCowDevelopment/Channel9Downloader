@@ -4,6 +4,7 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Xml.Linq;
 
+using Channel9Downloader.Composition;
 using Channel9Downloader.Entities;
 
 namespace Channel9Downloader.DataAccess
@@ -14,6 +15,8 @@ namespace Channel9Downloader.DataAccess
     [Export(typeof(IRssRepository))]
     public class RssRepository : IRssRepository
     {
+        private readonly IDependencyComposer _dependencyComposer;
+
         #region Fields
 
         /// <summary>
@@ -26,11 +29,6 @@ namespace Channel9Downloader.DataAccess
         /// </summary>
         private readonly XNamespace _media = "http://search.yahoo.com/mrss/";
 
-        /// <summary>
-        /// The downloader used for retrieving web files.
-        /// </summary>
-        private readonly IWebDownloader _webDownloader;
-
         #endregion Fields
 
         #region Constructors
@@ -38,11 +36,11 @@ namespace Channel9Downloader.DataAccess
         /// <summary>
         /// Initializes a new instance of the <see cref="RssRepository"/> class.
         /// </summary>
-        /// <param name="webDownloader">The downloader used for retrieving web files.</param>
+        /// <param name="dependencyComposer">The composer used for retrieving objects.</param>
         [ImportingConstructor]
-        public RssRepository(IWebDownloader webDownloader)
+        public RssRepository(IDependencyComposer dependencyComposer)
         {
-            _webDownloader = webDownloader;
+            _dependencyComposer = dependencyComposer;
         }
 
         #endregion Constructors
@@ -140,7 +138,8 @@ namespace Channel9Downloader.DataAccess
         /// <returns>Returns the feed data.</returns>
         private XDocument DownloadFeedData(string address)
         {
-            var rssFeedData = _webDownloader.DownloadString(address);
+            var webDownloader = _dependencyComposer.GetExportedValue<IWebDownloader>();
+            var rssFeedData = webDownloader.DownloadString(address);
             var doc = XDocument.Parse(rssFeedData);
             return doc;
         }

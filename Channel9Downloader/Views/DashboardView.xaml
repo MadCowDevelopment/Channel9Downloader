@@ -1,0 +1,162 @@
+﻿<UserControl x:Class="Channel9Downloader.Views.DashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:Channel9Downloader.Controls;assembly=Channel9Downloader.Controls"
+             mc:Ignorable="d">
+    
+    <UserControl.Resources>
+        <DataTemplate x:Key="VideoItemTemplate">
+            <StackPanel Margin="8">
+                <Grid x:Name="ItemTemplateGrid">
+                    
+                    <Border CornerRadius="16" BorderBrush="Black" BorderThickness="4" Width="210" Height="175">
+                        <Border.Background>
+                            <ImageBrush ImageSource="{Binding Thumbnails[0].Url, UpdateSourceTrigger=PropertyChanged}"/>
+                        </Border.Background>
+                        <Border.BitmapEffect>
+                            <DropShadowBitmapEffect Color="Black" Direction="320" 
+                                                    ShadowDepth="10" Opacity=".7" Softness="9" />
+                        </Border.BitmapEffect>
+                        <Border.Triggers>
+                            <EventTrigger RoutedEvent="Mouse.MouseEnter">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="TitleTextBlock"
+                                                                 Storyboard.TargetProperty="Opacity"
+                                                                 To="1" Duration="0:0:0.2"/>
+                                        <DoubleAnimation Storyboard.TargetName="InnerBorder"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0.7" Duration="0:0:0.2"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            <EventTrigger RoutedEvent="Mouse.MouseLeave">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="TitleTextBlock"
+                                                                 Storyboard.TargetProperty="Opacity"
+                                                                 To="0" Duration="0:0:0.2"/>
+                                        <DoubleAnimation Storyboard.TargetName="InnerBorder"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0" Duration="0:0:0.2"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Border.Triggers>
+                        <Border CornerRadius="16" x:Name="InnerBorder" Opacity="0" Background="WhiteSmoke">
+                            <TextBlock 
+                                FontWeight="Bold" TextAlignment="Center" MaxWidth="200" MaxHeight="140"
+                                Opacity="0" Margin="16" Text="{Binding Title}" 
+                                x:Name="TitleTextBlock" FontSize="16" TextWrapping="Wrap" 
+                                HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>                        
+                    </Border>
+                </Grid>
+            </StackPanel>
+        </DataTemplate>
+
+        <Style x:Key="StretchedContainerStyle" TargetType="{x:Type ListBoxItem}">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                        <Border Width="226" Background="Transparent"
+                    CornerRadius="20"
+                    x:Name="TemplateBorder"
+                    Margin="4,2,4,2">
+                            <ContentPresenter/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="true">
+                                <Setter TargetName="TemplateBorder" Property="Background" Value="#FFF79800"/>
+                                <Setter Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform CenterX="125" CenterY="125"/>
+                                    </Setter.Value>
+                                </Setter>
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation 
+                                                Storyboard.TargetProperty="RenderTransform.ScaleX" 
+                                                To="1.1" Duration="0:0:0.2" />
+                                            <DoubleAnimation 
+                                                Storyboard.TargetProperty="RenderTransform.ScaleY" 
+                                                To="1.1" Duration="0:0:0.2" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <controls:AdornedControl 
+        Name="LoadingAdorner" IsAdornerVisible="{Binding IsAdornerVisible}"
+        AdornerContent="{Binding AdornerContent}">
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.RowSpan="2" Grid.Column="0" Margin="5">
+                <Border HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Image Source="..\Images\Dashboard\9Guy.png" Width="232" Height="410" 
+                           Stretch="Fill" x:Name="myImage"></Image>
+                </Border>
+                <Border Width="232" Height="369">
+                    <Border.Background>
+                        <VisualBrush Visual="{Binding ElementName=myImage}">
+                            <VisualBrush.Transform>
+                                <ScaleTransform ScaleX="1" ScaleY="-0.9" CenterX="200" CenterY="175"/>
+                            </VisualBrush.Transform>
+                        </VisualBrush>
+                    </Border.Background>
+                    <Border.OpacityMask>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <GradientStop Offset="0" Color="#AA000000"></GradientStop>
+                            <GradientStop Offset="0.5" Color="Transparent"></GradientStop>
+                        </LinearGradientBrush>
+                    </Border.OpacityMask>
+                </Border>
+            </StackPanel>
+
+            <Border Margin="5" Grid.Row="0" Grid.Column="1" CornerRadius="10" Background="#FFF79800">
+                <TextBlock Margin="20,5,5,5" 
+                           Foreground="White" Text="Latest videos on Channel9:" 
+                           FontSize="36" FontWeight="Bold"/>                
+            </Border>
+                
+            
+
+            <ListBox 
+                Grid.Row="1" Grid.Column="1"
+                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                ScrollViewer.CanContentScroll="False"
+                Background="Transparent" BorderThickness="0"
+                SelectedItem="{Binding SelectedVideo}"
+                ItemTemplate="{StaticResource VideoItemTemplate}"
+                ItemsSource="{Binding LatestVideos}" ItemContainerStyle="{StaticResource StretchedContainerStyle}">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Margin="20"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
+        </Grid>
+
+    </controls:AdornedControl>
+        
+</UserControl>

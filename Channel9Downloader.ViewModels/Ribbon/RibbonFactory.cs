@@ -51,6 +51,7 @@ namespace Channel9Downloader.ViewModels.Ribbon
         public List<IRibbonTabVM> CreateRibbonTabs()
         {
             var result = new List<IRibbonTabVM>();
+            result.Add(CreateDashboardTab());
             result.Add(CreateCategoryTab());
             result.Add(CreateDownloadTab());
             return result;
@@ -59,6 +60,18 @@ namespace Channel9Downloader.ViewModels.Ribbon
         #endregion Public Methods
 
         #region Private Methods
+
+        /// <summary>
+        /// Creates the dashboard tab.
+        /// </summary>
+        /// <returns>Returns the dashboard tab.</returns>
+        private RibbonTabVM CreateDashboardTab()
+        {
+            var dashboard = new RibbonTabVM();
+            dashboard.Header = RibbonTabName.DASHBOARD;
+
+            return dashboard;
+        }
 
         /// <summary>
         /// Creates the category tab.

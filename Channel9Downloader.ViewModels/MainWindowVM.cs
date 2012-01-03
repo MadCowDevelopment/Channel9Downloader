@@ -5,6 +5,7 @@ using Channel9Downloader.Composition;
 using Channel9Downloader.DataAccess;
 using Channel9Downloader.Entities;
 using Channel9Downloader.ViewModels.Categories;
+using Channel9Downloader.ViewModels.Dashboard;
 using Channel9Downloader.ViewModels.Events;
 using Channel9Downloader.ViewModels.Framework;
 using Channel9Downloader.ViewModels.Ribbon;
@@ -29,6 +30,11 @@ namespace Channel9Downloader.ViewModels
         /// The composer used for dependency injection.
         /// </summary>
         private readonly IDependencyComposer _composer;
+
+        /// <summary>
+        /// The dashboard viewmodel.
+        /// </summary>
+        private readonly IDashboardVM _dashboardVM;
 
         /// <summary>
         /// The downloads viewmodel.
@@ -58,15 +64,18 @@ namespace Channel9Downloader.ViewModels
         /// Initializes a new instance of the <see cref="MainWindowVM"/> class.
         /// </summary>
         /// <param name="composer">The composer used for dependency injection.</param>
+        /// <param name="dashboardVM">The dashboard viewmodel.</param>
         /// <param name="categoriesVM">The categories viewmodel.</param>
         /// <param name="downloadsVM">The downloads viewmodel.</param>
         [ImportingConstructor]
         public MainWindowVM(
             IDependencyComposer composer,
+            IDashboardVM dashboardVM,
             ICategoriesVM categoriesVM,
             IDownloadsVM downloadsVM)
         {
             _composer = composer;
+            _dashboardVM = dashboardVM;
             _categoriesVM = categoriesVM;
             _downloadsVM = downloadsVM;
         }
@@ -143,6 +152,7 @@ namespace Channel9Downloader.ViewModels
         {
             InitializeRibbon();
             InitializeSettings();
+            InitializeDashboard();
             InitializeCategories();
             InitializeDownloads();
         }
@@ -150,6 +160,14 @@ namespace Channel9Downloader.ViewModels
         #endregion Public Methods
 
         #region Private Methods
+
+        /// <summary>
+        /// Initializes the dashboard.
+        /// </summary>
+        private void InitializeDashboard()
+        {
+            _dashboardVM.Initialize();
+        }
 
         /// <summary>
         /// Initialize the categories.
@@ -213,6 +231,10 @@ namespace Channel9Downloader.ViewModels
             else if (e.RibbonTabVM.Header == RibbonTabName.DOWNLOADS)
             {
                 ContentArea = _downloadsVM;
+            }
+            else if (e.RibbonTabVM.Header == RibbonTabName.DASHBOARD)
+            {
+                ContentArea = _dashboardVM;
             }
         }
 

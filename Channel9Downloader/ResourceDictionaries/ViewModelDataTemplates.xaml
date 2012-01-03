@@ -3,7 +3,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
     xmlns:Views="clr-namespace:Channel9Downloader.Views" 
     xmlns:ViewModels="clr-namespace:Channel9Downloader.ViewModels;assembly=Channel9Downloader.ViewModels" 
-    xmlns:RibbonViewModels="clr-namespace:Channel9Downloader.ViewModels.Ribbon;assembly=Channel9Downloader.ViewModels" xmlns:Categories="clr-namespace:Channel9Downloader.ViewModels.Categories;assembly=Channel9Downloader.ViewModels" xmlns:Controls="clr-namespace:Channel9Downloader.Controls;assembly=Channel9Downloader.Controls" xmlns:Configuration="clr-namespace:Channel9Downloader.ViewModels.Configuration;assembly=Channel9Downloader.ViewModels">
+    xmlns:RibbonViewModels="clr-namespace:Channel9Downloader.ViewModels.Ribbon;assembly=Channel9Downloader.ViewModels" 
+    xmlns:Categories="clr-namespace:Channel9Downloader.ViewModels.Categories;assembly=Channel9Downloader.ViewModels" 
+    xmlns:Controls="clr-namespace:Channel9Downloader.Controls;assembly=Channel9Downloader.Controls" 
+    xmlns:Configuration="clr-namespace:Channel9Downloader.ViewModels.Configuration;assembly=Channel9Downloader.ViewModels"
+    xmlns:Dashboard="clr-namespace:Channel9Downloader.ViewModels.Dashboard;assembly=Channel9Downloader.ViewModels">
     
     <DataTemplate DataType="{x:Type RibbonViewModels:RibbonVM}">
         <Views:RibbonView/>
@@ -15,6 +19,10 @@
     
     <DataTemplate DataType="{x:Type ViewModels:DownloadsVM}">
         <Views:DownloadsView/>
+    </DataTemplate>
+    
+    <DataTemplate DataType="{x:Type Dashboard:DashboardVM}">
+        <Views:DashboardView/>
     </DataTemplate>
     
     <DataTemplate DataType="{x:Type Categories:TagSelectionVM}">

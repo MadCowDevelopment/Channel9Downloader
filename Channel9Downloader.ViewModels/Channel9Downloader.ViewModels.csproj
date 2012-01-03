@@ -58,6 +58,8 @@
     <Compile Include="Categories\SeriesSelectionVM.cs" />
     <Compile Include="Categories\ShowSelectionVM.cs" />
     <Compile Include="Categories\TagSelectionVM.cs" />
+    <Compile Include="Dashboard\DashboardVM.cs" />
+    <Compile Include="Dashboard\IDashboardVM.cs" />
     <Compile Include="DownloadsVM.cs" />
     <Compile Include="Events\SelectedTabChangedEventArgs.cs" />
     <Compile Include="Framework\AdornerViewModel.cs" />
