@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
+using System.Web;
 using System.Xml.Linq;
 
 using Channel9Downloader.Composition;
@@ -81,7 +82,7 @@ namespace Channel9Downloader.DataAccess
                         select
                             new RssItem
                                 {
-                                    Description = item.Element("title").Value,
+                                    Description = HttpUtility.HtmlDecode(item.Element("title").Value),
                                     Guid = item.Element("guid").Value,
                                     MediaGroup = (from content in item.Element(_media + "group").Elements(_media + "content")
                                                   select
@@ -93,8 +94,8 @@ namespace Channel9Downloader.DataAccess
                                                               Url = content.Attribute("url").Value
                                                           }).ToList(),
                                     PubDate = DateTime.Parse(item.Element("pubDate").Value),
-                                    Summary = item.Element(_itunes + "summary").Value,
-                                    Title = item.Element("title").Value,
+                                    Summary = HttpUtility.HtmlDecode(item.Element(_itunes + "summary").Value),
+                                    Title = HttpUtility.HtmlDecode(item.Element("title").Value),
                                     Thumbnails = (from thumbnail in item.Elements(_media + "thumbnail")
                                                   select
                                                       new Thumbnail

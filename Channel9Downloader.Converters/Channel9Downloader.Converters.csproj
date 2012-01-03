@@ -50,6 +50,7 @@
     <Compile Include="IsEnabledToDisplayTextConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemainingTimeToDisplayValueConverter.cs" />
+    <Compile Include="SelectedVideoToSummaryConverter.cs" />
     <Compile Include="TagTitleToCharacterConverter.cs" />
     <Compile Include="TimeSpanToHoursConverter.cs" />
   </ItemGroup>
