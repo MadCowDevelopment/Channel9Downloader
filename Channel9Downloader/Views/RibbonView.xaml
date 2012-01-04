@@ -19,8 +19,7 @@
         
         <ribbon:Ribbon.ApplicationMenu>
             <ribbon:RibbonApplicationMenu 
-                SmallImageSource="..\Images\Ribbon\LargeIcon.png"
-                >
+                SmallImageSource="..\Images\Ribbon\LargeIcon.png">
                 <ribbon:RibbonApplicationMenuItem 
                     Header="_Settings"
                     Command="{Binding RibbonFactory.MainWindowVM.ShowSettingsViewCommand}"

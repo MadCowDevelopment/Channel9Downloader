@@ -1,9 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="SelectedVideoToSummaryConverter.cs" company="Microsoft">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-using System;
+﻿using System;
 using System.Globalization;
 using System.Windows.Data;
 
@@ -11,6 +6,10 @@ using Channel9Downloader.Entities;
 
 namespace Channel9Downloader.Converters
 {
+    /// <summary>
+    /// This class converts the summary of the selected video.
+    /// If no video is selected a message that the user should select one is shown.
+    /// </summary>
     public class SelectedVideoToSummaryConverter : IValueConverter
     {
         /// <summary>

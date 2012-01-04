@@ -97,6 +97,7 @@
             </Setter>
         </Style>
         <Converters:SelectedVideoToSummaryConverter x:Key="SelectedVideoToSummaryConverter" />
+        <Converters:BoolToVisibilityCollapsedConverter x:Key="BoolToVisibilityConverter" />
     </UserControl.Resources>
 
     <!-- Content -->
@@ -111,12 +112,14 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="95"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
             <!-- Channel9 guy image with reflection -->
-            <StackPanel Grid.RowSpan="3" Grid.Column="0" Margin="5">
+            <StackPanel Grid.RowSpan="3" Grid.Column="0" Margin="5" 
+                        Visibility="{Binding ShowSummaryRibbonToggleButton.IsChecked, 
+                        Converter={StaticResource BoolToVisibilityConverter}}">
                 <Border HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Image Source="..\Images\Dashboard\9Guy.png" Width="232" Height="410" 
                            Stretch="Fill" x:Name="myImage"></Image>
@@ -146,7 +149,9 @@
             </Border>
 
             <!-- Cartoon bubble with summary -->
-            <Grid Grid.Row="1" Grid.ColumnSpan="2" x:Name="CartoonBubble" Background="Transparent" Margin="5">
+            <Grid Height="95" Grid.Row="1" Grid.ColumnSpan="2" x:Name="CartoonBubble" Background="Transparent" Margin="5"
+                  Visibility="{Binding ShowSummaryRibbonToggleButton.IsChecked, 
+                        Converter={StaticResource BoolToVisibilityConverter}}">
                 <Rectangle RadiusX="10" RadiusY="10" Stroke="#FF000000" Margin="242,0,0,0" StrokeThickness="3"/>
                 <Path Fill="#FFFFFFFF" Stretch="Fill" Stroke="#FF000000" HorizontalAlignment="Left" 
                       Margin="200,0,0,15.848" Width="46.625"

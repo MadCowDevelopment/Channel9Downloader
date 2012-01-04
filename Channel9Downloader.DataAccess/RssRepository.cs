@@ -16,9 +16,12 @@ namespace Channel9Downloader.DataAccess
     [Export(typeof(IRssRepository))]
     public class RssRepository : IRssRepository
     {
-        private readonly IDependencyComposer _dependencyComposer;
-
         #region Fields
+
+        /// <summary>
+        /// The composer used for retrieving instances.
+        /// </summary>
+        private readonly IDependencyComposer _dependencyComposer;
 
         /// <summary>
         /// Namespace for ITunes elements.

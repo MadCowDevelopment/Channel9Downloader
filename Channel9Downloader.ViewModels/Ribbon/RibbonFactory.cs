@@ -5,6 +5,8 @@ using Channel9Downloader.ViewModels.Categories;
 
 namespace Channel9Downloader.ViewModels.Ribbon
 {
+    using Channel9Downloader.ViewModels.Dashboard;
+
     /// <summary>
     /// This class creates the ribbon.
     /// </summary>
@@ -30,6 +32,12 @@ namespace Channel9Downloader.ViewModels.Ribbon
         {
             get; set;
         }
+
+        /// <summary>
+        /// Gets or sets the dashboard viewmodel.
+        /// </summary>
+        [Import]
+        public IDashboardVM DashboardVM { get; set; }
 
         /// <summary>
         /// Gets or sets the main window viewmodel.
@@ -69,6 +77,12 @@ namespace Channel9Downloader.ViewModels.Ribbon
         {
             var dashboard = new RibbonTabVM();
             dashboard.Header = RibbonTabName.DASHBOARD;
+
+            var groupDisplay = new RibbonGroupVM();
+            groupDisplay.Header = "Display";
+            groupDisplay.Items.Add(DashboardVM.ShowSummaryRibbonToggleButton);
+
+            dashboard.Groups.Add(groupDisplay);
 
             return dashboard;
         }

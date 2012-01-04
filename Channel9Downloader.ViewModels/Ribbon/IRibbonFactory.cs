@@ -4,6 +4,8 @@ using Channel9Downloader.ViewModels.Categories;
 
 namespace Channel9Downloader.ViewModels.Ribbon
 {
+    using Channel9Downloader.ViewModels.Dashboard;
+
     /// <summary>
     /// This interface provides methods to create ribbon elements.
     /// </summary>
@@ -28,6 +30,20 @@ namespace Channel9Downloader.ViewModels.Ribbon
             get;
             set;
         }
+
+        /// <summary>
+        /// Gets or sets the downloads viewmodel.
+        /// </summary>
+        IDownloadsVM DownloadsVM
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets or sets the dashboard viewmodel.
+        /// </summary>
+        IDashboardVM DashboardVM { get; set; }
 
         #endregion Properties
 

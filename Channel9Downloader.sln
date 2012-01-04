@@ -32,6 +32,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Channel9Downloader.Test.Uti
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Channel9Downloader.Common", "Channel9Downloader.Common\Channel9Downloader.Common.csproj", "{D70BE04B-219D-4A50-8B81-59CEB7110C27}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Channel9Downloader.Resources", "Channel9Downloader.Resources\Channel9Downloader.Resources.csproj", "{8FE68FF6-FF50-4BBF-9113-27661A9F29BD}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -169,6 +171,16 @@ Global
 		{D70BE04B-219D-4A50-8B81-59CEB7110C27}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{D70BE04B-219D-4A50-8B81-59CEB7110C27}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{D70BE04B-219D-4A50-8B81-59CEB7110C27}.Release|x86.ActiveCfg = Release|Any CPU
+		{8FE68FF6-FF50-4BBF-9113-27661A9F29BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FE68FF6-FF50-4BBF-9113-27661A9F29BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FE68FF6-FF50-4BBF-9113-27661A9F29BD}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{8FE68FF6-FF50-4BBF-9113-27661A9F29BD}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{8FE68FF6-FF50-4BBF-9113-27661A9F29BD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8FE68FF6-FF50-4BBF-9113-27661A9F29BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FE68FF6-FF50-4BBF-9113-27661A9F29BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FE68FF6-FF50-4BBF-9113-27661A9F29BD}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{8FE68FF6-FF50-4BBF-9113-27661A9F29BD}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{8FE68FF6-FF50-4BBF-9113-27661A9F29BD}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

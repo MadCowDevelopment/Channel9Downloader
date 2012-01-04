@@ -5,6 +5,8 @@ using Channel9Downloader.ViewModels.Framework;
 
 namespace Channel9Downloader.ViewModels.Dashboard
 {
+    using Channel9Downloader.ViewModels.Ribbon;
+
     /// <summary>
     /// This interface is for the dashboard viewmodel.
     /// </summary>
@@ -19,6 +21,11 @@ namespace Channel9Downloader.ViewModels.Dashboard
         /// Gets or sets the selected video.
         /// </summary>
         RssItem SelectedVideo { get; set; }
+
+        /// <summary>
+        /// Gets the show summary toggle button.
+        /// </summary>
+        IRibbonToggleButtonVM ShowSummaryRibbonToggleButton { get; }
 
         /// <summary>
         /// Initializes this view model.

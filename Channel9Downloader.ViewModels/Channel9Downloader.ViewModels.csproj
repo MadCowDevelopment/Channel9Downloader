@@ -103,6 +103,7 @@
     <Compile Include="Ribbon\IRibbonCheckBoxVM.cs" />
     <Compile Include="Ribbon\IRibbonTabVM.cs" />
     <Compile Include="Ribbon\IRibbonTextBoxVM.cs" />
+    <Compile Include="Ribbon\IRibbonToggleButtonVM.cs" />
     <Compile Include="Ribbon\IRibbonVM.cs" />
     <Compile Include="MainWindowVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -115,6 +116,7 @@
     <Compile Include="Ribbon\RibbonTabName.cs" />
     <Compile Include="Ribbon\RibbonTabVM.cs" />
     <Compile Include="Ribbon\RibbonTextBoxVM.cs" />
+    <Compile Include="Ribbon\RibbonToggleButtonVM.cs" />
     <Compile Include="Ribbon\RibbonVM.cs" />
     <Compile Include="Configuration\SettingsVM.cs" />
   </ItemGroup>
@@ -134,6 +136,10 @@
     <ProjectReference Include="..\Channel9Downloader.Entities\Channel9Downloader.Entities.csproj">
       <Project>{B54175FB-049A-44AA-8261-533908DF1BE4}</Project>
       <Name>Channel9Downloader.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Channel9Downloader.Resources\Channel9Downloader.Resources.csproj">
+      <Project>{8FE68FF6-FF50-4BBF-9113-27661A9F29BD}</Project>
+      <Name>Channel9Downloader.Resources</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -14,6 +14,18 @@
         <Setter Property="ItemContainerStyle" Value="{StaticResource RibbonGroupStyle}"/>
     </Style>
 
+    <DataTemplate DataType="{x:Type Ribbon:RibbonToggleButtonVM}">
+        <StackPanel>
+            <ribbon:RibbonToggleButton 
+                Label="{Binding Label}"
+                LargeImageSource="{Binding LargeImageSource}" 
+                ToolTipDescription="{Binding ToolTipDescription}"
+                ToolTipTitle="{Binding ToolTipTitle}"
+                Command="{Binding Command}"
+                IsChecked="{Binding IsChecked}"/>
+        </StackPanel>
+    </DataTemplate>
+
     <DataTemplate DataType="{x:Type Ribbon:RibbonButtonVM}">
         <StackPanel>
             <ribbon:RibbonButton 
@@ -23,8 +35,8 @@
                 ToolTipTitle="{Binding ToolTipTitle}"
                 Command="{Binding Command}"/>
         </StackPanel>
-    </DataTemplate> 
-    
+    </DataTemplate>
+
     <DataTemplate DataType="{x:Type Ribbon:RibbonComboBoxVM}">
         <StackPanel>
             <ribbon:RibbonComboBox

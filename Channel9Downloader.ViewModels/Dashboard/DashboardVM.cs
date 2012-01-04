@@ -10,6 +10,8 @@ using Channel9Downloader.ViewModels.Framework;
 
 namespace Channel9Downloader.ViewModels.Dashboard
 {
+    using Channel9Downloader.ViewModels.Ribbon;
+
     /// <summary>
     /// This class manages the dashboard view.
     /// </summary>
@@ -32,17 +34,44 @@ namespace Channel9Downloader.ViewModels.Dashboard
         /// </summary>
         private RssItem _selectedVideo;
 
+        /// <summary>
+        /// Backing field for <see cref="ShowSummaryCommand"/> property.
+        /// </summary>
+        private ICommand _showSummaryCommand;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DashboardVM"/> class.
         /// </summary>
         /// <param name="rssRepository">The repository used for accessing RSS data.</param>
+        /// <param name="showSummaryToggleButtonVM">The toggle button for hide/show summary.</param>
         [ImportingConstructor]
-        public DashboardVM(IRssRepository rssRepository)
+        public DashboardVM(
+            IRssRepository rssRepository,
+            IRibbonToggleButtonVM showSummaryToggleButtonVM)
         {
             _rssRepository = rssRepository;
 
+            ShowSummaryRibbonToggleButton = showSummaryToggleButtonVM;
+            ShowSummaryRibbonToggleButton.Command = ShowSummaryCommand;
+            ShowSummaryRibbonToggleButton.IsChecked = true;
+            ShowSummaryRibbonToggleButton.Label = "Summary";
+            ShowSummaryRibbonToggleButton.LargeImageSource =
+                @"..\Images\Dashboard\SpeechBubble.png";
+            ShowSummaryRibbonToggleButton.ToolTipDescription = "Shows/hides the summary speech bubble.";
+            ShowSummaryRibbonToggleButton.ToolTipTitle = "Show/hide summary";
+
             AdornerContent = new LoadingWaitVM();
+        }
+
+        /// <summary>
+        /// Gets a command to show the summary.
+        /// </summary>
+        public ICommand ShowSummaryCommand
+        {
+            get
+            {
+                return _showSummaryCommand ?? (_showSummaryCommand = new RelayCommand(p => { }));
+            }
         }
 
         /// <summary>
@@ -80,6 +109,11 @@ namespace Channel9Downloader.ViewModels.Dashboard
         }
 
         /// <summary>
+        /// Gets the show summary ribbon toggle button.
+        /// </summary>
+        public IRibbonToggleButtonVM ShowSummaryRibbonToggleButton { get; private set; }
+
+        /// <summary>
         /// Initializes this view model.
         /// </summary>
         public void Initialize()
@@ -111,6 +145,5 @@ namespace Channel9Downloader.ViewModels.Dashboard
 
             task.Start();
         }
-
     }
 }
