@@ -99,6 +99,7 @@
         <Converters:SelectedVideoToSummaryConverter x:Key="SelectedVideoToSummaryConverter" />
     </UserControl.Resources>
 
+    <!-- Content -->
     <controls:AdornedControl 
         Name="LoadingAdorner" IsAdornerVisible="{Binding IsAdornerVisible}"
         AdornerContent="{Binding AdornerContent}">
@@ -114,6 +115,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
+            <!-- Channel9 guy image with reflection -->
             <StackPanel Grid.RowSpan="3" Grid.Column="0" Margin="5">
                 <Border HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Image Source="..\Images\Dashboard\9Guy.png" Width="232" Height="410" 
@@ -136,23 +138,26 @@
                 </Border>
             </StackPanel>
 
+            <!-- Latest videos header -->
             <Border Margin="5" Grid.Row="0" Grid.Column="1" CornerRadius="10" Background="#FFF79800">
                 <TextBlock Margin="20,5,5,5" 
                            Foreground="White" Text="Latest videos on Channel9:" 
                            FontSize="36" FontWeight="Bold"/>                
             </Border>
 
-            <Grid Grid.Row="1" Grid.Column="1" x:Name="CartoonBubble" Background="Transparent" Margin="5">
-                <Rectangle RadiusX="10" RadiusY="10" Stroke="#FF000000" Margin="42,0,0,0" StrokeThickness="3"/>
+            <!-- Cartoon bubble with summary -->
+            <Grid Grid.Row="1" Grid.ColumnSpan="2" x:Name="CartoonBubble" Background="Transparent" Margin="5">
+                <Rectangle RadiusX="10" RadiusY="10" Stroke="#FF000000" Margin="242,0,0,0" StrokeThickness="3"/>
                 <Path Fill="#FFFFFFFF" Stretch="Fill" Stroke="#FF000000" HorizontalAlignment="Left" 
-                      Margin="0,0,0,24.848" Width="46.625"
+                      Margin="200,0,0,15.848" Width="46.625"
                       Data="M45.990139,159.62776 L-9.2963676,192.95807 L45.831726,184.19051" StrokeThickness="3" 
                       Height="32.069" UseLayoutRounding="False" VerticalAlignment="Bottom"/>
-                <TextBlock Margin="50, 5, 5, 5" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="14" 
+                <TextBlock Margin="250, 5, 5, 5" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="14" 
                            Text="{Binding SelectedVideo, Converter={StaticResource SelectedVideoToSummaryConverter}}"
                            Foreground="Black" TextWrapping="WrapWithOverflow" TextTrimming="WordEllipsis"/>
             </Grid>
 
+            <!-- List of new videos -->
             <ListBox 
                 Grid.Row="2" Grid.Column="1"
                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"

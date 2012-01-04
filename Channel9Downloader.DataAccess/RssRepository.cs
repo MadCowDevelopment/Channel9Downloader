@@ -79,6 +79,7 @@ namespace Channel9Downloader.DataAccess
         private List<RssItem> ParseRssItems(XDocument doc)
         {
             var items = from item in doc.Element("rss").Element("channel").Elements("item")
+                        where item.Element(_media + "group") != null
                         select
                             new RssItem
                                 {
