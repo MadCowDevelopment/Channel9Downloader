@@ -82,7 +82,19 @@ namespace Channel9Downloader.ViewModels.Ribbon
             groupDisplay.Header = "Display";
             groupDisplay.Items.Add(DashboardVM.ShowSummaryRibbonToggleButton);
 
+            var groupManagement = new RibbonGroupVM();
+            groupManagement.Header = "Management";
+
+            var buttonDownload = new RibbonButtonVM();
+            buttonDownload.Command = DashboardVM.AddDownloadCommand;
+            buttonDownload.Label = "Add download";
+            buttonDownload.LargeImageSource = @"..\Images\Ribbon\AddDownloadLarge.png";
+            buttonDownload.ToolTipDescription = "Adds the selected item to downloads.";
+            buttonDownload.ToolTipTitle = "Add download";
+            groupManagement.Items.Add(buttonDownload);
+
             dashboard.Groups.Add(groupDisplay);
+            dashboard.Groups.Add(groupManagement);
 
             return dashboard;
         }

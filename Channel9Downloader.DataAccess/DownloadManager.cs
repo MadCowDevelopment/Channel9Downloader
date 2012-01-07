@@ -125,65 +125,6 @@ namespace Channel9Downloader.DataAccess
         #region Public Methods
 
         /// <summary>
-        /// Downloads a file asynchronously.
-        /// </summary>
-        /// <param name="address">The address of the resource to download.</param>
-        /// <param name="filename">The name of the local file that is to receive the data.</param>
-        /// <param name="downloadItem">The download item.</param>
-        /// <param name="token">The token for cancelling the operation.</param>
-        /// <returns>Returns a Task.</returns>
-        public Task<object> DownloadFileAsync(
-            string address,
-            string filename,
-            IDownloadItem downloadItem,
-            CancellationToken token)
-        {
-            var tcs = new TaskCompletionSource<object>();
-            var webClient = _composer.GetExportedValue<IWebDownloader>();
-
-            token.Register(webClient.CancelAsync);
-
-            webClient.DownloadFileCompleted += (obj, args) =>
-            {
-                if (args.Cancelled)
-                {
-                    tcs.TrySetCanceled();
-                    downloadItem.DownloadState = DownloadState.Stopped;
-                    return;
-                }
-
-                if (args.Error != null)
-                {
-                    tcs.TrySetException(args.Error);
-                    downloadItem.DownloadState = DownloadState.Error;
-                    return;
-                }
-
-                tcs.TrySetResult(null);
-                downloadItem.DownloadState = DownloadState.Finished;
-            };
-
-            webClient.DownloadProgressChanged += (obj, args) =>
-            {
-                downloadItem.ProgressPercentage = args.ProgressPercentage;
-                downloadItem.BytesReceived = args.BytesReceived;
-                downloadItem.TotalBytesToReceive = args.TotalBytesToReceive;
-            };
-
-            try
-            {
-                webClient.DownloadFileAsync(new Uri(address), filename);
-                downloadItem.DownloadState = DownloadState.Downloading;
-            }
-            catch (UriFormatException ex)
-            {
-                tcs.TrySetException(ex);
-            }
-
-            return tcs.Task;
-        }
-
-        /// <summary>
         /// Initializes this class.
         /// </summary>
         /// <param name="settings">The application settings.</param>
@@ -281,6 +222,21 @@ namespace Channel9Downloader.DataAccess
             IsUpdating = false;
         }
 
+        /// <summary>
+        /// Adds a download at the end of the queue.
+        /// </summary>
+        /// <param name="downloadItem">The download to add.</param>
+        public void AddDownload(IDownloadItem downloadItem)
+        {
+            if (_downloadQueue.Any(p => p.RssItem.Guid == downloadItem.RssItem.Guid))
+            {
+                return;
+            }
+
+            _downloadQueue.AddLast(downloadItem);
+            RaiseDownloadAdded(new DownloadAddedEventArgs(downloadItem));
+        }
+
         #endregion Public Methods
 
         #region Private Methods
@@ -305,10 +261,11 @@ namespace Channel9Downloader.DataAccess
         {
             foreach (var availableItem in
                 availableItems.Where(
-                    availableItem => !_downloadQueue.Any(p => p.RssItem.Guid == availableItem.RssItem.Guid)))
+                    availableItem =>
+                        !_downloadQueue.Any(p => p.RssItem.Guid == availableItem.RssItem.Guid) &&
+                        !_cancellationTokenSources.Keys.Any(p => p.RssItem.Guid == availableItem.RssItem.Guid)))
             {
-                _downloadQueue.AddLast(availableItem);
-                RaiseDownloadAdded(new DownloadAddedEventArgs(availableItem));
+                AddDownload(availableItem);
             }
         }
 
@@ -378,6 +335,65 @@ namespace Channel9Downloader.DataAccess
             }
 
             return media.Url;
+        }
+
+        /// <summary>
+        /// Downloads a file asynchronously.
+        /// </summary>
+        /// <param name="address">The address of the resource to download.</param>
+        /// <param name="filename">The name of the local file that is to receive the data.</param>
+        /// <param name="downloadItem">The download item.</param>
+        /// <param name="token">The token for cancelling the operation.</param>
+        /// <returns>Returns a Task.</returns>
+        private Task<object> DownloadFileAsync(
+            string address,
+            string filename,
+            IDownloadItem downloadItem,
+            CancellationToken token)
+        {
+            var tcs = new TaskCompletionSource<object>();
+            var webClient = _composer.GetExportedValue<IWebDownloader>();
+
+            token.Register(webClient.CancelAsync);
+
+            webClient.DownloadFileCompleted += (obj, args) =>
+            {
+                if (args.Cancelled)
+                {
+                    tcs.TrySetCanceled();
+                    downloadItem.DownloadState = DownloadState.Stopped;
+                    return;
+                }
+
+                if (args.Error != null)
+                {
+                    tcs.TrySetException(args.Error);
+                    downloadItem.DownloadState = DownloadState.Error;
+                    return;
+                }
+
+                tcs.TrySetResult(null);
+                downloadItem.DownloadState = DownloadState.Finished;
+            };
+
+            webClient.DownloadProgressChanged += (obj, args) =>
+            {
+                downloadItem.ProgressPercentage = args.ProgressPercentage;
+                downloadItem.BytesReceived = args.BytesReceived;
+                downloadItem.TotalBytesToReceive = args.TotalBytesToReceive;
+            };
+
+            try
+            {
+                webClient.DownloadFileAsync(new Uri(address), filename);
+                downloadItem.DownloadState = DownloadState.Downloading;
+            }
+            catch (UriFormatException ex)
+            {
+                tcs.TrySetException(ex);
+            }
+
+            return tcs.Task;
         }
 
         /// <summary>
@@ -476,6 +492,12 @@ namespace Channel9Downloader.DataAccess
             for (int i = _downloadQueue.Count - 1; i >= 0; i--)
             {
                 var downloadItem = _downloadQueue.ElementAt(i);
+
+                if (downloadItem.Category == null)
+                {
+                    continue;
+                }
+
                 var isInAnyCategory =
                     enabledCategories.Any(p => p.RelativePath == downloadItem.Category.RelativePath);
 

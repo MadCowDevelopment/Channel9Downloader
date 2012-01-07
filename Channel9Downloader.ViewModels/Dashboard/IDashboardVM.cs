@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 using Channel9Downloader.Entities;
 using Channel9Downloader.ViewModels.Framework;
@@ -26,6 +27,11 @@ namespace Channel9Downloader.ViewModels.Dashboard
         /// Gets the show summary toggle button.
         /// </summary>
         IRibbonToggleButtonVM ShowSummaryRibbonToggleButton { get; }
+
+        /// <summary>
+        /// Gets the command to add a download.
+        /// </summary>
+        ICommand AddDownloadCommand { get; }
 
         /// <summary>
         /// Initializes this view model.

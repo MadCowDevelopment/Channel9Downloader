@@ -121,6 +121,10 @@
     <Compile Include="Configuration\SettingsVM.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Channel9Downloader.Common\Channel9Downloader.Common.csproj">
+      <Project>{D70BE04B-219D-4A50-8B81-59CEB7110C27}</Project>
+      <Name>Channel9Downloader.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Channel9Downloader.Composition\Channel9Downloader.Composition.csproj">
       <Project>{ECD4CA34-5AAB-4DA7-A13E-9407487888AC}</Project>
       <Name>Channel9Downloader.Composition</Name>

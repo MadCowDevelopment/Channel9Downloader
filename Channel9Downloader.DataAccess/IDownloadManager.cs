@@ -66,6 +66,12 @@ namespace Channel9Downloader.DataAccess
         /// </summary>
         void UpdateAvailableDownloads();
 
+        /// <summary>
+        /// Adds a download at the end of the queue.
+        /// </summary>
+        /// <param name="downloadItem">The download to add.</param>
+        void AddDownload(IDownloadItem downloadItem);
+
         #endregion Methods
     }
 }

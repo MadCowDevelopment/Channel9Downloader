@@ -216,6 +216,10 @@ namespace Channel9Downloader.ViewModels
             }
         }
 
+        #endregion Public Methods
+
+        #region Private Methods
+
         /// <summary>
         /// Handles the property changed event of settings.
         /// </summary>
@@ -274,10 +278,6 @@ namespace Channel9Downloader.ViewModels
             _updateTimer.Stop();
             _updateTimer = null;
         }
-
-        #endregion Public Methods
-
-        #region Private Methods
 
         /// <summary>
         /// Adds a <see cref="DownloadItem"/> on the main thread.
