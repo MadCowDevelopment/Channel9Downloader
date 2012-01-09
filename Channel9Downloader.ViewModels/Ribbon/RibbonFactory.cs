@@ -2,11 +2,10 @@
 using System.ComponentModel.Composition;
 
 using Channel9Downloader.ViewModels.Categories;
+using Channel9Downloader.ViewModels.Dashboard;
 
 namespace Channel9Downloader.ViewModels.Ribbon
 {
-    using Channel9Downloader.ViewModels.Dashboard;
-
     /// <summary>
     /// This class creates the ribbon.
     /// </summary>
@@ -25,6 +24,15 @@ namespace Channel9Downloader.ViewModels.Ribbon
         }
 
         /// <summary>
+        /// Gets or sets the dashboard viewmodel.
+        /// </summary>
+        [Import]
+        public IDashboardVM DashboardVM
+        {
+            get; set;
+        }
+
+        /// <summary>
         /// Gets or sets the downloads viewmodel.
         /// </summary>
         [Import]
@@ -32,12 +40,6 @@ namespace Channel9Downloader.ViewModels.Ribbon
         {
             get; set;
         }
-
-        /// <summary>
-        /// Gets or sets the dashboard viewmodel.
-        /// </summary>
-        [Import]
-        public IDashboardVM DashboardVM { get; set; }
 
         /// <summary>
         /// Gets or sets the main window viewmodel.
@@ -68,36 +70,6 @@ namespace Channel9Downloader.ViewModels.Ribbon
         #endregion Public Methods
 
         #region Private Methods
-
-        /// <summary>
-        /// Creates the dashboard tab.
-        /// </summary>
-        /// <returns>Returns the dashboard tab.</returns>
-        private RibbonTabVM CreateDashboardTab()
-        {
-            var dashboard = new RibbonTabVM();
-            dashboard.Header = RibbonTabName.DASHBOARD;
-
-            var groupDisplay = new RibbonGroupVM();
-            groupDisplay.Header = "Display";
-            groupDisplay.Items.Add(DashboardVM.ShowSummaryRibbonToggleButton);
-
-            var groupManagement = new RibbonGroupVM();
-            groupManagement.Header = "Management";
-
-            var buttonDownload = new RibbonButtonVM();
-            buttonDownload.Command = DashboardVM.AddDownloadCommand;
-            buttonDownload.Label = "Add download";
-            buttonDownload.LargeImageSource = @"..\Images\Ribbon\AddDownloadLarge.png";
-            buttonDownload.ToolTipDescription = "Adds the selected item to downloads.";
-            buttonDownload.ToolTipTitle = "Add download";
-            groupManagement.Items.Add(buttonDownload);
-
-            dashboard.Groups.Add(groupDisplay);
-            dashboard.Groups.Add(groupManagement);
-
-            return dashboard;
-        }
 
         /// <summary>
         /// Creates the category tab.
@@ -176,6 +148,36 @@ namespace Channel9Downloader.ViewModels.Ribbon
             categories.Groups.Add(groupFilter);
 
             return categories;
+        }
+
+        /// <summary>
+        /// Creates the dashboard tab.
+        /// </summary>
+        /// <returns>Returns the dashboard tab.</returns>
+        private RibbonTabVM CreateDashboardTab()
+        {
+            var dashboard = new RibbonTabVM();
+            dashboard.Header = RibbonTabName.DASHBOARD;
+
+            var groupDisplay = new RibbonGroupVM();
+            groupDisplay.Header = "Display";
+            groupDisplay.Items.Add(DashboardVM.ShowSummaryRibbonToggleButton);
+
+            var groupManagement = new RibbonGroupVM();
+            groupManagement.Header = "Management";
+
+            var buttonDownload = new RibbonButtonVM();
+            buttonDownload.Command = DashboardVM.AddDownloadCommand;
+            buttonDownload.Label = "Add download";
+            buttonDownload.LargeImageSource = @"..\Images\Ribbon\AddDownloadLarge.png";
+            buttonDownload.ToolTipDescription = "Adds the selected item to downloads.";
+            buttonDownload.ToolTipTitle = "Add download";
+            groupManagement.Items.Add(buttonDownload);
+
+            dashboard.Groups.Add(groupDisplay);
+            dashboard.Groups.Add(groupManagement);
+
+            return dashboard;
         }
 
         /// <summary>

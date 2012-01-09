@@ -55,6 +55,11 @@ namespace Channel9Downloader.Entities
         private DateTime _lastUpdate;
 
         /// <summary>
+        /// Backing field for <see cref="Priority"/> property.
+        /// </summary>
+        private DownloadPriority _priority;
+
+        /// <summary>
         /// Backing field for <see cref="ProgressPercentage"/> property.
         /// </summary>
         private int _progressPercentage;
@@ -68,11 +73,6 @@ namespace Channel9Downloader.Entities
         /// Backing field for <see cref="TotalBytesToReceive"/> property.
         /// </summary>
         private long _totalBytesToReceive;
-
-        /// <summary>
-        /// Backing field for <see cref="Priority"/> property.
-        /// </summary>
-        private DownloadPriority _priority;
 
         #endregion Fields
 
@@ -173,6 +173,28 @@ namespace Channel9Downloader.Entities
         }
 
         /// <summary>
+        /// Gets or sets the download priority.
+        /// </summary>
+        public DownloadPriority Priority
+        {
+            get
+            {
+                return _priority;
+            }
+
+            set
+            {
+                if (value == _priority)
+                {
+                    return;
+                }
+
+                _priority = value;
+                RaisePropertyChanged(() => Priority);
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the download progress in percent.
         /// </summary>
         public int ProgressPercentage
@@ -234,28 +256,6 @@ namespace Channel9Downloader.Entities
 
                 _totalBytesToReceive = value;
                 RaisePropertyChanged(() => TotalBytesToReceive);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the download priority.
-        /// </summary>
-        public DownloadPriority Priority
-        {
-            get
-            {
-                return _priority;
-            }
-
-            set
-            {
-                if (value == _priority)
-                {
-                    return;
-                }
-
-                _priority = value;
-                RaisePropertyChanged(() => Priority);
             }
         }
 

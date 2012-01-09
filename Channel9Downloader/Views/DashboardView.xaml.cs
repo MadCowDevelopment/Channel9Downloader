@@ -5,6 +5,8 @@
     /// </summary>
     public partial class DashboardView
     {
+        #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DashboardView"/> class.
         /// </summary>
@@ -12,5 +14,7 @@
         {
             InitializeComponent();
         }
+
+        #endregion Constructors
     }
 }

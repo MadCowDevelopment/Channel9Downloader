@@ -12,6 +12,8 @@ namespace Channel9Downloader.Converters
     /// </summary>
     public class SelectedVideoToSummaryConverter : IValueConverter
     {
+        #region Public Methods
+
         /// <summary>
         /// Converts a value. 
         /// </summary>
@@ -42,5 +44,7 @@ namespace Channel9Downloader.Converters
         {
             throw new NotImplementedException();
         }
+
+        #endregion Public Methods
     }
 }

@@ -7,9 +7,16 @@ namespace Channel9Downloader.Common
     /// </summary>
     public interface IDate
     {
+        #region Properties
+
         /// <summary>
         /// Gets the current time.
         /// </summary>
-        DateTime Now { get; }
+        DateTime Now
+        {
+            get;
+        }
+
+        #endregion Properties
     }
 }

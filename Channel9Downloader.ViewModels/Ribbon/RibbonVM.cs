@@ -75,7 +75,7 @@ namespace Channel9Downloader.ViewModels.Ribbon
         }
 
         #endregion Public Properties
-        
+
         #region Public Methods
 
         /// <summary>

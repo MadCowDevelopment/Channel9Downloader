@@ -33,19 +33,14 @@ namespace Channel9Downloader.ViewModels
         private readonly ObservableCollection<IDownloadItem> _downloads;
 
         /// <summary>
-        /// The task scheduler of the main thread.
-        /// </summary>
-        private readonly TaskScheduler _mainThreadTaskScheduler;
-
-        /// <summary>
         /// The main thread dispatcher.
         /// </summary>
         private readonly Dispatcher _mainThreadDispatcher;
 
         /// <summary>
-        /// The timer used for updating the downloads.
+        /// The task scheduler of the main thread.
         /// </summary>
-        private DispatcherTimer _updateTimer;
+        private readonly TaskScheduler _mainThreadTaskScheduler;
 
         /// <summary>
         /// Backing field for <see cref="CleanDownloadsCommand"/> property.
@@ -76,6 +71,11 @@ namespace Channel9Downloader.ViewModels
         /// Backing field for <see cref="UpdateDownloadsCommand"/> property.
         /// </summary>
         private ICommand _updateDownloadsCommand;
+
+        /// <summary>
+        /// The timer used for updating the downloads.
+        /// </summary>
+        private DispatcherTimer _updateTimer;
 
         #endregion Fields
 
@@ -221,65 +221,6 @@ namespace Channel9Downloader.ViewModels
         #region Private Methods
 
         /// <summary>
-        /// Handles the property changed event of settings.
-        /// </summary>
-        /// <param name="sender">Sender of the event.</param>
-        /// <param name="e">Event args of the event.</param>
-        private void SettingsPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == Settings.PROP_UPDATE_VIDEOS_PERIODICALLY)
-            {
-                if (_settings.UpdateVideosPeriodically)
-                {
-                    StartUpdateTimer();
-                }
-                else
-                {
-                    StopUpdateTimer();
-                }
-            }
-            else if (e.PropertyName == Settings.PROP_CHECK_FOR_NEW_VIDEOS_INTERVAL)
-            {
-                if (_updateTimer != null)
-                {
-                    _updateTimer.Interval = _settings.CheckForNewVideosInterval;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Starts the update timer.
-        /// </summary>
-        private void StartUpdateTimer()
-        {
-            if (_updateTimer != null)
-            {
-                return;
-            }
-
-            _updateTimer = new DispatcherTimer(
-                _settings.CheckForNewVideosInterval,
-                DispatcherPriority.Background,
-                (sender, args) => UpdateDownloadsAsync(),
-                _mainThreadDispatcher);
-            _updateTimer.Start();
-        }
-
-        /// <summary>
-        /// Stops the update timer.
-        /// </summary>
-        private void StopUpdateTimer()
-        {
-            if (_updateTimer == null)
-            {
-                return;
-            }
-
-            _updateTimer.Stop();
-            _updateTimer = null;
-        }
-
-        /// <summary>
         /// Adds a <see cref="DownloadItem"/> on the main thread.
         /// </summary>
         /// <param name="downloadItem">The download to add.</param>
@@ -416,6 +357,74 @@ namespace Channel9Downloader.ViewModels
         }
 
         /// <summary>
+        /// Removes a <see cref="DownloadItem"/> on the main thread.
+        /// </summary>
+        /// <param name="downloadItem">The download to remove.</param>
+        private void RemoveDownloadItemOnMainThread(IDownloadItem downloadItem)
+        {
+            _mainThreadDispatcher.Invoke(new CollectionInitializerDelegate(p => _downloads.Remove(p)), downloadItem);
+        }
+
+        /// <summary>
+        /// Handles the property changed event of settings.
+        /// </summary>
+        /// <param name="sender">Sender of the event.</param>
+        /// <param name="e">Event args of the event.</param>
+        private void SettingsPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == Settings.PROP_UPDATE_VIDEOS_PERIODICALLY)
+            {
+                if (_settings.UpdateVideosPeriodically)
+                {
+                    StartUpdateTimer();
+                }
+                else
+                {
+                    StopUpdateTimer();
+                }
+            }
+            else if (e.PropertyName == Settings.PROP_CHECK_FOR_NEW_VIDEOS_INTERVAL)
+            {
+                if (_updateTimer != null)
+                {
+                    _updateTimer.Interval = _settings.CheckForNewVideosInterval;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Starts the update timer.
+        /// </summary>
+        private void StartUpdateTimer()
+        {
+            if (_updateTimer != null)
+            {
+                return;
+            }
+
+            _updateTimer = new DispatcherTimer(
+                _settings.CheckForNewVideosInterval,
+                DispatcherPriority.Background,
+                (sender, args) => UpdateDownloadsAsync(),
+                _mainThreadDispatcher);
+            _updateTimer.Start();
+        }
+
+        /// <summary>
+        /// Stops the update timer.
+        /// </summary>
+        private void StopUpdateTimer()
+        {
+            if (_updateTimer == null)
+            {
+                return;
+            }
+
+            _updateTimer.Stop();
+            _updateTimer = null;
+        }
+
+        /// <summary>
         /// Updates the downloads.
         /// </summary>
         private void UpdateDownloadsAsync()
@@ -435,15 +444,6 @@ namespace Channel9Downloader.ViewModels
                     },
                 _mainThreadTaskScheduler);
             task.Start();
-        }
-
-        /// <summary>
-        /// Removes a <see cref="DownloadItem"/> on the main thread.
-        /// </summary>
-        /// <param name="downloadItem">The download to remove.</param>
-        private void RemoveDownloadItemOnMainThread(IDownloadItem downloadItem)
-        {
-            _mainThreadDispatcher.Invoke(new CollectionInitializerDelegate(p => _downloads.Remove(p)), downloadItem);
         }
 
         #endregion Private Methods

@@ -162,19 +162,19 @@ namespace Channel9Downloader.ViewModels
         #region Private Methods
 
         /// <summary>
-        /// Initializes the dashboard.
-        /// </summary>
-        private void InitializeDashboard()
-        {
-            _dashboardVM.Initialize();
-        }
-
-        /// <summary>
         /// Initialize the categories.
         /// </summary>
         private void InitializeCategories()
         {
             _categoriesVM.Initialize();
+        }
+
+        /// <summary>
+        /// Initializes the dashboard.
+        /// </summary>
+        private void InitializeDashboard()
+        {
+            _dashboardVM.Initialize();
         }
 
         /// <summary>

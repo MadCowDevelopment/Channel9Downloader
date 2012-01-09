@@ -5,9 +5,16 @@ namespace Channel9Downloader.ViewModels.Ribbon
     /// </summary>
     public interface IRibbonToggleButtonVM : IRibbonButtonVM
     {
+        #region Properties
+
         /// <summary>
         /// Gets or sets a value indicating whether the button is checked.
         /// </summary>
-        bool IsChecked { get; set; }
+        bool IsChecked
+        {
+            get; set;
+        }
+
+        #endregion Properties
     }
 }

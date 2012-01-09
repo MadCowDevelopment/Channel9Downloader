@@ -53,7 +53,7 @@ namespace Channel9Downloader.DataAccess
 
         #endregion Events
 
-        #region Properties
+        #region Public Properties
 
         /// <summary>
         /// Gets a value indicating whether a web request is in progress.
@@ -66,7 +66,7 @@ namespace Channel9Downloader.DataAccess
             }
         }
 
-        #endregion
+        #endregion Public Properties
 
         #region Public Methods
 

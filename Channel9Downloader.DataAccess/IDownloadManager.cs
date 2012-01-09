@@ -39,11 +39,20 @@ namespace Channel9Downloader.DataAccess
         /// <summary>
         /// Gets a value indicating whether the download manager is currently updating the list of available downloads.
         /// </summary>
-        bool IsUpdating { get; }
+        bool IsUpdating
+        {
+            get;
+        }
 
-        #endregion
+        #endregion Properties
 
         #region Methods
+
+        /// <summary>
+        /// Adds a download at the end of the queue.
+        /// </summary>
+        /// <param name="downloadItem">The download to add.</param>
+        void AddDownload(IDownloadItem downloadItem);
 
         /// <summary>
         /// Initializes the class.
@@ -65,12 +74,6 @@ namespace Channel9Downloader.DataAccess
         /// Updates all available downloads.
         /// </summary>
         void UpdateAvailableDownloads();
-
-        /// <summary>
-        /// Adds a download at the end of the queue.
-        /// </summary>
-        /// <param name="downloadItem">The download to add.</param>
-        void AddDownload(IDownloadItem downloadItem);
 
         #endregion Methods
     }

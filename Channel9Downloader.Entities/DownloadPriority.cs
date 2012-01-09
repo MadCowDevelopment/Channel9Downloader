@@ -1,5 +1,7 @@
 ﻿namespace Channel9Downloader.Entities
 {
+    #region Enumerations
+
     /// <summary>
     /// Enumeration for the different download priorities.
     /// </summary>
@@ -20,4 +22,6 @@
         /// </summary>
         Low
     }
+
+    #endregion Enumerations
 }

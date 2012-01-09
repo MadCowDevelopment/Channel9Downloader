@@ -10,6 +10,8 @@ namespace Channel9Downloader.Converters
     /// </summary>
     public class BoolToVisibilityCollapsedConverter : IValueConverter
     {
+        #region Public Methods
+
         /// <summary>
         /// Converts a boolean value to Visibility. 
         /// </summary>
@@ -40,5 +42,7 @@ namespace Channel9Downloader.Converters
         {
             return null;
         }
+
+        #endregion Public Methods
     }
 }

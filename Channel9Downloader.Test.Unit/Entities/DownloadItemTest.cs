@@ -14,10 +14,7 @@ namespace Channel9Downloader.Test.Unit.Entities
     [TestClass]
     public class DownloadItemTest
     {
-        /// <summary>
-        /// The <see cref="DownloadItem"/> that will be tested.
-        /// </summary>
-        private DownloadItem _downloadItem;
+        #region Fields
 
         /// <summary>
         /// The mock for date.
@@ -25,12 +22,43 @@ namespace Channel9Downloader.Test.Unit.Entities
         private Mock<IDate> _date;
 
         /// <summary>
+        /// The <see cref="DownloadItem"/> that will be tested.
+        /// </summary>
+        private DownloadItem _downloadItem;
+
+        #endregion Fields
+
+        #region Public Properties
+
+        /// <summary>
         /// Gets or sets the test context which provides
         /// information about and functionality for the current test run.
         /// </summary>
-        public TestContext TestContext { get; set; }
+        public TestContext TestContext
+        {
+            get; set;
+        }
 
-        #region Initialize / Cleanup
+        #endregion Public Properties
+
+        #region Public Methods
+
+        /// <summary>
+        /// Verifies that the default value for the priority is normal.
+        /// </summary>
+        [TestMethod]
+        public void DefaultValueForPriorityIsNormal()
+        {
+            Assert.AreEqual(DownloadPriority.Normal, _downloadItem.Priority);
+        }
+
+        /// <summary>
+        /// Cleans up after the tests in this class.
+        /// </summary>
+        [TestCleanup]
+        public void MyTestCleanup()
+        {
+        }
 
         /// <summary>
         /// Initializes the tests in this class.
@@ -40,25 +68,6 @@ namespace Channel9Downloader.Test.Unit.Entities
         {
             _date = new Mock<IDate>();
             _downloadItem = new DownloadItem(_date.Object);
-        }
-        
-        /// <summary>
-        /// Cleans up after the tests in this class.
-        /// </summary>
-        [TestCleanup]
-        public void MyTestCleanup()
-        {
-        }
-
-        #endregion
-
-        /// <summary>
-        /// Verifies that the default value for the priority is normal.
-        /// </summary>
-        [TestMethod]
-        public void DefaultValueForPriorityIsNormal()
-        {
-            Assert.AreEqual(DownloadPriority.Normal, _downloadItem.Priority);
         }
 
         /// <summary>
@@ -78,5 +87,7 @@ namespace Channel9Downloader.Test.Unit.Entities
         {
             Assertion.PropertyChangedIsNotCalled(_downloadItem, DownloadItem.PROP_PRIORITY, DownloadPriority.Normal);
         }
+
+        #endregion Public Methods
     }
 }

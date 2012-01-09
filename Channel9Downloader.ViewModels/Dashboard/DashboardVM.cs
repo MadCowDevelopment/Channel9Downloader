@@ -9,11 +9,10 @@ using Channel9Downloader.Composition;
 using Channel9Downloader.DataAccess;
 using Channel9Downloader.Entities;
 using Channel9Downloader.ViewModels.Framework;
+using Channel9Downloader.ViewModels.Ribbon;
 
 namespace Channel9Downloader.ViewModels.Dashboard
 {
-    using Channel9Downloader.ViewModels.Ribbon;
-
     /// <summary>
     /// This class manages the dashboard view.
     /// </summary>
@@ -21,10 +20,17 @@ namespace Channel9Downloader.ViewModels.Dashboard
     [PartCreationPolicy(CreationPolicy.Shared)]
     public class DashboardVM : AdornerViewModel, IDashboardVM
     {
+        #region Fields
+
         /// <summary>
         /// The dependency composer.
         /// </summary>
         private readonly IDependencyComposer _composer;
+
+        /// <summary>
+        /// The download manager.
+        /// </summary>
+        private readonly IDownloadManager _downloadManager;
 
         /// <summary>
         /// The repository used for accessing RSS data.
@@ -32,9 +38,9 @@ namespace Channel9Downloader.ViewModels.Dashboard
         private readonly IRssRepository _rssRepository;
 
         /// <summary>
-        /// The download manager.
+        /// Backing field for <see cref="AddDownloadCommand"/> property.
         /// </summary>
-        private readonly IDownloadManager _downloadManager;
+        private ICommand _addDownloadCommand;
 
         /// <summary>
         /// Backing field for <see cref="LatestVideos"/> property.
@@ -51,10 +57,9 @@ namespace Channel9Downloader.ViewModels.Dashboard
         /// </summary>
         private ICommand _showSummaryCommand;
 
-        /// <summary>
-        /// Backing field for <see cref="AddDownloadCommand"/> property.
-        /// </summary>
-        private ICommand _addDownloadCommand;
+        #endregion Fields
+
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DashboardVM"/> class.
@@ -86,14 +91,19 @@ namespace Channel9Downloader.ViewModels.Dashboard
             AdornerContent = new LoadingWaitVM();
         }
 
+        #endregion Constructors
+
+        #region Public Properties
+
         /// <summary>
-        /// Gets a command to show the summary.
+        /// Gets the command to add a download.
         /// </summary>
-        public ICommand ShowSummaryCommand
+        public ICommand AddDownloadCommand
         {
             get
             {
-                return _showSummaryCommand ?? (_showSummaryCommand = new RelayCommand(p => { }));
+                return _addDownloadCommand
+                       ?? (_addDownloadCommand = new RelayCommand(p => OnAddDownload(), p => SelectedVideo != null));
             }
         }
 
@@ -132,21 +142,27 @@ namespace Channel9Downloader.ViewModels.Dashboard
         }
 
         /// <summary>
-        /// Gets the show summary ribbon toggle button.
+        /// Gets a command to show the summary.
         /// </summary>
-        public IRibbonToggleButtonVM ShowSummaryRibbonToggleButton { get; private set; }
-
-        /// <summary>
-        /// Gets the command to add a download.
-        /// </summary>
-        public ICommand AddDownloadCommand
+        public ICommand ShowSummaryCommand
         {
             get
             {
-                return _addDownloadCommand
-                       ?? (_addDownloadCommand = new RelayCommand(p => OnAddDownload(), p => SelectedVideo != null));
+                return _showSummaryCommand ?? (_showSummaryCommand = new RelayCommand(p => { }));
             }
         }
+
+        /// <summary>
+        /// Gets the show summary ribbon toggle button.
+        /// </summary>
+        public IRibbonToggleButtonVM ShowSummaryRibbonToggleButton
+        {
+            get; private set;
+        }
+
+        #endregion Public Properties
+
+        #region Public Methods
 
         /// <summary>
         /// Initializes this view model.
@@ -156,15 +172,9 @@ namespace Channel9Downloader.ViewModels.Dashboard
             InitializeLatestVideosAsync(TaskScheduler.FromCurrentSynchronizationContext());
         }
 
-        /// <summary>
-        /// Adds the selected video to the downloads.
-        /// </summary>
-        private void OnAddDownload()
-        {
-            var downloadItem = _composer.GetExportedValue<IDownloadItem>();
-            downloadItem.RssItem = SelectedVideo;
-            _downloadManager.AddDownload(downloadItem);
-        }
+        #endregion Public Methods
+
+        #region Private Methods
 
         /// <summary>
         /// Initializes the latest videos in the background.
@@ -190,5 +200,17 @@ namespace Channel9Downloader.ViewModels.Dashboard
 
             task.Start();
         }
+
+        /// <summary>
+        /// Adds the selected video to the downloads.
+        /// </summary>
+        private void OnAddDownload()
+        {
+            var downloadItem = _composer.GetExportedValue<IDownloadItem>();
+            downloadItem.RssItem = SelectedVideo;
+            _downloadManager.AddDownload(downloadItem);
+        }
+
+        #endregion Private Methods
     }
 }

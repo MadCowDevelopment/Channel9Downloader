@@ -12,11 +12,6 @@ namespace Channel9Downloader.Entities
         #region Fields
 
         /// <summary>
-        /// Property name for <see cref="UpdateVideosPeriodically"/> property.
-        /// </summary>
-        public const string PROP_UPDATE_VIDEOS_PERIODICALLY = "UpdateVideosPeriodically";
-
-        /// <summary>
         /// Property name for <see cref="CheckForNewVideosInterval"/> property.
         /// </summary>
         public const string PROP_CHECK_FOR_NEW_VIDEOS_INTERVAL = "CheckForNewVideosInterval";
@@ -25,6 +20,16 @@ namespace Channel9Downloader.Entities
         /// Property name for <see cref="MaximumParallelDownloads"/> property.
         /// </summary>
         public const string PROP_MAXIMUM_PARALLEL_DOWNLOADS = "MaximumParallelDownloads";
+
+        /// <summary>
+        /// Property name for <see cref="UpdateVideosPeriodically"/> property.
+        /// </summary>
+        public const string PROP_UPDATE_VIDEOS_PERIODICALLY = "UpdateVideosPeriodically";
+
+        /// <summary>
+        /// Backing field for <see cref="CheckForNewVideosInterval"/> property.
+        /// </summary>
+        private TimeSpan _checkForNewVideosInterval;
 
         /// <summary>
         /// Backing field for <see cref="DownloadFolder"/> property.
@@ -40,11 +45,6 @@ namespace Channel9Downloader.Entities
         /// Backing field for <see cref="StartDownloadingWhenApplicationStarts"/> property.
         /// </summary>
         private bool _startDownloadingWhenApplicationStarts;
-
-        /// <summary>
-        /// Backing field for <see cref="CheckForNewVideosInterval"/> property.
-        /// </summary>
-        private TimeSpan _checkForNewVideosInterval;
 
         /// <summary>
         /// Backing field for <see cref="UpdateVideosPeriodically"/> property.
@@ -68,6 +68,24 @@ namespace Channel9Downloader.Entities
         #endregion Constructors
 
         #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the interval for how often new videos are loaded.
+        /// </summary>
+        [DataMember]
+        public TimeSpan CheckForNewVideosInterval
+        {
+            get
+            {
+                return _checkForNewVideosInterval;
+            }
+
+            set
+            {
+                _checkForNewVideosInterval = value;
+                RaisePropertyChanged(() => CheckForNewVideosInterval);
+            }
+        }
 
         /// <summary>
         /// Gets or sets the folder where movies will be downloaded to.
@@ -120,24 +138,6 @@ namespace Channel9Downloader.Entities
             {
                 _startDownloadingWhenApplicationStarts = value;
                 RaisePropertyChanged(() => StartDownloadingWhenApplicationStarts);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the interval for how often new videos are loaded.
-        /// </summary>
-        [DataMember]
-        public TimeSpan CheckForNewVideosInterval
-        {
-            get
-            {
-                return _checkForNewVideosInterval;
-            }
-
-            set
-            {
-                _checkForNewVideosInterval = value;
-                RaisePropertyChanged(() => CheckForNewVideosInterval);
             }
         }
 

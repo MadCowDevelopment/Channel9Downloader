@@ -9,6 +9,8 @@ namespace Channel9Downloader.Test.Utils
     /// </summary>
     public static class Assertion
     {
+        #region Public Static Methods
+
         /// <summary>
         /// Asserts that property changed is called for the specified property when the value of the property is set
         /// to the specified value.
@@ -38,6 +40,10 @@ namespace Channel9Downloader.Test.Utils
         {
             PropertyChangedIsCalled(observableObject, propertyName, value, false);
         }
+
+        #endregion Public Static Methods
+
+        #region Private Static Methods
 
         /// <summary>
         /// Asserts that property changed is called for the specified property when the value of the property is set
@@ -81,5 +87,7 @@ namespace Channel9Downloader.Test.Utils
 
             Assert.AreEqual(isRaised, propertyChangedCalled);
         }
+
+        #endregion Private Static Methods
     }
 }

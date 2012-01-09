@@ -10,6 +10,8 @@ namespace Channel9Downloader.Common
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class Date : IDate
     {
+        #region Public Properties
+
         /// <summary>
         /// Gets a <see cref="DateTime"/> object that is set to the current date and time on this computer,
         /// expressed as local time.
@@ -21,5 +23,7 @@ namespace Channel9Downloader.Common
                 return DateTime.Now;
             }
         }
+
+        #endregion Public Properties
     }
 }

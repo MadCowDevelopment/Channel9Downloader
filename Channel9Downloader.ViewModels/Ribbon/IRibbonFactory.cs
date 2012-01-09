@@ -1,11 +1,10 @@
 using System.Collections.Generic;
 
 using Channel9Downloader.ViewModels.Categories;
+using Channel9Downloader.ViewModels.Dashboard;
 
 namespace Channel9Downloader.ViewModels.Ribbon
 {
-    using Channel9Downloader.ViewModels.Dashboard;
-
     /// <summary>
     /// This interface provides methods to create ribbon elements.
     /// </summary>
@@ -23,12 +22,11 @@ namespace Channel9Downloader.ViewModels.Ribbon
         }
 
         /// <summary>
-        /// Gets or sets the main window viewmodel.
+        /// Gets or sets the dashboard viewmodel.
         /// </summary>
-        IMainWindowVM MainWindowVM
+        IDashboardVM DashboardVM
         {
-            get;
-            set;
+            get; set;
         }
 
         /// <summary>
@@ -41,9 +39,13 @@ namespace Channel9Downloader.ViewModels.Ribbon
         }
 
         /// <summary>
-        /// Gets or sets the dashboard viewmodel.
+        /// Gets or sets the main window viewmodel.
         /// </summary>
-        IDashboardVM DashboardVM { get; set; }
+        IMainWindowVM MainWindowVM
+        {
+            get;
+            set;
+        }
 
         #endregion Properties
 

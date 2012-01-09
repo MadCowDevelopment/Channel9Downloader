@@ -74,6 +74,42 @@ namespace Channel9Downloader.DataAccess
             return items;
         }
 
+        #endregion Public Methods
+
+        #region Private Methods
+
+        /// <summary>
+        /// Downloads RSS feed data for the specified category.
+        /// </summary>
+        /// <param name="category">Category of the feed.</param>
+        /// <returns>Returns the feed data.</returns>
+        private XDocument DownloadFeedData(Category category)
+        {
+            return DownloadFeedData(string.Format("http://channel9.msdn.com{0}/RSS", category.RelativePath));
+        }
+
+        /// <summary>
+        /// Downloads RSS feed data.
+        /// </summary>
+        /// <returns>Returns the feed data.</returns>
+        private XDocument DownloadFeedData()
+        {
+            return DownloadFeedData(string.Format("http://channel9.msdn.com/Feeds/RSS"));
+        }
+
+        /// <summary>
+        /// Downloads RSS feed data from the specified address.
+        /// </summary>
+        /// <param name="address">The address of the RSS feed.</param>
+        /// <returns>Returns the feed data.</returns>
+        private XDocument DownloadFeedData(string address)
+        {
+            var webDownloader = _dependencyComposer.GetExportedValue<IWebDownloader>();
+            var rssFeedData = webDownloader.DownloadString(address);
+            var doc = XDocument.Parse(rssFeedData);
+            return doc;
+        }
+
         /// <summary>
         /// Parses RSS feed data.
         /// </summary>
@@ -111,42 +147,6 @@ namespace Channel9Downloader.DataAccess
                                 };
 
             return items.Where(p => p.MediaGroup.Any(m => m.Medium == "video" && m.Type == "video/x-ms-wmv")).ToList();
-        }
-
-        #endregion Public Methods
-
-        #region Private Methods
-
-        /// <summary>
-        /// Downloads RSS feed data for the specified category.
-        /// </summary>
-        /// <param name="category">Category of the feed.</param>
-        /// <returns>Returns the feed data.</returns>
-        private XDocument DownloadFeedData(Category category)
-        {
-            return DownloadFeedData(string.Format("http://channel9.msdn.com{0}/RSS", category.RelativePath));
-        }
-
-        /// <summary>
-        /// Downloads RSS feed data.
-        /// </summary>
-        /// <returns>Returns the feed data.</returns>
-        private XDocument DownloadFeedData()
-        {
-            return DownloadFeedData(string.Format("http://channel9.msdn.com/Feeds/RSS"));
-        }
-
-        /// <summary>
-        /// Downloads RSS feed data from the specified address.
-        /// </summary>
-        /// <param name="address">The address of the RSS feed.</param>
-        /// <returns>Returns the feed data.</returns>
-        private XDocument DownloadFeedData(string address)
-        {
-            var webDownloader = _dependencyComposer.GetExportedValue<IWebDownloader>();
-            var rssFeedData = webDownloader.DownloadString(address);
-            var doc = XDocument.Parse(rssFeedData);
-            return doc;
         }
 
         #endregion Private Methods

@@ -113,16 +113,34 @@ namespace Channel9Downloader.DataAccess
 
         #endregion Events
 
-        #region Properties
+        #region Public Properties
 
         /// <summary>
         /// Gets a value indicating whether the download manager is currently updating;
         /// </summary>
-        public bool IsUpdating { get; private set; }
+        public bool IsUpdating
+        {
+            get; private set;
+        }
 
-        #endregion
+        #endregion Public Properties
 
         #region Public Methods
+
+        /// <summary>
+        /// Adds a download at the end of the queue.
+        /// </summary>
+        /// <param name="downloadItem">The download to add.</param>
+        public void AddDownload(IDownloadItem downloadItem)
+        {
+            if (_downloadQueue.Any(p => p.RssItem.Guid == downloadItem.RssItem.Guid))
+            {
+                return;
+            }
+
+            _downloadQueue.AddLast(downloadItem);
+            RaiseDownloadAdded(new DownloadAddedEventArgs(downloadItem));
+        }
 
         /// <summary>
         /// Initializes this class.
@@ -222,21 +240,6 @@ namespace Channel9Downloader.DataAccess
             IsUpdating = false;
         }
 
-        /// <summary>
-        /// Adds a download at the end of the queue.
-        /// </summary>
-        /// <param name="downloadItem">The download to add.</param>
-        public void AddDownload(IDownloadItem downloadItem)
-        {
-            if (_downloadQueue.Any(p => p.RssItem.Guid == downloadItem.RssItem.Guid))
-            {
-                return;
-            }
-
-            _downloadQueue.AddLast(downloadItem);
-            RaiseDownloadAdded(new DownloadAddedEventArgs(downloadItem));
-        }
-
         #endregion Public Methods
 
         #region Private Methods
@@ -251,90 +254,6 @@ namespace Channel9Downloader.DataAccess
             var uri = new Uri(address);
             var path = Path.Combine(_settings.DownloadFolder, uri.Segments[uri.Segments.Length - 1]);
             return path;
-        }
-
-        /// <summary>
-        /// Enqueues all downloads that are not already queued.
-        /// </summary>
-        /// <param name="availableItems">List of available items.</param>
-        private void EnqueueDownloads(IEnumerable<IDownloadItem> availableItems)
-        {
-            foreach (var availableItem in
-                availableItems.Where(
-                    availableItem =>
-                        !_downloadQueue.Any(p => p.RssItem.Guid == availableItem.RssItem.Guid) &&
-                        !_cancellationTokenSources.Keys.Any(p => p.RssItem.Guid == availableItem.RssItem.Guid)))
-            {
-                AddDownload(availableItem);
-            }
-        }
-
-        /// <summary>
-        /// Gets the next download item. First it will look for items with high priority, then normal priority
-        /// and at last low priority.
-        /// </summary>
-        /// <returns>Returns the next download item.</returns>
-        private IDownloadItem GetNextDownload()
-        {
-            foreach (var downloadItem in _downloadQueue)
-            {
-                if (downloadItem.Priority == DownloadPriority.High)
-                {
-                    return downloadItem;
-                }
-            }
-
-            foreach (var downloadItem in _downloadQueue)
-            {
-                if (downloadItem.Priority == DownloadPriority.Normal)
-                {
-                    return downloadItem;
-                }
-            }
-
-            return _downloadQueue.First.Value;
-        }
-
-        /// <summary>
-        /// Gets all items that are available in the RSS repository.
-        /// </summary>
-        /// <param name="enabledCategories">List of all categories that are enabled.</param>
-        /// <returns>Returns a list of all items that are available.</returns>
-        private List<IDownloadItem> GetAvailableItems(IEnumerable<Category> enabledCategories)
-        {
-            var availableItems = new List<IDownloadItem>();
-            foreach (var enabledCategory in enabledCategories)
-            {
-                var items = _rssRepository.GetRssItems(enabledCategory);
-                foreach (var rssItem in items.Where(p => p.MediaGroup.Count > 0))
-                {
-                    var downloadItem = _composer.GetExportedValue<IDownloadItem>();
-                    downloadItem.Category = enabledCategory;
-                    downloadItem.RssItem = rssItem;
-                    availableItems.Add(downloadItem);
-                }
-            }
-
-            return availableItems;
-        }
-
-        /// <summary>
-        /// Gets the download address.
-        /// </summary>
-        /// <param name="downloadItem">The download item.</param>
-        /// <returns>Returns the URI of the download item.</returns>
-        private string GetDownloadAddress(IDownloadItem downloadItem)
-        {
-            var media = new MediaContent { FileSize = 0 };
-            foreach (var mediaContent in downloadItem.RssItem.MediaGroup)
-            {
-                if (mediaContent.FileSize > media.FileSize)
-                {
-                    media = mediaContent;
-                }
-            }
-
-            return media.Url;
         }
 
         /// <summary>
@@ -397,6 +316,64 @@ namespace Channel9Downloader.DataAccess
         }
 
         /// <summary>
+        /// Enqueues all downloads that are not already queued.
+        /// </summary>
+        /// <param name="availableItems">List of available items.</param>
+        private void EnqueueDownloads(IEnumerable<IDownloadItem> availableItems)
+        {
+            foreach (var availableItem in
+                availableItems.Where(
+                    availableItem =>
+                        !_downloadQueue.Any(p => p.RssItem.Guid == availableItem.RssItem.Guid) &&
+                        !_cancellationTokenSources.Keys.Any(p => p.RssItem.Guid == availableItem.RssItem.Guid)))
+            {
+                AddDownload(availableItem);
+            }
+        }
+
+        /// <summary>
+        /// Gets all items that are available in the RSS repository.
+        /// </summary>
+        /// <param name="enabledCategories">List of all categories that are enabled.</param>
+        /// <returns>Returns a list of all items that are available.</returns>
+        private List<IDownloadItem> GetAvailableItems(IEnumerable<Category> enabledCategories)
+        {
+            var availableItems = new List<IDownloadItem>();
+            foreach (var enabledCategory in enabledCategories)
+            {
+                var items = _rssRepository.GetRssItems(enabledCategory);
+                foreach (var rssItem in items.Where(p => p.MediaGroup.Count > 0))
+                {
+                    var downloadItem = _composer.GetExportedValue<IDownloadItem>();
+                    downloadItem.Category = enabledCategory;
+                    downloadItem.RssItem = rssItem;
+                    availableItems.Add(downloadItem);
+                }
+            }
+
+            return availableItems;
+        }
+
+        /// <summary>
+        /// Gets the download address.
+        /// </summary>
+        /// <param name="downloadItem">The download item.</param>
+        /// <returns>Returns the URI of the download item.</returns>
+        private string GetDownloadAddress(IDownloadItem downloadItem)
+        {
+            var media = new MediaContent { FileSize = 0 };
+            foreach (var mediaContent in downloadItem.RssItem.MediaGroup)
+            {
+                if (mediaContent.FileSize > media.FileSize)
+                {
+                    media = mediaContent;
+                }
+            }
+
+            return media.Url;
+        }
+
+        /// <summary>
         /// Get all categories that are enabled.
         /// </summary>
         /// <returns>Returns all enabled categories.</returns>
@@ -412,6 +389,32 @@ namespace Channel9Downloader.DataAccess
             enabledCategories.AddRange(enabledSeries);
 
             return enabledCategories;
+        }
+
+        /// <summary>
+        /// Gets the next download item. First it will look for items with high priority, then normal priority
+        /// and at last low priority.
+        /// </summary>
+        /// <returns>Returns the next download item.</returns>
+        private IDownloadItem GetNextDownload()
+        {
+            foreach (var downloadItem in _downloadQueue)
+            {
+                if (downloadItem.Priority == DownloadPriority.High)
+                {
+                    return downloadItem;
+                }
+            }
+
+            foreach (var downloadItem in _downloadQueue)
+            {
+                if (downloadItem.Priority == DownloadPriority.Normal)
+                {
+                    return downloadItem;
+                }
+            }
+
+            return _downloadQueue.First.Value;
         }
 
         /// <summary>

@@ -47,6 +47,6 @@ namespace Channel9Downloader.Converters
             return TimeSpan.FromHours(hours);
         }
 
-        #endregion
+        #endregion Public Methods
     }
 }
