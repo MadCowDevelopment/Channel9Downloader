@@ -164,7 +164,9 @@ namespace Channel9Downloader.DataAccess
         /// </summary>
         public void StartDownloads()
         {
-            while (_numberOfRunningDownloads < _settings.MaximumParallelDownloads && _downloadQueue.Count > 0)
+            IDownloadItem downloadItem;
+            while (_numberOfRunningDownloads < _settings.MaximumParallelDownloads 
+                && (downloadItem = GetNextDownload()) != null)
             {
                 _numberOfRunningDownloads++;
 
@@ -173,7 +175,7 @@ namespace Channel9Downloader.DataAccess
                     RaiseDownloadingStarted(new EventArgs());
                 }
 
-                var downloadItem = GetNextDownload();
+                //var downloadItem = GetNextDownload();
                 _downloadQueue.Remove(downloadItem);
 
                 var cancellationTokenSource = new CancellationTokenSource();
@@ -181,6 +183,7 @@ namespace Channel9Downloader.DataAccess
                 var address = GetDownloadAddress(downloadItem);
                 var filename = CreateLocalFilename(address);
                 var task = DownloadFileAsync(address, filename, downloadItem, cancellationTokenSource.Token);
+                var item = downloadItem;
                 task.ContinueWith(
                     x =>
                     {
@@ -193,15 +196,15 @@ namespace Channel9Downloader.DataAccess
 
                         if (x.IsCanceled)
                         {
-                            _downloadQueue.AddFirst(downloadItem);
+                            _downloadQueue.AddFirst(item);
                         }
                         else
                         {
-                            _finishedDownloadsRepository.AddFinishedDownload(downloadItem.RssItem);
+                            _finishedDownloadsRepository.AddFinishedDownload(item.RssItem);
                             StartDownloads();
                         }
 
-                        _cancellationTokenSources.Remove(downloadItem);
+                        _cancellationTokenSources.Remove(item);
                     });
             }
         }
@@ -398,23 +401,36 @@ namespace Channel9Downloader.DataAccess
         /// <returns>Returns the next download item.</returns>
         private IDownloadItem GetNextDownload()
         {
+            IDownloadItem nextDownload;
+            if ((nextDownload = GetNextDownloadWithPriority(DownloadPriority.High)) != null)
+            {
+                return nextDownload;
+            }
+
+            if ((nextDownload = GetNextDownloadWithPriority(DownloadPriority.Normal)) != null)
+            {
+                return nextDownload;
+            }
+
+            if ((nextDownload = GetNextDownloadWithPriority(DownloadPriority.Low)) != null)
+            {
+                return nextDownload;
+            }
+
+            return null;
+        }
+
+        private IDownloadItem GetNextDownloadWithPriority(DownloadPriority priority)
+        {
             foreach (var downloadItem in _downloadQueue)
             {
-                if (downloadItem.Priority == DownloadPriority.High)
+                if (downloadItem.Priority == priority && downloadItem.DownloadState != DownloadState.Skipped)
                 {
                     return downloadItem;
                 }
             }
 
-            foreach (var downloadItem in _downloadQueue)
-            {
-                if (downloadItem.Priority == DownloadPriority.Normal)
-                {
-                    return downloadItem;
-                }
-            }
-
-            return _downloadQueue.First.Value;
+            return null;
         }
 
         /// <summary>

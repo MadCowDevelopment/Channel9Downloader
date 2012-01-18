@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.Composition;
+using System.Windows.Input;
 
 using Channel9Downloader.Common;
 
@@ -74,6 +75,16 @@ namespace Channel9Downloader.Entities
         /// </summary>
         private long _totalBytesToReceive;
 
+        /// <summary>
+        /// Backing field for <see cref="SkipCommand"/> property.
+        /// </summary>
+        private ICommand _skipCommand;
+
+        /// <summary>
+        /// Backing field for <see cref="QueueCommand"/> property.
+        /// </summary>
+        private ICommand _queueCommand;
+
         #endregion Fields
 
         #region Constructors
@@ -94,6 +105,37 @@ namespace Channel9Downloader.Entities
         #endregion Constructors
 
         #region Public Properties
+
+        /// <summary>
+        /// Gets a command to skip the download.
+        /// </summary>
+        public ICommand SkipCommand
+        {
+            get
+            {
+                return _skipCommand
+                       ??
+                       (_skipCommand =
+                        new RelayCommand(
+                            p => DownloadState = DownloadState.Skipped,
+                            p => DownloadState == DownloadState.Queued || DownloadState == DownloadState.Stopped));
+            }
+        }
+
+        /// <summary>
+        /// Gets a command to queue a skipped download.
+        /// </summary>
+        public ICommand QueueCommand
+        {
+            get
+            {
+                return _queueCommand
+                       ??
+                       (_queueCommand =
+                        new RelayCommand(
+                            p => DownloadState = DownloadState.Queued, p => DownloadState == DownloadState.Skipped));
+            }
+        }
 
         /// <summary>
         /// Gets or sets the average bytes per second download speed.

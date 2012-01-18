@@ -55,6 +55,8 @@
                                         Converter={StaticResource DownloadPriorityToBoolConverter},
                                         ConverterParameter={x:Static Entities:DownloadPriority.Low}}"/>
                                 </MenuItem>
+                                <MenuItem Header="Skip" Command="{Binding SkipCommand}"/>
+                                <MenuItem Header="Queue" Command="{Binding QueueCommand}"/>
                             </ContextMenu>
                         </Setter.Value>
                     </Setter>

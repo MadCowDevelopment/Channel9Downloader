@@ -78,7 +78,6 @@
     <Compile Include="Framework\IViewService.cs" />
     <Compile Include="Framework\MvvmWindow.cs" />
     <Compile Include="Framework\ObservableObject.cs" />
-    <Compile Include="Framework\RelayCommand.cs" />
     <Compile Include="Framework\SimpleViewModel.cs" />
     <Compile Include="Framework\ValidatingObject.cs" />
     <Compile Include="Framework\BaseViewModel.cs" />

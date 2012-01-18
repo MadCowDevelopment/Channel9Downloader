@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using System.Windows.Input;
 
+using Channel9Downloader.Common;
 using Channel9Downloader.Entities;
 using Channel9Downloader.ViewModels.Framework;
 

@@ -6,6 +6,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Threading;
 
+using Channel9Downloader.Common;
 using Channel9Downloader.DataAccess;
 using Channel9Downloader.DataAccess.Events;
 using Channel9Downloader.Entities;

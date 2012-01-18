@@ -1,5 +1,7 @@
 using System;
 
+using Channel9Downloader.Common;
+
 namespace Channel9Downloader.ViewModels.Framework
 {
     /// <summary>

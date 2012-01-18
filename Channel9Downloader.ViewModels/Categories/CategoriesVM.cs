@@ -3,6 +3,7 @@ using System.ComponentModel.Composition;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
+using Channel9Downloader.Common;
 using Channel9Downloader.Composition;
 using Channel9Downloader.DataAccess;
 using Channel9Downloader.Entities;

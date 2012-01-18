@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Windows.Input;
 
-namespace Channel9Downloader.ViewModels.Framework
+namespace Channel9Downloader.Common
 {
     /// <summary>
     /// A command whose sole purpose is to 
