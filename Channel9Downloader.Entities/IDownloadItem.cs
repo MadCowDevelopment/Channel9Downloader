@@ -81,6 +81,11 @@ namespace Channel9Downloader.Entities
             get; set;
         }
 
+        /// <summary>
+        /// Gets or sets the local filename.
+        /// </summary>
+        string LocalFilename { get; set; }
+
         #endregion Properties
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.ComponentModel.Composition;
+using System.Diagnostics;
+using System.IO;
 using System.Windows.Input;
 
 using Channel9Downloader.Common;
@@ -85,6 +87,21 @@ namespace Channel9Downloader.Entities
         /// </summary>
         private ICommand _queueCommand;
 
+        /// <summary>
+        /// Backing field for <see cref="PlayMovieCommand"/> property.
+        /// </summary>
+        private ICommand _playMovieCommand;
+
+        /// <summary>
+        /// Backing field for <see cref="OpenInExplorerCommand"/> property.
+        /// </summary>
+        private ICommand _openInExplorerCommand;
+
+        /// <summary>
+        /// Backing field for <see cref="LocalFilename"/> property.
+        /// </summary>
+        private string _localFilename;
+
         #endregion Fields
 
         #region Constructors
@@ -105,6 +122,49 @@ namespace Channel9Downloader.Entities
         #endregion Constructors
 
         #region Public Properties
+
+        public ICommand PlayMovieCommand
+        {
+            get
+            {
+                return _playMovieCommand
+                       ??
+                       (_playMovieCommand =
+                        new RelayCommand(p => OnPlayMovie(), p => DownloadState == DownloadState.Finished));
+            }
+        }
+
+        private void OnPlayMovie()
+        {
+            if (!File.Exists(LocalFilename))
+            {
+                return;
+            }
+
+            Process.Start(LocalFilename);
+        }
+
+        public ICommand OpenInExplorerCommand
+        {
+            get
+            {
+                return _openInExplorerCommand
+                       ??
+                       (_openInExplorerCommand =
+                        new RelayCommand(p => OnOpenInExplorer(), p => DownloadState == DownloadState.Finished));
+            }
+        }
+
+        private void OnOpenInExplorer()
+        {
+            if (!File.Exists(LocalFilename))
+            {
+                return;
+            }
+
+            var arguments = string.Format("/select,\"{0}\"", LocalFilename);
+            Process.Start("explorer.exe", arguments);
+        }
 
         /// <summary>
         /// Gets a command to skip the download.
@@ -298,6 +358,22 @@ namespace Channel9Downloader.Entities
 
                 _totalBytesToReceive = value;
                 RaisePropertyChanged(() => TotalBytesToReceive);
+            }
+        }
+
+        public string LocalFilename
+        {
+            get
+            {
+                return _localFilename;
+            }
+            set
+            {
+                if (_localFilename != value)
+                {
+                    _localFilename = value;
+                    RaisePropertyChanged(() => LocalFilename);
+                }
             }
         }
 

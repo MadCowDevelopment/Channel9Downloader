@@ -35,6 +35,8 @@
                     <Setter Property="ContextMenu">
                         <Setter.Value>
                             <ContextMenu>
+                                <MenuItem Header="Play" Command="{Binding PlayMovieCommand}"/>
+                                <MenuItem Header="Open in windows explorer" Command="{Binding OpenInExplorerCommand}"/>                                           
                                 <MenuItem Header="Priority">
                                     <MenuItem 
                                         Header="High"

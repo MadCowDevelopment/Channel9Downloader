@@ -35,10 +35,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Channel9Downloader.Resources", "Channel9Downloader.Resources\Channel9Downloader.Resources.csproj", "{8FE68FF6-FF50-4BBF-9113-27661A9F29BD}"
 EndProject
 Global
-	GlobalSection(SubversionScc) = preSolution
-		Svn-Managed = True
-		Manager = AnkhSVN - Subversion Support for Visual Studio
-	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Channel9Downloader.vsmdi
 	EndGlobalSection

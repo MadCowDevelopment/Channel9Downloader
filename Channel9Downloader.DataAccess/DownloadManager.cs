@@ -175,13 +175,13 @@ namespace Channel9Downloader.DataAccess
                     RaiseDownloadingStarted(new EventArgs());
                 }
 
-                //var downloadItem = GetNextDownload();
                 _downloadQueue.Remove(downloadItem);
 
                 var cancellationTokenSource = new CancellationTokenSource();
                 _cancellationTokenSources.Add(downloadItem, cancellationTokenSource);
                 var address = GetDownloadAddress(downloadItem);
                 var filename = CreateLocalFilename(address);
+                downloadItem.LocalFilename = filename;
                 var task = DownloadFileAsync(address, filename, downloadItem, cancellationTokenSource.Token);
                 var item = downloadItem;
                 task.ContinueWith(
@@ -420,6 +420,11 @@ namespace Channel9Downloader.DataAccess
             return null;
         }
 
+        /// <summary>
+        /// Gets the next download with the specified priority.
+        /// </summary>
+        /// <param name="priority">The priority of the download.</param>
+        /// <returns>Returns the next download.</returns>
         private IDownloadItem GetNextDownloadWithPriority(DownloadPriority priority)
         {
             foreach (var downloadItem in _downloadQueue)
