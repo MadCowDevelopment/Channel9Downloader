@@ -123,6 +123,9 @@ namespace Channel9Downloader.Entities
 
         #region Public Properties
 
+        /// <summary>
+        /// Gets a command to play the movie in the default player.
+        /// </summary>
         public ICommand PlayMovieCommand
         {
             get
@@ -134,16 +137,9 @@ namespace Channel9Downloader.Entities
             }
         }
 
-        private void OnPlayMovie()
-        {
-            if (!File.Exists(LocalFilename))
-            {
-                return;
-            }
-
-            Process.Start(LocalFilename);
-        }
-
+        /// <summary>
+        /// Gets a command to open the item in the windows explorer.
+        /// </summary>
         public ICommand OpenInExplorerCommand
         {
             get
@@ -153,17 +149,6 @@ namespace Channel9Downloader.Entities
                        (_openInExplorerCommand =
                         new RelayCommand(p => OnOpenInExplorer(), p => DownloadState == DownloadState.Finished));
             }
-        }
-
-        private void OnOpenInExplorer()
-        {
-            if (!File.Exists(LocalFilename))
-            {
-                return;
-            }
-
-            var arguments = string.Format("/select,\"{0}\"", LocalFilename);
-            Process.Start("explorer.exe", arguments);
         }
 
         /// <summary>
@@ -361,12 +346,16 @@ namespace Channel9Downloader.Entities
             }
         }
 
+        /// <summary>
+        /// Gets or sets the filename of the item on the local harddisc.
+        /// </summary>
         public string LocalFilename
         {
             get
             {
                 return _localFilename;
             }
+
             set
             {
                 if (_localFilename != value)
@@ -380,6 +369,33 @@ namespace Channel9Downloader.Entities
         #endregion Public Properties
 
         #region Private Methods
+
+        /// <summary>
+        /// Plays the movie in the default player.
+        /// </summary>
+        private void OnPlayMovie()
+        {
+            if (!File.Exists(LocalFilename))
+            {
+                return;
+            }
+
+            Process.Start(LocalFilename);
+        }
+
+        /// <summary>
+        /// Opens the item in the windows explorer.
+        /// </summary>
+        private void OnOpenInExplorer()
+        {
+            if (!File.Exists(LocalFilename))
+            {
+                return;
+            }
+
+            var arguments = string.Format("/select,\"{0}\"", LocalFilename);
+            Process.Start("explorer.exe", arguments);
+        }
 
         /// <summary>
         /// Calculates the bytes per second.
